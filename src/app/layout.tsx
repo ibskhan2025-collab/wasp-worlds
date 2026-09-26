@@ -26,7 +26,7 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL ?? "https://example.com"),
+  metadataBase: new URL(process.env.SITE_URL || "https://example.com"),
   title: "WASP — Websites are too small a word",
   description:
     "Independent premium web design and development studio. Don't look at the work. Get inside it.",

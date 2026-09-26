@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = (process.env.SITE_URL ?? "https://example.com").replace(/\/$/, "");
+  const base = (process.env.SITE_URL || "https://example.com").replace(/\/$/, "");
   const pages: [string, "weekly" | "monthly", number][] = [
     ["/", "weekly", 1],
     ["/studio", "monthly", 0.8],
