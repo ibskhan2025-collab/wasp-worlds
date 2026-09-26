@@ -15,6 +15,8 @@ export function Itinerary() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [done, setDone] = useState("");
+  const [travelers, setTravelers] = useState(2);
+  const [month, setMonth] = useState("Flexible");
 
   // Hydrate persisted plan after mount (avoids SSR mismatch).
   useEffect(() => {
@@ -27,7 +29,7 @@ export function Itinerary() {
 
   const routes = useMemo(() => plan.map((s) => destinations.find((d) => d.slug === s)).filter((d) => d !== undefined), [plan]);
   const days = routes.reduce((n, d) => n + d.days, 0);
-  const total = routes.reduce((n, d) => n + d.price, 0);
+  const total = routes.reduce((n, d) => n + d.price, 0) * travelers;
 
   function move(i: number, dir: -1 | 1) {
     setPlan((p) => {
@@ -49,7 +51,7 @@ export function Itinerary() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name, email,
-        brief: `ATLAS itinerary: ${routes.map((d) => d.name).join(" → ")} (${days} days)`,
+        brief: `ATLAS itinerary (${travelers} traveler${travelers === 1 ? "" : "s"}, ${month}): ${routes.map((d) => d.name).join(" → ")} (${days} days)`,
         source: "atlas",
       }),
     });
@@ -84,7 +86,24 @@ export function Itinerary() {
                 </div>
               </div>
             ))}
-            <p style={{ marginTop: 16 }}><strong>{days} days · {money(total)}</strong> per person</p>
+            <p style={{ marginTop: 16 }}><strong>{days} days · {money(total)}</strong> for {travelers} traveler{travelers === 1 ? "" : "s"} in {month.toLowerCase()}</p>
+            <div className="grid-2" style={{ marginTop: 8 }}>
+              <div className="field">
+                <span>Travelers</span>
+                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <button type="button" className="ghost" aria-label="Fewer travelers" onClick={() => setTravelers((n) => Math.max(1, n - 1))}>−</button>
+                  <span aria-live="polite">{travelers}</span>
+                  <button type="button" className="ghost" aria-label="More travelers" onClick={() => setTravelers((n) => Math.min(12, n + 1))}>+</button>
+                </div>
+              </div>
+              <label className="field"><span>Month</span>
+                <select value={month} onChange={(e) => setMonth(e.target.value)}>
+                  {["Flexible", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((m) => (
+                    <option key={m}>{m}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
             <div className="grid-2" style={{ marginTop: 16 }}>
               <label className="field"><span>Name</span><input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" /></label>
               <label className="field"><span>Email</span><input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" /></label>

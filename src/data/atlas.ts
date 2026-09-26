@@ -10,6 +10,8 @@ export type Destination = {
   rating: number;
   image: string;
   blurb: string;
+  pack: string;
+  map: { x: number; y: number };
   stops: { name: string; note: string }[];
 };
 
@@ -24,6 +26,8 @@ export const destinations: Destination[] = [
     rating: 4.9,
     image: media.still.valley,
     blurb: "Five days down the coast: cliffs, a working salt pan, and a lake house with no television.",
+    pack: "Sandals, one warm layer, a book you will actually finish.",
+    map: { x: 90, y: 210 },
     stops: [
       { name: "Cliff path", note: "Morning walk, 3 hours, ends at the lighthouse café." },
       { name: "Salt pans", note: "Afternoon with the harvesters. Bring sandals." },
@@ -40,6 +44,8 @@ export const destinations: Destination[] = [
     rating: 4.7,
     image: media.still.city,
     blurb: "A town that rewards slow walkers: arcades, a print shop, three wine bars you will argue about.",
+    pack: "Broken-in shoes, a tote for prints, appetite.",
+    map: { x: 220, y: 150 },
     stops: [
       { name: "Arcade quarter", note: "Covered streets, best in the rain." },
       { name: "Print shop", note: "Letterpress workshop, Thursday evenings." },
@@ -56,6 +62,8 @@ export const destinations: Destination[] = [
     rating: 4.8,
     image: media.still.upward,
     blurb: "Spring in the hills: orchards in flower, a monastery guesthouse, one serious climb.",
+    pack: "Boots, layers, antihistamines if blossom owns you.",
+    map: { x: 300, y: 70 },
     stops: [
       { name: "Orchard stay", note: "Two nights among blossom. Bees included." },
       { name: "Guesthouse", note: "Silence after nine. Breakfast at six." },
@@ -72,10 +80,48 @@ export const destinations: Destination[] = [
     rating: 4.6,
     image: media.still.street,
     blurb: "Off-season coast: storms watched from a glass-fronted room, oysters, early nights.",
+    pack: "The warmest thing you own, twice. Binoculars.",
+    map: { x: 120, y: 120 },
     stops: [
       { name: "Storm room", note: "Floor-to-ceiling glass. Book the corner." },
       { name: "Oyster sheds", note: "Lunch standing up, as intended." },
       { name: "Night walk", note: "Lanterns provided. Stars if lucky." },
+    ],
+  },
+  {
+    slug: "cider-fog",
+    name: "Cider & Fog",
+    region: "Hills",
+    season: "Autumn",
+    days: 4,
+    price: 890,
+    rating: 4.7,
+    image: media.casa.room,
+    blurb: "Harvest season uphill: pressing days, fog that arrives on schedule, fires every night.",
+    pack: "Wool, a corkscrew, no white trousers.",
+    map: { x: 260, y: 190 },
+    stops: [
+      { name: "Pressing barn", note: "Work a shift, drink the previous year." },
+      { name: "Fog ridge", note: "Dawn walk. The valley disappears by eight." },
+      { name: "Fire room", note: "One long table. Strangers at first." },
+    ],
+  },
+  {
+    slug: "estuary-light",
+    name: "Estuary Light",
+    region: "Coast",
+    season: "Spring",
+    days: 3,
+    price: 690,
+    rating: 4.5,
+    image: media.still.alley,
+    blurb: "Where the river gives up: salt marsh, wading birds, boats that have seen things.",
+    pack: "Light layers, field glasses, tide table (provided).",
+    map: { x: 180, y: 250 },
+    stops: [
+      { name: "Marsh walk", note: "Guided at low tide. Boots provided." },
+      { name: "Boat shed", note: "An hour on the water with a man of few words." },
+      { name: "Light dinner", note: "Whatever the boats brought. Always enough." },
     ],
   },
 ];

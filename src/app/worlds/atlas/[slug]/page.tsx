@@ -26,6 +26,7 @@ export default async function AtlasDetail({ params }: { params: Promise<{ slug: 
         <p className="kicker" style={{ marginTop: 16 }}>{d.region} · {d.season} · ★ {d.rating}</p>
         <h1 style={{ fontSize: "clamp(2.6rem, 7vw, 5rem)", lineHeight: 0.95, margin: "8px 0" }}>{d.name}</h1>
         <p style={{ fontSize: "1.25rem" }}>{d.blurb}</p>
+        <p className="kicker" style={{ marginTop: 8 }}>Pack: {d.pack}</p>
         <img src={d.image} alt={d.name} loading="lazy" decoding="async" style={{ width: "100%", maxHeight: 480, objectFit: "cover", margin: "24px 0" }} />
         <p className="kicker">The stops</p>
         {d.stops.map((s, i) => (

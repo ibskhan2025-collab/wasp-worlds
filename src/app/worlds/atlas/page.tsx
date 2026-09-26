@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { AtlasBrowser } from "./browser";
+import { AtlasMap } from "./map";
 
 export const metadata: Metadata = {
   title: "ATLAS — Destinations you can explore before you arrive",
@@ -23,6 +24,7 @@ export default function AtlasPage() {
           <Link className="btn" href="/worlds/atlas/itinerary">My itinerary →</Link>
         </div>
       </header>
+      <AtlasMap />
       <AtlasBrowser />
     </div>
   );
