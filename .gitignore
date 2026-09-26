@@ -1,0 +1,21 @@
+# deps
+node_modules/
+
+# next
+.next/
+out/
+
+# env (NEVER commit real secrets)
+.env*.local
+.env.local
+
+# logs
+*.log
+npm-debug.log*
+
+# os
+.DS_Store
+Thumbs.db
+
+# misc
+*.tsbuildinfo
