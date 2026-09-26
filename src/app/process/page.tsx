@@ -27,6 +27,23 @@ export default function ProcessPage() {
       <Link className="btn" href="/start">
         Enquiry
       </Link>
+      <hr className="rule" />
+      <p className="kicker">The reassuring part</p>
+      <h2 className="display" style={{ fontSize: "clamp(2rem, 5vw, 3.6rem)" }}>Certainty, itemized.</h2>
+      <div className="grid-2" style={{ marginTop: 24 }}>
+        <div>
+          <p className="kicker">WASP handles</p>
+          <p>Everything technical and visual: direction, design, build, QA, launch, analytics, redirects, the 404 page. You never touch a config file or learn what a bundler is.</p>
+          <p className="kicker" style={{ marginTop: 16 }}>You handle</p>
+          <p>Decisions, content, and access. One owner on your side who can say yes. Showing up to two scheduled reviews with opinions. That&apos;s the whole job.</p>
+        </div>
+        <div>
+          <p className="kicker">Feedback & revisions</p>
+          <p>Two structured revision rounds per phase, on a written list — not a drip-feed of new ideas for six weeks. Anything beyond scope gets priced plainly before it&apos;s built, never discovered on the invoice.</p>
+          <p className="kicker" style={{ marginTop: 16 }}>Money & after</p>
+          <p>A start fee reserves the calendar, milestones follow progress, nothing is due for work you haven&apos;t seen. After launch: handover with docs, or a care arrangement if you&apos;d rather never think about it again.</p>
+        </div>
+      </div>
     </div>
   );
 }

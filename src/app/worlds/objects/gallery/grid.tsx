@@ -31,6 +31,10 @@ export function GalleryGrid() {
       {open !== null ? (
         <Lightbox images={images} index={open} onClose={() => setOpen(null)} onMove={setOpen} />
       ) : null}
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", padding: "32px 20px 0" }}>
+        <Link className="btn" href="/worlds/objects/shop">Shop the work →</Link>
+        <Link className="btn ghost" href="/worlds/objects/makers">Meet the makers</Link>
+      </div>
     </div>
   );
 }

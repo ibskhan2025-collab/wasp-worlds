@@ -6,7 +6,7 @@ import { TourList } from "./tour-list";
 
 export const metadata: Metadata = {
   title: "PULSE — The release is the event",
-  description: "A culture-first world: releases, tracklists, countdowns and a tour you can RSVP to.",
+  description: "A culture-first world by WASP: releases, tracklists, countdowns and a tour you can RSVP to. Fictional artists.",
 };
 
 export default function PulsePage() {

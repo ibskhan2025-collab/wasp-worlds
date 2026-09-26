@@ -36,7 +36,7 @@ export const releases: Release[] = [
     artist: "Copper Line",
     date: "2026-04-02",
     cover: media.motion.fire,
-    note: "Out now. Eleven songs, no skips, one harmonica solo the label begged them to cut.",
+    note: "Out now. Five songs, no skips, one harmonica solo the label begged them to cut.",
     tracks: [
       { name: "Paper Tigers", secs: 198 },
       { name: "Copper Line", secs: 224 },

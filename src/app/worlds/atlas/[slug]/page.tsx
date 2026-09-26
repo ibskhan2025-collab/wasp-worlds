@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { destinations } from "@/data/atlas";
-import { money } from "@/lib/use-cart";
+import { money } from "@/lib/format";
 import { AddStop } from "./add-stop";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { noirJournal } from "@/data/noir";
+
+export const metadata: Metadata = {
+  title: "Journal — NOIR",
+  description: "Notes on cut, color and constraint from the NOIR house. A demo fashion world by WASP.",
+};
 
 export default function NoirJournal() {
   return (

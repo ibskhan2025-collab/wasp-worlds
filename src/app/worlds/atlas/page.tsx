@@ -6,7 +6,7 @@ import { AtlasMap } from "./map";
 
 export const metadata: Metadata = {
   title: "ATLAS — Destinations you can explore before you arrive",
-  description: "A travel world: routes, stops and seasons. Build an itinerary, then request it.",
+  description: "A travel world by WASP: routes, stops and seasons. Build an itinerary, then request it. Fictional destinations, real interface.",
 };
 
 export default function AtlasPage() {

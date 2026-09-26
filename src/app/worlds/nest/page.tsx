@@ -5,7 +5,7 @@ import { nestRooms } from "@/data/nest";
 
 export const metadata: Metadata = {
   title: "NEST — Enter through the floorplan",
-  description: "A spatial world: the plan is the sitemap. Click a room, see its light, feel its materials.",
+  description: "A spatial world by WASP: the plan is the sitemap. Click a room, see its light, feel its materials.",
 };
 
 export default function NestPage() {

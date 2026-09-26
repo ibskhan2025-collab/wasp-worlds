@@ -7,12 +7,17 @@ import { useWasp } from "@/context/wasp-context";
 
 const LINKS = [
   { href: "/", label: "Work" },
+  { href: "/studio/services", label: "Services" },
   { href: "/studio", label: "Studio" },
-  { href: "/lab", label: "Lab" },
-  { href: "/tools", label: "Tools" },
   { href: "/process", label: "Process" },
-  { href: "/os", label: "OS" },
+  { href: "/tools", label: "Tools" },
   { href: "/start", label: "Start" },
+];
+
+// Lab and OS live one click deeper: studio grid, homepage meta-links, footer.
+const MORE_LINKS = [
+  { href: "/lab", label: "Lab" },
+  { href: "/os", label: "OS" },
 ];
 
 export function SiteChrome({ children }: { children: ReactNode }) {
@@ -73,6 +78,9 @@ export function SiteChrome({ children }: { children: ReactNode }) {
           <Link className="nav-mark" href="/">WASP</Link>
           <nav aria-label="Footer">
             {LINKS.map((link) => (
+              <Link key={link.href} href={link.href}>{link.label}</Link>
+            ))}
+            {MORE_LINKS.map((link) => (
               <Link key={link.href} href={link.href}>{link.label}</Link>
             ))}
             <a href="mailto:hello@wasp.studio">hello@wasp.studio</a>

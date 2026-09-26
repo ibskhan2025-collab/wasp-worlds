@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import { media } from "@/lib/media";
+
+export const metadata: Metadata = {
+  title: "Story — Casa Valle",
+  description: "Fire, valley, patience: the story of Casa Valle, a demo restaurant by WASP.",
+};
 
 export default function CasaAbout() {
   return (

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { media } from "@/lib/media";
+import { WorldProof } from "@/components/worlds/world-proof";
 
 export default function ObjectsHome() {
   return (
@@ -22,6 +23,11 @@ export default function ObjectsHome() {
           Not a theme. Not a screenshot of Shopify. A place to pick something up.
         </p>
       </section>
+      <WorldProof
+        proves="Commerce as craft, not plugin: discovery, desire, cart, checkout — every step designed and working. If you sell things, this is what your store could feel like."
+        relatedHref="/worlds/noir"
+        relatedName="NOIR"
+      />
     </div>
   );
 }

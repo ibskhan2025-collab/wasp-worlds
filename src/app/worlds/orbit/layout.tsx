@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "ORBIT — Complex software, made legible",
-  description: "A working operations demo: customers, projects, team, activity.",
+  description: "A working operations demo by WASP: customers, projects, team, activity. Not a real company.",
 };
 
 export default function OrbitLayout({ children }: { children: ReactNode }) {

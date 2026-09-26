@@ -38,6 +38,12 @@ export default function StillAbout() {
         <p className="kicker" style={{ marginTop: 32 }}>
           {stillCollections.length} collections · {total} pictures · <Link href="/worlds/still/prints">prints →</Link>
         </p>
+        <hr className="rule" />
+        <p className="kicker">Field notes — the interface philosophy</p>
+        <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 400, letterSpacing: "-0.02em" }}>Why the site looks like nothing.</h2>
+        <p style={{ lineHeight: 1.65 }}>A photography site has one job: get out of the way of the picture. So there is no hero, no slideshow, no parallax — a contact sheet, the way photographers have reviewed work for a century. Thumbnails are deliberately small and grayscale; the fullscreen view is the only place an image appears at full force.</p>
+        <p style={{ lineHeight: 1.65 }}>Navigation is three filters and two links. The keyboard runs the lightbox because photographers already live on keyboards. Favorites exist because editing — choosing — is half the craft, and the site keeps your edit.</p>
+        <p style={{ lineHeight: 1.65 }}>What this proves: restraint as a technical discipline. No frameworks for effects, no libraries for viewing — one page component, image optimization, and the confidence to stop.</p>
       </div>
     </div>
   );

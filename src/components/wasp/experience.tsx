@@ -31,6 +31,29 @@ const ROOM_IMAGE: Record<string, string> = {
   vector: pexels(37436278, 800),
 };
 
+const SELECTED = [
+  {
+    id: "casa",
+    editorial: "A restaurant site where booking a table feels like the evening starting early — atmosphere and utility in the same gesture. If hospitality can convert without groveling, so can you.",
+    capabilities: ["Reservations", "Editorial menu", "Gallery"],
+  },
+  {
+    id: "noir",
+    editorial: "Fashion commerce that makes the object desirable before the price appears — then still closes: sizes, bag, validated checkout, appointments.",
+    capabilities: ["Ecommerce", "Lookbook", "Appointments"],
+  },
+  {
+    id: "orbit",
+    editorial: "Complex software made legible: customers, pipeline, reports, exports. Proof the studio handles operational products, not just marketing sites.",
+    capabilities: ["Dashboards", "CRUD", "Reports + CSV"],
+  },
+  {
+    id: "forge",
+    editorial: "Industrial parts made human: spec tables, generated diagrams, a three-question quote flow. B2B clarity that still converts.",
+    capabilities: ["Catalogues", "Diagrams", "Quote builder"],
+  },
+] as const;
+
 export function Experience() {
   const wasp = useWasp();
   const router = useRouter();
@@ -138,6 +161,16 @@ export function Experience() {
           <h1 className="ex-title">
             {copy ? copy.headline : "WHAT DO YOU WANT TO MAKE?"}
           </h1>
+          {!copy ? (
+            <p className="ex-sub">
+              WASP designs and builds digital experiences for people, products, places and ideas —
+              treating the website not as a page to fill, but as a place to enter.
+            </p>
+          ) : null}
+          <div className="world-actions" style={{ marginTop: 22 }}>
+            <Link className="btn" href="#selected">View selected work</Link>
+            <Link className="btn ghost" href="/start">Start a project</Link>
+          </div>
           <div className="intent-row" role="list">
             {INTENTS.map((item) => (
               <button
@@ -196,6 +229,41 @@ export function Experience() {
         </p>
       ) : null}
 
+      <section id="selected" aria-label="Selected work" style={{ borderBottom: "1px solid var(--line)" }}>
+        <div style={{ padding: "clamp(24px,5vw,56px) var(--pad) 8px" }}>
+          <p className="ex-kicker">Selected work · 4 rooms that carry the argument</p>
+        </div>
+        {SELECTED.map((s) => {
+          const world = WORLDS.find((w) => w.id === s.id)!;
+          return (
+            <article key={s.id} className="selected-row">
+              <Link
+                href={world.href}
+                className="selected-img"
+                style={{ ["--room-image" as string]: `url(${ROOM_IMAGE[world.id]})` }}
+                aria-label={`Enter ${world.name}`}
+              />
+              <div className="selected-body">
+                <p className="kicker">ROOM {world.room} · {world.kind} · WASP STUDY</p>
+                <h2>{world.name}</h2>
+                <p className="selected-line">{world.line}</p>
+                <p>{s.editorial}</p>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", margin: "14px 0 20px" }}>
+                  {s.capabilities.map((c) => <span key={c} className="chip">{c}</span>)}
+                </div>
+                <div className="world-actions">
+                  <Link className="btn" href={world.href}>Enter world</Link>
+                  <Link className="btn ghost" href={`/studio/case/${world.id}`}>View case study</Link>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </section>
+
+      <div style={{ padding: "clamp(24px,5vw,56px) var(--pad) 8px", borderBottom: "1px solid var(--line)" }}>
+        <p className="ex-kicker">The exhibition · all 15 rooms</p>
+      </div>
       <div className="rooms">
         {WORLDS.map((world, i) => {
           const rec = recIds.includes(world.id);
@@ -207,7 +275,7 @@ export function Experience() {
               style={{ ["--room-image" as string]: `url(${ROOM_IMAGE[world.id]})` }}
             >
               <div>
-                <div className="room-id">ROOM {world.room}{rec ? " · FOR YOU" : ""}</div>
+                <div className="room-id">ROOM {world.room} · WASP STUDY{rec ? " · FOR YOU" : ""}</div>
                 <h2>{world.name}</h2>
                 <div className="kind">{world.kind}</div>
               </div>

@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { dishes } from "@/data/casa";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const dish = dishes.find((d) => d.id === slug);
+  return dish
+    ? { title: `${dish.name} — CASA menu`, description: `${dish.desc} A dish from Casa Valle, a demo restaurant by WASP.` }
+    : { title: "Dish not found — CASA" };
+}
 
 export default async function DishPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

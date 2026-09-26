@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { WorldProof } from "@/components/worlds/world-proof";
 import { ForgeBrowser } from "./browser";
 
 export const metadata: Metadata = {
   title: "FORGE — Industrial parts, explained like someone cares",
-  description: "A B2B catalogue with real specs, dimensioned diagrams and a three-question quote path.",
+  description: "A B2B catalogue study by WASP: real specs, dimensioned diagrams, three-question quote path. Fictional parts, real flow.",
 };
 
 export default function ForgePage() {
@@ -21,6 +22,11 @@ export default function ForgePage() {
         </div>
       </header>
       <ForgeBrowser />
+      <WorldProof
+        proves="Technical information made human: tolerances as diagrams, catalogues organized by problem, a quote path a busy buyer can finish. B2B clarity that still converts."
+        relatedHref="/worlds/vector"
+        relatedName="VECTOR"
+      />
     </div>
   );
 }

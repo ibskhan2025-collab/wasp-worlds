@@ -23,6 +23,18 @@ export default function VoidNotes() {
         <Link href="/worlds/void" className="kicker">← The void</Link>
         <p className="kicker" style={{ marginTop: 16 }}>Field notes</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.6rem)", margin: "8px 0 24px" }}>HOW TO BE IN HERE</h1>
+        <div style={{ display: "grid", gap: 16, marginBottom: 16 }}>
+          {[
+            ["What is this", "A particle field with simple physics — drift, attraction, repulsion, decay. No score, no goal, no end state."],
+            ["Why it exists", "To study the cheapest possible interactivity: does a screen that notices the pointer feel alive with nothing else on it? Answer so far: yes, for about four minutes."],
+            ["What we learned", "Stillness is the strongest input. Visitors who stop moving get the only authored moment in the room — which is why the discovery exists. Boredom, instrumented, becomes a mechanic."],
+          ].map(([k, v]) => (
+            <div key={k}>
+              <p className="kicker">{k}</p>
+              <p style={{ margin: "4px 0 0", lineHeight: 1.6 }}>{v}</p>
+            </div>
+          ))}
+        </div>
         {NOTES.map((n, i) => (
           <div key={n.t} style={{ display: "grid", gridTemplateColumns: "48px 1fr", gap: 12, padding: "14px 0", borderTop: "1px solid rgba(244,241,234,0.16)" }}>
             <span className="kicker">0{i + 1}</span>

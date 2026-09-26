@@ -25,6 +25,13 @@ export function RoomView({ slug }: { slug: string }) {
   if (!room) return <p style={{ padding: 24 }}>No such room.</p>;
   const material = nestMaterials.find((m) => m.id === mat) ?? nestMaterials[0];
   const others = nestRooms.filter((r) => r.slug !== slug);
+  const notes: Record<string, { mood: string; scale: string; relation: string }> = {
+    "reading-corner": { mood: "Held and low — the room drops its voice.", scale: "One body, one book, one lamp.", relation: "Off the table room, behind a half-wall." },
+    "oak-table": { mood: "Convivial and loud — built for midnight.", scale: "Six chairs, one long table, no wobble.", relation: "Center of the plan; every room refers to it." },
+    "linen-bedroom": { mood: "Slow and pale — designed for waking.", scale: "Low bed, one window, nothing else competing.", relation: "East end, farthest from the door." },
+    "maker-niche": { mood: "Honest and even — north light, no flattery.", scale: "A bench, a stool, a day's work.", relation: "Tucked beside the bedroom, smallest room, hardest working." },
+  };
+  const note = notes[slug] ?? { mood: "", scale: "", relation: "" };
 
   async function ask() {
     if (!room) return;
@@ -54,6 +61,18 @@ export function RoomView({ slug }: { slug: string }) {
       <p className="kicker" style={{ marginTop: 16 }}>{room.size} · {room.light}</p>
       <h1 style={{ fontSize: "clamp(2.4rem, 6vw, 4.4rem)", margin: "8px 0", letterSpacing: "-0.04em" }}>{room.name}</h1>
       <p style={{ fontSize: "1.2rem", maxWidth: "56ch" }}>{room.desc}</p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginTop: 20 }} className="grid-3">
+        {[
+          ["Mood", note.mood],
+          ["Scale", note.scale],
+          ["Relation", note.relation],
+        ].map(([k, v]) => (
+          <div key={k}>
+            <p className="kicker">{k}</p>
+            <p style={{ margin: "4px 0 0" }}>{v}</p>
+          </div>
+        ))}
+      </div>
       <div style={{ background: material.hex, padding: 16, marginTop: 20, transition: "background 400ms" }}>
         <img src={room.image} alt={room.name} loading="lazy" decoding="async" style={{ width: "100%", maxHeight: 440, objectFit: "cover" }} />
         <p className="kicker" style={{ marginTop: 10, color: "#1c1a16" }}>Shown in {material.name} — {material.note}</p>

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { WorldProof } from "@/components/worlds/world-proof";
 import { orbitSeries, type OrbitCustomer, type OrbitProject } from "@/data/orbit";
 import { isCustomerEmailTaken, loadOrbit, saveOrbit, touch } from "@/lib/orbit-store";
 
@@ -410,6 +411,11 @@ export default function OrbitPage() {
           ) : null}
         </main>
       </div>
+      <WorldProof
+        proves="Operational complexity handled in public: customers, pipeline, reports, exports — an interface people live in, not pages they land on. If your software needs operating, this is the proof."
+        relatedHref="/worlds/forge"
+        relatedName="FORGE"
+      />
     </div>
   );
 }

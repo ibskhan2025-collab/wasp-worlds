@@ -53,8 +53,13 @@ This is a working draft inside WASP OS, not a contract.`;
   return (
     <div className="os-page" style={{ padding: 0 }}>
       <div style={{ padding: "18px 20px", borderBottom: "1px solid var(--line)" }}>
-        <p className="kicker">WASP OS · demonstration</p>
+        <p className="kicker">How the studio works · live demonstration</p>
         <h1 className="display" style={{ fontSize: "clamp(2.2rem, 6vw, 4rem)" }}>The studio as a loop.</h1>
+        <p style={{ maxWidth: "60ch", fontSize: "1.1rem" }}>
+          Why should you care? Because this is the actual machinery your project would run on:
+          pipeline, records, SOPs, content, sales, documents — the same loop, with your project in it.
+          Click around. It&apos;s all operable, and it all persists in this browser.
+        </p>
       </div>
       <div className="os-shell">
         <aside className="os-side">

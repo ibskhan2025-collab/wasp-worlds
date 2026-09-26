@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { casa } from "@/data/casa";
 import { media } from "@/lib/media";
+import { WorldProof } from "@/components/worlds/world-proof";
 
 export default function CasaHome() {
   return (
@@ -52,6 +53,11 @@ export default function CasaHome() {
           </Link>
         ))}
       </section>
+      <WorldProof
+        proves="A hospitality site doesn't choose between atmosphere and utility. The reservation journey can be part of the evening, not a mechanical step before it — and that thinking ports directly to any business that takes bookings."
+        relatedHref="/worlds/noir"
+        relatedName="NOIR"
+      />
     </div>
   );
 }

@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { noirJournal } from "@/data/noir";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const article = noirJournal.find((j) => j.slug === slug);
+  return article
+    ? { title: `${article.title} — NOIR journal`, description: `${article.dek} From the NOIR house, a demo fashion world by WASP.` }
+    : { title: "Article not found — NOIR" };
+}
 
 export default async function JournalArticle({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

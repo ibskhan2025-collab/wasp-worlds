@@ -58,12 +58,13 @@ export type WaspState = {
 };
 
 export type BuilderState = {
-  making: string;
-  needs: string;
-  feel: string;
-  idea: string;
+  type: string;
+  goal: string;
+  audience: string;
+  existing: string;
+  ambition: string;
   budget: string;
-  matters: string;
+  timeline: string;
   name: string;
   email: string;
   company: string;
@@ -106,12 +107,13 @@ export const MOTIONS: { id: MotionPref; label: string }[] = [
 ];
 
 export const defaultBuilder: BuilderState = {
-  making: "",
-  needs: "",
-  feel: "",
-  idea: "",
+  type: "",
+  goal: "",
+  audience: "",
+  existing: "",
+  ambition: "",
   budget: "",
-  matters: "",
+  timeline: "",
   name: "",
   email: "",
   company: "",

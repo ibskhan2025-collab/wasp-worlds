@@ -23,6 +23,9 @@ export default async function CivicGuide({ params }: { params: Promise<{ slug: s
         <p className="kicker" style={{ marginTop: 16 }}>{s.dept}</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 6vw, 4.2rem)", letterSpacing: "-0.04em", margin: "8px 0" }}>{s.title}</h1>
         <p style={{ fontSize: "1.25rem" }}>{s.intro}</p>
+        <p className="kicker" style={{ border: "1px solid var(--line)", padding: "10px 12px" }}>
+          Fictional guide for interface demonstration. Not affiliated with any authority; check your real council for real rules.
+        </p>
         <Checklist slug={s.slug} steps={s.steps} />
         <p className="kicker" style={{ marginTop: 32 }}>Source: {s.source}</p>
       </article>

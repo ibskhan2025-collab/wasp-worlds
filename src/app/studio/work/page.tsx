@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { WORLDS } from "@/lib/worlds";
+
+export const metadata: Metadata = {
+  title: "Work — 15 rooms you can operate",
+  description: "Every WASP case study is a working demo, not a screenshot. Enter the rooms.",
+};
 
 export default function WorkPage() {
   return (

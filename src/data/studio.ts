@@ -78,6 +78,9 @@ export const caseStudies = [
     design: "Dark, photographic, type that behaves like print. The food is large. The booking is not buried in a footer.",
     interaction: "Filter the menu. Open a dish. Choose a night, a time, a party. Submit a reservation that is stored.",
     result: "Clearer path from appetite to table. Reduced friction between looking and booking. Stronger presentation of the cooking.",
+    idea: "Hospitality websites always choose between atmosphere and utility. CASA refuses the choice.",
+    system: "Route per concern; Postgres reservations with server-side validation; local bookings mirror; the menu is data, not pages.",
+    proves: "A hospitality client gets emotion that converts — the reservation journey as part of the evening, not a form stapled to a gallery.",
   },
   {
     slug: "noir",
@@ -88,6 +91,9 @@ export const caseStudies = [
     design: "Black, white, cut, space. Almost no chrome. The garment is the interface.",
     interaction: "Filter, open, choose a size, add, change quantity, remove, see a subtotal, walk a checkout simulation.",
     result: "A store that still feels like a magazine. A magazine that can take money seriously.",
+    idea: "Editorial and commerce are one object. The picture is shoppable; the bag is real.",
+    system: "Cart in local storage; the server reprices every order from the catalogue, so totals can't be edited in devtools. Sizes validated per garment.",
+    proves: "Fashion ecommerce without sacrificing art direction — desire built editorially, money handled seriously.",
   },
   {
     slug: "orbit",
@@ -98,6 +104,9 @@ export const caseStudies = [
     design: "Light interior, dense but not noisy. Data in terracotta. A sidebar that knows what it is.",
     interaction: "Change the range. Open a customer. Move through views. Toggle a setting and watch the room respond.",
     result: "Product craft you can verify with your hands. Improved clarity about what 'app' actually means.",
+    idea: "A portfolio that claims product craft should let you operate the product — not admire a laptop at twelve degrees.",
+    system: "Local-first store with validated CRUD, shaped for an API swap; the activity log derives from mutations; reports export to CSV.",
+    proves: "Complex operational interfaces, not marketing sites — dashboards people live in, with states, settings and exports.",
   },
   {
     slug: "objects",
@@ -108,6 +117,9 @@ export const caseStudies = [
     design: "Warm paper, slow photography, type that could live on a swing tag.",
     interaction: "Search, filter, configure, add, adjust, checkout. Totals that add up.",
     result: "A clearer conversion path without looking like a marketplace.",
+    idea: "Independent retail deserves its own system — not a theme, not a marketplace listing.",
+    system: "The NOIR cart engine, reskinned; option and quantity validation per piece; simulated till with server-side totals.",
+    proves: "Commerce craft for small catalogues — discovery, desire and checkout designed as one material.",
   },
 ];
 

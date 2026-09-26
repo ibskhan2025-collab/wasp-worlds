@@ -8,7 +8,7 @@ import { CallForm } from "./call-form";
 
 export const metadata: Metadata = {
   title: "VECTOR — Serious information, presented with confidence",
-  description: "A finance world: labelled performance, plain-figure fees, and insights one scroll from a conversation.",
+  description: "A speculative finance world by WASP: labelled performance, plain-figure fees. Illustrative figures, not advice.",
 };
 
 export default function VectorPage() {
@@ -19,6 +19,9 @@ export default function VectorPage() {
         <p className="kicker" style={{ color: "#3ddc84" }}>Room 15 · Finance / Professional</p>
         <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(3rem, 10vw, 7.5rem)", margin: "4px 0", letterSpacing: "-0.06em" }}>VECTOR</h1>
         <p style={{ maxWidth: "52ch", fontSize: "1.15rem", color: "#e8e4dcbb" }}>Credibility and conversion as design materials — not opposing forces.</p>
+        <p className="kicker" style={{ marginTop: 12, border: "1px solid #ffffff2c", padding: "10px 12px", maxWidth: "64ch", color: "#3ddc84" }}>
+          Speculative finance experience. All figures are fabricated for interface demonstration — nothing here is financial advice or a real performance claim.
+        </p>
       </header>
       <section style={{ padding: "24px 20px", maxWidth: 960 }}>
         <p className="kicker" style={{ color: "#3ddc84" }}>Composite index · drawdowns labelled</p>

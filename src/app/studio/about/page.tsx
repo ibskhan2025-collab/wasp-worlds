@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "About — the studio behind the rooms",
+  description: "WASP in short: independent, premium when needed, weird when it should be.",
+};
 
 export default function AboutPage() {
   return (

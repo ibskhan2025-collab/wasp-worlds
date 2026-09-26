@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { media } from "@/lib/media";
+import { WorldProof } from "@/components/worlds/world-proof";
 
 export default function NoirHome() {
   return (
@@ -30,6 +31,11 @@ export default function NoirHome() {
           </Link>
         ))}
       </section>
+      <WorldProof
+        proves="Editorial desire and commercial function are not enemies. NOIR makes the object wanted before the price appears — then still closes with sizes, bag, appointments and validated checkout. That is ecommerce as craft."
+        relatedHref="/worlds/objects"
+        relatedName="OBJECTS"
+      />
     </div>
   );
 }

@@ -87,6 +87,10 @@ export default function StillPage() {
           {stillCollections.find((c) => c.id === col)?.note}
         </p>
       ) : null}
+      <div style={{ display: "flex", gap: 16, padding: "0 20px 60px" }}>
+        <Link href="/worlds/still/prints" className="kicker">Like one? Prints →</Link>
+        <Link href="/worlds/still/about" className="kicker">About →</Link>
+      </div>
       {open !== null && images[open] ? (
         <div className="lightbox" role="dialog" aria-modal="true">
           <button type="button" className="ghost" style={{ position: "absolute", top: 16, right: 16 }} onClick={() => setOpen(null)}>

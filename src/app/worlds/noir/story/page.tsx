@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "House — NOIR",
+  description: "The NOIR house: black as constraint, not default. A demo fashion world by WASP.",
+};
+
 export default function NoirStory() {
   return (
     <div style={{ padding: "12vh 24px 80px", maxWidth: 720 }}>

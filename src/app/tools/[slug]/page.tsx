@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { use, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useWasp } from "@/context/wasp-context";
 import { TOOLS, contrastRatio, conversionItems, estimateScope, fitScore } from "@/lib/tools";
 
 export default function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -24,6 +26,34 @@ export default function ToolPage({ params }: { params: Promise<{ slug: string }>
       {slug === "ideas" ? <Ideas /> : null}
       {slug === "redesign" ? <Redesign /> : null}
       {slug === "conversion" ? <Conversion /> : null}
+      <hr className="rule" />
+      <ToolCta tool={tool.name} />
+    </div>
+  );
+}
+
+function ToolCta({ tool, payload }: { tool: string; payload?: string }) {
+  const wasp = useWasp();
+  const router = useRouter();
+  function send() {
+    if (payload) {
+      wasp.patch({ builder: { ...wasp.builder, goal: payload.slice(0, 2000), step: 6 } });
+    }
+    router.push("/start");
+  }
+  return (
+    <div className="panel" style={{ marginTop: 8 }}>
+      <p className="kicker">Want to take this further?</p>
+      <p style={{ fontSize: "1.2rem", maxWidth: "44ch" }}>
+        {payload
+          ? "This result travels with you — it lands prefilled in the project builder."
+          : `The ${tool} tells you what's what. WASP does what’s next.`}
+      </p>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <button className="btn" type="button" onClick={send}>
+          {payload ? "Send this to WASP →" : "Start a project →"}
+        </button>
+      </div>
     </div>
   );
 }
@@ -123,6 +153,9 @@ function Cost() {
         <p className="kicker">Estimated effort</p>
         <p style={{ fontSize: "2.4rem" }}>{result.weeksLow} – {result.weeksHigh} weeks</p>
         <p>{result.note}</p>
+        <div style={{ marginTop: 12 }}>
+          <ToolCta tool="Scope / cost range" payload={`Scope estimate from WASP tools: ${type} site, ${pages} pages${ecommerce ? ", ecommerce" : ""}${cms ? ", CMS" : ""}, ${integrations} integrations, ${complexity} complexity → ${result.weeksLow}–${result.weeksHigh} weeks.`} />
+        </div>
       </div>
     </div>
   );
@@ -204,6 +237,9 @@ Tradeoff: more of one usually means less of another, or more time.`;
         </label>
       </div>
       <pre className="panel" style={{ whiteSpace: "pre-wrap" }}>{text}</pre>
+      <div style={{ marginTop: 12 }}>
+        <ToolCta tool="Project scope builder" payload={text} />
+      </div>
     </div>
   );
 }
@@ -228,6 +264,9 @@ Must not: ${b.not || "—"}`;
         ))}
       </div>
       <pre className="panel" style={{ whiteSpace: "pre-wrap" }}>{text}</pre>
+      <div style={{ marginTop: 12 }}>
+        <ToolCta tool="Website brief generator" payload={text} />
+      </div>
     </div>
   );
 }

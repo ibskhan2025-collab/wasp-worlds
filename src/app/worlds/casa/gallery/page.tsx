@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
 import { Lightbox } from "@/components/worlds/lightbox";
@@ -21,6 +22,10 @@ export default function CasaGallery() {
       {open !== null ? (
         <Lightbox images={casaGallery.map((g) => ({ src: g.src, alt: g.alt }))} index={open} onClose={() => setOpen(null)} onMove={setOpen} />
       ) : null}
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 32 }}>
+        <Link className="btn" href="/worlds/casa/reservations">Hungry? Book →</Link>
+        <Link className="btn ghost" href="/worlds/casa/menu">See the menu</Link>
+      </div>
     </div>
   );
 }

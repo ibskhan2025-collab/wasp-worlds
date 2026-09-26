@@ -5,7 +5,7 @@ import { ObjNav } from "@/components/objects/obj-nav";
 
 export const metadata: Metadata = {
   title: "OBJECTS — A shop that treats shopping like discovery",
-  description: "Ceramics, seating, light. Browse, desire, cart, convert.",
+  description: "Ceramics, seating, light. Browse, desire, cart, convert — a working demo by WASP, not a real shop.",
 };
 
 export default function ObjectsLayout({ children }: { children: ReactNode }) {
