@@ -237,7 +237,7 @@ export function Experience() {
         </button>
         {wasp.visited.length >= 3 && !wasp.holyShitSeen ? (
           <button className="ghost" type="button" onClick={startHoly}>
-            Something&apos;s wrong
+            Notice something?
           </button>
         ) : null}
         <Link className="ghost" href="/studio">
@@ -251,18 +251,18 @@ export function Experience() {
           {holyStep === 1 ? <h2>NOW LOOK AT THE WEBSITE.</h2> : null}
           {holyStep >= 2 && holyStep < 4 ? (
             <div>
-              <h2>SYSTEM</h2>
+              <h2>HERE&apos;S WHAT YOU&apos;RE STANDING IN.</h2>
               <div className="sys">
-                <div>WORLDS — fifteen working worlds</div>
+                <div>WORLDS — fifteen working rooms, not screenshots</div>
                 <div>STUDIO — process, services, proof</div>
-                <div>TOOLS — value before the invoice</div>
-                <div>BUILDER — a brief that is actually a brief</div>
-                <div>OS — the studio as software</div>
+                <div>TOOLS — free instruments, no invoice</div>
+                <div>BUILDER — a brief in six questions</div>
+                <div>OS — the studio run as software</div>
               </div>
             </div>
           ) : null}
-          {holyStep === 4 ? <h2>YOU JUST BROKE MY PORTFOLIO.</h2> : null}
-          {holyStep === 5 ? <h2>GOOD.</h2> : null}
+          {holyStep === 4 ? <h2>NOTHING HERE IS A MOCKUP.</h2> : null}
+          {holyStep === 5 ? <h2>THAT&apos;S THE WHOLE PITCH.</h2> : null}
           {holyStep >= 6 ? (
             <div>
               <h2>IMAGINE WHAT WE COULD DO WITH YOURS.</h2>
