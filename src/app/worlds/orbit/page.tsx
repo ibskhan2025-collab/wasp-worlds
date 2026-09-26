@@ -5,7 +5,7 @@ import { WorldExit } from "@/components/wasp/world-exit";
 import { orbitSeries, type OrbitCustomer, type OrbitProject } from "@/data/orbit";
 import { isCustomerEmailTaken, loadOrbit, saveOrbit, touch } from "@/lib/orbit-store";
 
-const VIEWS = ["Dashboard", "Customers", "Projects", "Team", "Activity", "Settings"] as const;
+const VIEWS = ["Dashboard", "Customers", "Projects", "Team", "Activity", "Reports", "Settings"] as const;
 type View = (typeof VIEWS)[number];
 type Range = "7d" | "30d" | "90d";
 
@@ -35,6 +35,16 @@ function Chart({ data }: { data: number[] }) {
 function moneyK(n: number) {
   if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
   return String(n);
+}
+
+function downloadCsv(name: string, rows: string[][]) {
+  const esc = (v: string) => `"${v.replace(/"/g, '""')}"`;
+  const blob = new Blob([rows.map((r) => r.map(esc).join(",")).join("\n")], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `orbit-${name}.csv`;
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 
 const inputStyle = { background: "transparent", border: "1px solid var(--line)", padding: "8px 10px", fontSize: 14 } as const;
@@ -354,6 +364,26 @@ export default function OrbitPage() {
                 </li>
               ))}
             </ul>
+          ) : null}
+
+          {view === "Reports" ? (
+            <div>
+              <p className="kicker">Month-end, without the month-end</p>
+              <div className="grid-3" style={{ marginBottom: 16 }}>
+                <div className="metric"><span className="kicker">Customers</span><b>{state.customers.length}</b></div>
+                <div className="metric"><span className="kicker">Pipeline value</span><b>{moneyK(state.projects.length * 8200)}</b></div>
+                <div className="metric"><span className="kicker">Live projects</span><b>{state.projects.filter((p) => p.stage !== "Live").length}</b></div>
+              </div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <button className="btn" type="button" onClick={() => downloadCsv("customers", [["name", "company", "email", "plan", "spend", "health"], ...state.customers.map((c) => [c.name, c.company, c.email, c.plan, String(c.spend), c.health])])}>
+                  Customers CSV
+                </button>
+                <button className="btn ghost" type="button" onClick={() => downloadCsv("projects", [["project", "client", "stage", "due", "owner"], ...state.projects.map((p) => [p.name, p.client, p.stage, p.due, p.owner])])}>
+                  Projects CSV
+                </button>
+              </div>
+              <p className="kicker" style={{ marginTop: 12 }}>Exports everything currently in the room, as CSV.</p>
+            </div>
           ) : null}
 
           {view === "Settings" ? (

@@ -17,7 +17,7 @@ const LINKS = [
 
 export function SiteChrome({ children }: { children: ReactNode }) {
   const path = usePathname();
-  const { feel } = useWasp();
+  const { feel, motion } = useWasp();
   const inWorld = path.startsWith("/worlds/");
   const standalone = path === "/resume";
   const [open, setOpen] = useState(false);
@@ -32,7 +32,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
   useEffect(() => {
     const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
     const rm = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const apply = () => setFine(mq.matches && feel !== "quiet" && !rm.matches);
+    const apply = () => setFine(mq.matches && feel !== "quiet" && motion !== "still" && !rm.matches);
     apply();
     mq.addEventListener("change", apply);
     rm.addEventListener("change", apply);
@@ -40,7 +40,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
       mq.removeEventListener("change", apply);
       rm.removeEventListener("change", apply);
     };
-  }, [feel]);
+  }, [feel, motion]);
 
   useEffect(() => {
     document.body.classList.toggle("cursor-fine", fine);

@@ -105,6 +105,18 @@ export default function StartPage() {
                 onChange={(e) => setField(current.key, e.target.value)}
                 style={{ width: "100%", minHeight: 140, background: "transparent", border: "1px solid var(--line)", padding: 12 }}
               />
+              {current.key === "feel" ? (
+                <p style={{ marginTop: 10 }}>
+                  <span className="kicker">Your exhibition vibe: {wasp.feel} · {wasp.motion} motion </span>
+                  <button
+                    className="ghost"
+                    type="button"
+                    onClick={() => setField("feel", `${wasp.feel} feel, ${wasp.motion} motion`)}
+                  >
+                    Use it
+                  </button>
+                </p>
+              ) : null}
               <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
                 {step > 0 ? (
                   <button className="btn ghost" type="button" onClick={() => setField("step", step - 1)}>

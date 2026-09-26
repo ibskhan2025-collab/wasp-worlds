@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { loadJson, saveJson } from "@/lib/storage";
 
@@ -205,6 +206,10 @@ export default function SignalPage() {
                 Begin intercept
               </button>
             </div>
+            <p style={{ marginTop: 16, display: "flex", gap: 16 }}>
+              <Link className="kicker" href="/worlds/signal/records">Records →</Link>
+              <Link className="kicker" href="/worlds/signal/about">About →</Link>
+            </p>
             <p className="kicker" style={{ marginTop: 16 }}>Best on {diff}: {best}</p>
           </div>
         ) : null}

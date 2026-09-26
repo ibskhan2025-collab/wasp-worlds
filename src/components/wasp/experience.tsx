@@ -47,6 +47,11 @@ export function Experience() {
     }
     // Compressed intro: the full show is under 1.5s so the 5-second
     // test passes — headline + ENTER are up almost immediately.
+    // STILL motion skips the theater entirely.
+    if (wasp.motion === "still") {
+      const id = window.setTimeout(() => setStage(4), 0);
+      return () => window.clearTimeout(id);
+    }
     const timers = [120, 450, 800, 1200].map((t, i) =>
       window.setTimeout(() => setStage(i + 1), wasp.motion === "subtle" ? t / 2 : t),
     );

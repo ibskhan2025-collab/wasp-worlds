@@ -83,6 +83,10 @@ export default function MotionPage() {
           <p className="kicker">Campaign 01 · WASP study</p>
           <h2>DON&apos;T WATCH THE FILM.</h2>
           <p style={{ fontFamily: "var(--font-sans)", letterSpacing: "0.12em", textAlign: "center" }}>SCROLL IT.</p>
+          <p style={{ display: "flex", gap: 16, justifyContent: "center", marginTop: 16 }}>
+            <Link className="kicker" href="/worlds/motion/principles">Principles →</Link>
+            <Link className="kicker" href="/worlds/motion/commissions">Commissions →</Link>
+          </p>
         </div>
       </section>
       {panels.map((s, i) => (

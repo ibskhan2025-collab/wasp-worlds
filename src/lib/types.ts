@@ -14,7 +14,7 @@ export type Feel =
   | "dark"
   | "futuristic";
 
-export type MotionPref = "subtle" | "cinematic" | "chaotic";
+export type MotionPref = "subtle" | "cinematic" | "chaotic" | "still";
 
 export type WorldId =
   | "casa"
@@ -102,6 +102,7 @@ export const MOTIONS: { id: MotionPref; label: string }[] = [
   { id: "subtle", label: "SUBTLE" },
   { id: "cinematic", label: "CINEMATIC" },
   { id: "chaotic", label: "CHAOTIC" },
+  { id: "still", label: "STILL" },
 ];
 
 export const defaultBuilder: BuilderState = {

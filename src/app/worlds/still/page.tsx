@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { stillCollections, stillPhotographer } from "@/data/still";
 import { loadJson, saveJson } from "@/lib/storage";
@@ -53,6 +54,10 @@ export default function StillPage() {
           <p className="kicker">{stillPhotographer.name}</p>
           <h1 style={{ fontSize: "clamp(3rem, 8vw, 6.5rem)", margin: 0, fontWeight: 400, letterSpacing: "-0.04em" }}>STILL</h1>
           <p style={{ maxWidth: "36ch" }}>{stillPhotographer.bio}</p>
+          <p style={{ display: "flex", gap: 16 }}>
+            <Link href="/worlds/still/about" className="kicker">About →</Link>
+            <Link href="/worlds/still/prints" className="kicker">Prints →</Link>
+          </p>
         </div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "flex-start" }}>
           <button className={col === "all" ? "chip-on" : "chip"} type="button" onClick={() => setCol("all")}>Contact sheet</button>

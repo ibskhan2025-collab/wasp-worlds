@@ -52,6 +52,10 @@ export default function ArchiveHome() {
           <p className="kicker">A magazine, not a blog skin</p>
         </div>
         <h1 className="arc-hero-title">THE ARCHIVE</h1>
+        <p style={{ display: "flex", gap: 16, marginTop: 8 }}>
+          <Link href="/worlds/archive/about" className="kicker">Manifesto →</Link>
+          <Link href="/worlds/archive/letters" className="kicker">Letters →</Link>
+        </p>
       </header>
       <div style={{ padding: "16px 20px", display: "flex", gap: 8, flexWrap: "wrap" }}>
         <input

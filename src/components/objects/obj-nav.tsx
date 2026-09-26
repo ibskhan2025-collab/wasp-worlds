@@ -10,6 +10,8 @@ export function ObjNav() {
       <Link href="/worlds/objects" style={{ fontWeight: 600 }}>OBJECTS</Link>
       <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
         <Link href="/worlds/objects/shop">Shop</Link>
+        <Link href="/worlds/objects/makers">Makers</Link>
+        <Link href="/worlds/objects/gallery">Gallery</Link>
         <Link href="/worlds/objects/cart">Cart ({count})</Link>
       </div>
     </nav>

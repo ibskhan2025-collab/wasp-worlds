@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { loadState, saveState } from "@/lib/storage";
+import { track } from "@/lib/track";
 import { defaultState, type Feel, type Intent, type MotionPref, type WaspState, type WorldId } from "@/lib/types";
 
 type WaspContextValue = WaspState & {
@@ -64,9 +65,18 @@ export function WaspProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const setIntent = useCallback((intent: Intent | null) => patch({ intent }), [patch]);
-  const setFeel = useCallback((feel: Feel) => patch({ feel }), [patch]);
-  const setMotion = useCallback((motion: MotionPref) => patch({ motion }), [patch]);
+  const setIntent = useCallback((intent: Intent | null) => {
+    patch({ intent });
+    track("preference_set", { kind: "intent", value: intent ?? "none" });
+  }, [patch]);
+  const setFeel = useCallback((feel: Feel) => {
+    patch({ feel });
+    track("preference_set", { kind: "feel", value: feel });
+  }, [patch]);
+  const setMotion = useCallback((motion: MotionPref) => {
+    patch({ motion });
+    track("preference_set", { kind: "motion", value: motion });
+  }, [patch]);
   const markHolyShit = useCallback(() => patch({ holyShitSeen: true }), [patch]);
   const discover = useCallback((id: string) => {
     setState((current) =>

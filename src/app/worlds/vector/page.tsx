@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { vectorInsights, vectorPractices } from "@/data/vector";
+import { media } from "@/lib/media";
 import { PerfChart } from "./chart";
 import { CallForm } from "./call-form";
 
@@ -29,8 +30,18 @@ export default function VectorPage() {
         </div>
       </section>
       <section style={{ padding: "8px 20px", maxWidth: 960 }}>
-        <p className="kicker" style={{ color: "#3ddc84" }}>Insights</p>
-        {vectorInsights.map((a) => (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+          {[
+            { src: media.still.tower, alt: "Looking up at the sector" },
+            { src: media.still.corridor, alt: "The long view" },
+            { src: media.still.pillars, alt: "Colonnade, quarterly" },
+          ].map((img) => (
+            <img key={img.src} src={img.src} alt={img.alt} loading="lazy" decoding="async" style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", filter: "grayscale(0.6) brightness(0.85)" }} />
+          ))}
+        </div>
+      </section>
+      <section style={{ padding: "8px 20px", maxWidth: 960 }}>
+        <p className="kicker" style={{ color: "#3ddc84" }}>Insights</p>        {vectorInsights.map((a) => (
           <Link key={a.slug} href={`/worlds/vector/${a.slug}`} style={{ display: "block", padding: "18px 0", borderTop: "1px solid #ffffff1c" }}>
             <strong style={{ fontSize: "1.5rem" }}>{a.title}</strong>
             <div style={{ color: "#e8e4dc99" }}>{a.dek}</div>

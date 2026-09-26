@@ -4,7 +4,7 @@ import { clientKey, rateLimit } from "@/lib/server";
 
 export const dynamic = "force-dynamic";
 
-const ALLOWED = new Set(["world_visit", "brief_started", "inquiry_submitted", "reservation_submitted"]);
+const ALLOWED = new Set(["world_visit", "brief_started", "inquiry_submitted", "reservation_submitted", "preference_set"]);
 
 export async function POST(req: Request) {
   if (!rateLimit(`events:${clientKey(req)}`, 120, 60_000)) {
