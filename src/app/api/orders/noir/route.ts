@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { noirOrders } from "@/db/schema";
 import { noirProducts } from "@/data/noir";
-import { clientKey, clampInt, isEmail, rateLimit } from "@/lib/server";
+import { clientKey, clampInt, emailError, isHoneypot, rateLimit } from "@/lib/server";
 
 export const dynamic = "force-dynamic";
 
@@ -16,9 +16,11 @@ export async function POST(req: Request) {
     return Response.json({ ok: false, error: "Database not configured" }, { status: 503 });
   }
   try {
-    const body = (await req.json()) as { email?: unknown; items?: unknown };
-    if (!isEmail(body.email) || !Array.isArray(body.items) || body.items.length === 0 || body.items.length > 50) {
-      return Response.json({ ok: false, error: "Valid email and 1-50 items required" }, { status: 400 });
+    const body = (await req.json()) as { email?: unknown; items?: unknown } & Record<string, unknown>;
+    if (isHoneypot(body)) return Response.json({ ok: true, id: 0, simulated: true });
+    const badEmail = emailError(body.email);
+    if (badEmail || !Array.isArray(body.items) || body.items.length === 0 || body.items.length > 50) {
+      return Response.json({ ok: false, error: badEmail ?? "1–50 items required" }, { status: 400 });
     }
     let total = 0;
     const clean: { id: string; qty: number; size?: string }[] = [];

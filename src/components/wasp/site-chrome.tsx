@@ -83,6 +83,8 @@ export function SiteChrome({ children }: { children: ReactNode }) {
             {MORE_LINKS.map((link) => (
               <Link key={link.href} href={link.href}>{link.label}</Link>
             ))}
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/terms">Terms</Link>
             <a href="mailto:hello@wasp.studio">hello@wasp.studio</a>
           </nav>
           <p>© {new Date().getFullYear()} WASP · Built with Next.js</p>

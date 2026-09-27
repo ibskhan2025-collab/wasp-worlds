@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useWasp } from "@/context/wasp-context";
 import { FEELS, INTENTS, MOTIONS } from "@/lib/types";
 import { INTENT_COPY, WORLDS, recommendWorlds } from "@/lib/worlds";
@@ -230,13 +230,30 @@ export function Experience() {
       ) : null}
 
       <section id="selected" aria-label="Selected work" style={{ borderBottom: "1px solid var(--line)" }}>
-        <div style={{ padding: "clamp(24px,5vw,56px) var(--pad) 8px" }}>
-          <p className="ex-kicker">Selected work · 4 rooms that carry the argument</p>
+        <div style={{ padding: "16px var(--pad) 8px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }} className="grid-2">
+          <div>
+            <p className="ex-kicker">Selected work · 4 rooms that carry the argument</p>
+          </div>
+          <div>
+            <p className="kicker">What&apos;s actually here</p>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
+              <Link className="ghost" href="#selected">15 worlds ↓</Link>
+              <Link className="ghost" href="/tools">10 tools</Link>
+              <Link className="ghost" href="/process">16 stages</Link>
+              <Link className="ghost" href="/os">The OS</Link>
+              <Link className="ghost" href="/lab">Lab</Link>
+              <Link className="ghost" href="/start">Builder →</Link>
+            </div>
+            <p className="kicker" style={{ marginTop: 14, border: "1px solid var(--line)", padding: "10px 12px" }}>
+              A note on proof: nothing here invents clients, quotes, or numbers. Where measurement doesn&apos;t exist yet, it says so.
+            </p>
+          </div>
         </div>
         {SELECTED.map((s) => {
           const world = WORLDS.find((w) => w.id === s.id)!;
           return (
-            <article key={s.id} className="selected-row">
+            <SelReveal key={s.id}>
+            <article className="selected-row">
               <Link
                 href={world.href}
                 className="selected-img"
@@ -246,6 +263,7 @@ export function Experience() {
               <div className="selected-body">
                 <p className="kicker">ROOM {world.room} · {world.kind} · WASP STUDY</p>
                 <h2>{world.name}</h2>
+                <p className="kicker" style={{ marginTop: 6 }}>Palette — {world.palette}</p>
                 <p className="selected-line">{world.line}</p>
                 <p>{s.editorial}</p>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", margin: "14px 0 20px" }}>
@@ -257,11 +275,12 @@ export function Experience() {
                 </div>
               </div>
             </article>
+            </SelReveal>
           );
         })}
       </section>
 
-      <div style={{ padding: "clamp(24px,5vw,56px) var(--pad) 8px", borderBottom: "1px solid var(--line)" }}>
+      <div style={{ padding: "16px var(--pad) 8px", borderBottom: "1px solid var(--line)" }}>
         <p className="ex-kicker">The exhibition · all 15 rooms</p>
       </div>
       <div className="rooms">
@@ -278,6 +297,7 @@ export function Experience() {
                 <div className="room-id">ROOM {world.room} · WASP STUDY{rec ? " · FOR YOU" : ""}</div>
                 <h2>{world.name}</h2>
                 <div className="kind">{world.kind}</div>
+                <div className="room-palette">{world.palette}</div>
               </div>
               <p className="line">{world.line}</p>
             </Link>
@@ -361,6 +381,36 @@ export function Experience() {
           ) : null}
         </div>
       ) : null}
+    </div>
+  );
+}
+
+function SelReveal({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.classList.add("in");
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("in");
+            io.disconnect();
+          }
+        }
+      },
+      { threshold: 0.08 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div ref={ref} className="sel-reveal">
+      {children}
     </div>
   );
 }

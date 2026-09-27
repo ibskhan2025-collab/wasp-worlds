@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { objectOrders } from "@/db/schema";
 import { objectProducts } from "@/data/objects";
-import { clientKey, clampInt, isEmail, rateLimit, str } from "@/lib/server";
+import { clientKey, clampInt, emailError, isHoneypot, nameError, rateLimit, str } from "@/lib/server";
 
 export const dynamic = "force-dynamic";
 
@@ -16,10 +16,13 @@ export async function POST(req: Request) {
     return Response.json({ ok: false, error: "Database not configured" }, { status: 503 });
   }
   try {
-    const body = (await req.json()) as { email?: unknown; name?: unknown; items?: unknown };
-    const name = str(body.name, 200);
-    if (!isEmail(body.email) || !name || !Array.isArray(body.items) || body.items.length === 0 || body.items.length > 50) {
-      return Response.json({ ok: false, error: "Valid name, email and 1-50 items required" }, { status: 400 });
+    const body = (await req.json()) as { email?: unknown; name?: unknown; items?: unknown } & Record<string, unknown>;
+    if (isHoneypot(body)) return Response.json({ ok: true, id: 0, simulated: true });
+    const name = str(body.name, 100);
+    const badName = nameError(name);
+    const badEmail = emailError(body.email);
+    if (badName || badEmail || !Array.isArray(body.items) || body.items.length === 0 || body.items.length > 50) {
+      return Response.json({ ok: false, error: badName ?? badEmail ?? "1–50 items required" }, { status: 400 });
     }
     let total = 0;
     const clean: { id: string; qty: number; option?: string }[] = [];
@@ -42,7 +45,7 @@ export async function POST(req: Request) {
       .insert(objectOrders)
       .values({
         email: String(body.email).trim().slice(0, 200),
-        name,
+        name: name as string,
         items: clean,
         total,
         status: "simulated",

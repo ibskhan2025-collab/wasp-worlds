@@ -28,9 +28,12 @@ export default function ServicesPage() {
         {services.map((s) => {
           const d = DETAIL[s.id];
           return (
-            <section key={s.id} style={{ padding: "28px 0", borderTop: "1px solid var(--line)" }}>
-              <h2 style={{ fontFamily: "var(--font-display)", fontSize: "2.2rem", margin: 0 }}>{s.name}</h2>
-              <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.25rem" }}>{s.outcome}</p>
+            <details key={s.id} style={{ padding: "20px 0", borderTop: "1px solid var(--line)" }}>
+              <summary style={{ cursor: "pointer", listStyle: "none", display: "flex", gap: 16, alignItems: "baseline", flexWrap: "wrap" }}>
+                <span style={{ fontFamily: "var(--font-display)", fontSize: "1.8rem" }}>{s.name}</span>
+                <span className="kicker">{s.outcome}</span>
+              </summary>
+              <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.25rem", marginTop: 12 }}>{s.outcome}</p>
               <div className="grid-2" style={{ marginTop: 8 }}>
                 <div>
                   <p className="kicker">When it&apos;s useful</p>
@@ -50,10 +53,11 @@ export default function ServicesPage() {
                     {d?.worlds.map((w) => (
                       <Link key={w.href} className="ghost" href={w.href}>{w.name} →</Link>
                     ))}
+                    <Link className="ghost" href="/start">Scope this →</Link>
                   </div>
                 </div>
               </div>
-            </section>
+            </details>
           );
         })}
       </div>
@@ -64,6 +68,39 @@ export default function ServicesPage() {
           We do not sell $999 / $2,499 / $4,999 packages. A smaller budget means a sharper scope: fewer pages, less custom motion, fewer integrations. A larger budget means more rooms, more iteration, more of the thing only a human would bother to make.
         </p>
         <p>We will shape the smartest project possible around what you actually have — or decline if the math is unkind to both of us.</p>
+      </section>
+      <section style={{ marginTop: 32 }}>
+        <p className="kicker">Depth, visualized</p>
+        <div className="grid-3" style={{ marginTop: 12 }}>
+          {[
+            { label: "Focused", range: "Smaller budget", depth: 32, points: ["Core pages done properly", "Sensible defaults over custom systems", "Essential interaction only", "Clear handover docs"] },
+            { label: "Complete", range: "Mid budget", depth: 68, points: ["Full information architecture", "Custom design system", "Considered motion + interaction", "CMS modelling if needed", "Accessibility + performance passes"] },
+            { label: "Transformative", range: "Larger budget", depth: 100, points: ["Research and strategy phase", "Custom interactive or generative work", "Multi-surface systems", "Prototyping and testing", "Ongoing iteration"] },
+          ].map((t) => (
+            <div key={t.label} className="panel">
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                <strong style={{ fontFamily: "var(--font-display)", fontSize: "1.4rem" }}>{t.label}</strong>
+                <span className="kicker">{t.range}</span>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
+                <span className="kicker">Depth of scope</span>
+                <span className="kicker">{t.depth}%</span>
+              </div>
+              <div style={{ height: 6, background: "var(--line)", marginTop: 6 }}>
+                <div style={{ height: "100%", width: `${t.depth}%`, background: "var(--fg)" }} />
+              </div>
+              <ul style={{ marginTop: 16 }}>
+                {t.points.map((p) => (
+                  <li key={p}>{p}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 20 }}>
+          <Link className="btn" href="/tools/cost">Open cost estimator →</Link>
+          <Link className="btn ghost" href="/tools/scope">Build a scope →</Link>
+        </div>
       </section>
     </div>
   );

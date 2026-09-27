@@ -1,9 +1,6 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
-import Image from "next/image";
-import { Lightbox } from "@/components/worlds/lightbox";
 import { casaGallery } from "@/data/casa";
 
 export default function CasaGallery() {
@@ -14,18 +11,19 @@ export default function CasaGallery() {
       <h1 style={{ fontFamily: "var(--font-lux)", fontSize: "clamp(3rem, 7vw, 5rem)", fontWeight: 500 }}>Gallery</h1>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 8, marginTop: 24 }}>
         {casaGallery.map((img, i) => (
-          <button key={img.src} type="button" onClick={() => setOpen(i)} style={{ border: 0, padding: 0, background: "none", position: "relative", height: 220 }} aria-label={`Open ${img.alt}`}>
-            <Image src={img.src} alt={img.alt} fill sizes="(max-width: 820px) 50vw, 33vw" style={{ objectFit: "cover" }} />
+          <button key={img.src} type="button" onClick={() => setOpen(i)} style={{ border: 0, padding: 0, background: "none" }}>
+            <img src={img.src} alt={img.alt} style={{ width: "100%", height: 220, objectFit: "cover" }} />
           </button>
         ))}
       </div>
       {open !== null ? (
-        <Lightbox images={casaGallery.map((g) => ({ src: g.src, alt: g.alt }))} index={open} onClose={() => setOpen(null)} onMove={setOpen} />
+        <div className="lightbox" role="dialog" aria-label="Image">
+          <button type="button" className="ghost" onClick={() => setOpen(null)} style={{ position: "absolute", top: 16, right: 16 }}>
+            Close
+          </button>
+          <img src={casaGallery[open].src} alt={casaGallery[open].alt} />
+        </div>
       ) : null}
-      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 32 }}>
-        <Link className="btn" href="/worlds/casa/reservations">Hungry? Book →</Link>
-        <Link className="btn ghost" href="/worlds/casa/menu">See the menu</Link>
-      </div>
     </div>
   );
 }

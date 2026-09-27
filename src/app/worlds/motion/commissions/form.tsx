@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { Consent } from "@/components/consent";
+import { Honeypot, hpValue } from "@/components/honeypot";
 
 export function CommissionForm() {
   const [name, setName] = useState("");
@@ -17,7 +19,7 @@ export function CommissionForm() {
     const res = await fetch("/api/inquiries", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, brief: `MOTION commission: ${kind}, needed by ${date}.`, source: "motion-commissions" }),
+      body: JSON.stringify({ website: hpValue(), name, email, brief: `MOTION commission: ${kind}, needed by ${date}.`, source: "motion-commissions" }),
     });
     if (res.ok) setMsg("Logged. If the date is possible, you hear back within two days.");
     else setMsg("Could not send. Try again.");
@@ -39,6 +41,8 @@ export function CommissionForm() {
         </label>
       </div>
       <button className="btn" type="button" onClick={send} style={{ background: "#fff", color: "#000", borderColor: "#fff" }}>Check the date</button>
+      <Honeypot />
+      <Consent />
       {msg ? <p style={{ marginTop: 12 }}>{msg}</p> : null}
     </div>
   );

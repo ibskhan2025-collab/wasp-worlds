@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useWasp } from "@/context/wasp-context";
 import { track } from "@/lib/track";
+import { Consent } from "@/components/consent";
+import { Honeypot, hpValue } from "@/components/honeypot";
 import type { BuilderState } from "@/lib/types";
 
 const TYPES = ["Website", "Ecommerce", "Product", "Redesign", "Campaign", "Experience"];
@@ -81,6 +83,7 @@ export default function StartPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        website: hpValue(),
         name: b.name,
         email: b.email,
         company: b.company,
@@ -163,6 +166,7 @@ export default function StartPage() {
               <label className="field"><span>Company</span><input value={b.company} onChange={(e) => setField("company", e.target.value)} /></label>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 <button className="btn" type="button" onClick={send}>Send project to WASP</button>
+                <Honeypot />
                 <button className="btn ghost" type="button" onClick={() => { navigator.clipboard.writeText(text); setCopied(true); }}>
                   {copied ? "Copied" : "Copy dossier"}
                 </button>
@@ -170,6 +174,7 @@ export default function StartPage() {
                 <button className="btn ghost" type="button" onClick={() => setField("step", 0)}>Edit answers</button>
               </div>
               {sent ? <p style={{ marginTop: 12 }}>{sent}</p> : null}
+              <Consent />
               <hr className="rule" />
               <p className="kicker">What happens next</p>
               <p><strong>1.</strong> We reply within one working day — even if it&apos;s a no.</p>

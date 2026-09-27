@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { track } from "@/lib/track";
+import { Consent } from "@/components/consent";
+import { Honeypot, hpValue } from "@/components/honeypot";
 
 export function CallForm() {
   const [name, setName] = useState("");
@@ -16,7 +18,7 @@ export function CallForm() {
     const res = await fetch("/api/inquiries", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, brief: "VECTOR: book a call with a partner.", source: "vector" }),
+      body: JSON.stringify({ website: hpValue(), name, email, brief: "VECTOR: book a call with a partner.", source: "vector" }),
     });
     if (res.ok) {
       setDone("Booked in spirit. A partner replies within two working days with a calendar.");
@@ -33,6 +35,8 @@ export function CallForm() {
         <label className="field"><span>Email</span><input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" /></label>
       </div>
       <button className="btn" type="button" onClick={send}>Talk to a partner</button>
+      <Honeypot />
+      <Consent />
       {done ? <p style={{ marginTop: 12 }}>{done}</p> : null}
     </div>
   );

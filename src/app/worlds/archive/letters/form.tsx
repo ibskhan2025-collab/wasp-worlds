@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { loadJson, saveJson } from "@/lib/storage";
+import { Consent } from "@/components/consent";
+import { Honeypot, hpValue } from "@/components/honeypot";
 
 const SUB_KEY = "wasp-v11-archive-sub";
 
@@ -25,7 +27,7 @@ export function LettersForm() {
     const res = await fetch("/api/inquiries", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: name.trim() || "Reader", email, brief: "ARCHIVE letters subscription.", source: "archive-letters" }),
+      body: JSON.stringify({ website: hpValue(), name: name.trim() || "Reader", email, brief: "ARCHIVE letters subscription.", source: "archive-letters" }),
     });
     if (res.ok) {
       saveJson(SUB_KEY, email);
@@ -57,6 +59,8 @@ export function LettersForm() {
         <label className="field"><span>Email</span><input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" /></label>
       </div>
       <button className="btn" type="button" onClick={subscribe}>Subscribe</button>
+      <Honeypot />
+      <Consent />
       {msg ? <p style={{ marginTop: 12 }}>{msg}</p> : null}
     </div>
   );

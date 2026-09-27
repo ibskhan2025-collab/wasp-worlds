@@ -40,6 +40,7 @@ export type WorldMeta = {
   kind: string;
   line: string;
   href: string;
+  palette: string;
   tags: string[];
   intents: Intent[];
   atmosphere: string;
@@ -124,8 +125,8 @@ export const defaultState: WaspState = {
   entered: false,
   visited: [],
   discoveries: [],
-  intent: null,
-  feel: "dark",
+  intent: "portfolio",
+  feel: "luxury",
   motion: "cinematic",
   holyShitSeen: false,
   interest: {},

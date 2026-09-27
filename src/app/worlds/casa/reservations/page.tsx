@@ -1,27 +1,11 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { casa } from "@/data/casa";
-import { loadJson, saveJson } from "@/lib/storage";
-import { track } from "@/lib/track";
-
-type Booking = { id: string; date: string; time: string; party: number };
-
-const BOOK_KEY = "wasp-v11-casa-bookings";
 
 export default function ReservationsPage() {
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "err">("idle");
   const [message, setMessage] = useState("");
-  const [bookings, setBookings] = useState<Booking[]>([]);
-
-  // Hydrate persisted bookings after mount (avoids SSR mismatch).
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setBookings(loadJson<Booking[]>(BOOK_KEY, []));
-  }, []);
-  useEffect(() => {
-    saveJson(BOOK_KEY, bookings);
-  }, [bookings]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -34,26 +18,20 @@ export default function ReservationsPage() {
     }
     setStatus("sending");
     try {
-      const payload = {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        date: data.date,
-        time: data.time,
-        party: Number(data.party),
-        notes: data.notes,
-      };
       const res = await fetch("/api/reservations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          date: data.date,
+          time: data.time,
+          party: Number(data.party),
+          notes: data.notes,
+        }),
       });
       if (!res.ok) throw new Error("fail");
-      track("reservation_submitted", { source: "casa" });
-      setBookings((b) => [
-        { id: `b${Date.now()}`, date: String(data.date), time: String(data.time), party: Number(data.party) },
-        ...b,
-      ].slice(0, 20));
       setStatus("ok");
       setMessage("Held. We'll confirm by email. This is a study restaurant — treat it as a working reservation, not a table in the real valley.");
       form.reset();
@@ -118,19 +96,6 @@ export default function ReservationsPage() {
         </button>
         {message ? <p style={{ marginTop: 16 }}>{message}</p> : null}
       </form>
-      {bookings.length ? (
-        <div style={{ marginTop: 40 }}>
-          <p className="kicker">My tables (this browser)</p>
-          {bookings.map((b) => (
-            <div key={b.id} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "12px 0", borderBottom: "1px solid var(--line)" }}>
-              <span>{b.date} · {b.time} · party of {b.party}</span>
-              <button type="button" className="ghost" onClick={() => setBookings((list) => list.filter((x) => x.id !== b.id))}>
-                Release
-              </button>
-            </div>
-          ))}
-        </div>
-      ) : null}
     </div>
   );
 }

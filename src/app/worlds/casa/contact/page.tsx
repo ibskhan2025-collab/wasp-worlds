@@ -1,10 +1,4 @@
-import type { Metadata } from "next";
 import { casa } from "@/data/casa";
-
-export const metadata: Metadata = {
-  title: "Contact — Casa Valle",
-  description: "Find Casa Valle: address, hours and phone. A demo restaurant by WASP.",
-};
 
 export default function CasaContact() {
   return (

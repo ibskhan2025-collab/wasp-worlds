@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { nestMaterials, nestRooms } from "@/data/nest";
 import { loadJson, saveJson } from "@/lib/storage";
 import { track } from "@/lib/track";
+import { Consent } from "@/components/consent";
+import { Honeypot, hpValue } from "@/components/honeypot";
 
 export function RoomView({ slug }: { slug: string }) {
   const room = nestRooms.find((r) => r.slug === slug);
@@ -43,6 +45,7 @@ export function RoomView({ slug }: { slug: string }) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        website: hpValue(),
         name, email,
         brief: `NEST enquiry: ${room.name} in ${material.name}.`,
         source: "nest",
@@ -100,6 +103,8 @@ export function RoomView({ slug }: { slug: string }) {
           <label className="field"><span>Email</span><input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" /></label>
         </div>
         <button className="btn" type="button" onClick={ask}>Ask about the {room.name.toLowerCase()}</button>
+        <Honeypot />
+        <Consent />
         {done ? <p style={{ marginTop: 12 }}>{done}</p> : null}
       </div>
       <div style={{ marginTop: 32 }}>

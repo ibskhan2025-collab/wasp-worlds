@@ -7,6 +7,8 @@ import { WorldExit } from "@/components/wasp/world-exit";
 import { forgeProducts } from "@/data/forge";
 import { loadJson, saveJson } from "@/lib/storage";
 import { track } from "@/lib/track";
+import { Consent } from "@/components/consent";
+import { Honeypot, hpValue } from "@/components/honeypot";
 
 const LIST_KEY = "wasp-v11-forge-list";
 
@@ -44,6 +46,7 @@ function Builder() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        website: hpValue(),
         name, email, company,
         brief: `FORGE quote: ${rows.map((r) => `${r.p!.name} × ${r.qty}`).join(", ")}`,
         source: "forge",
@@ -90,6 +93,8 @@ function Builder() {
         <label className="field"><span>Email</span><input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" /></label>
         <p className="kicker">Question 3 of 3 — press the button</p>
         <button className="btn" type="button" onClick={send}>Request quote ({lines} {lines === 1 ? "line" : "lines"})</button>
+        <Honeypot />
+        <Consent />
         {done ? <p style={{ marginTop: 16 }}>{done}</p> : null}
       </div>
     </div>

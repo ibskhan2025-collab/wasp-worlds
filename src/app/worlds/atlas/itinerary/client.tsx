@@ -6,6 +6,8 @@ import { WorldExit } from "@/components/wasp/world-exit";
 import { destinations } from "@/data/atlas";
 import { loadJson, saveJson } from "@/lib/storage";
 import { track } from "@/lib/track";
+import { Consent } from "@/components/consent";
+import { Honeypot, hpValue } from "@/components/honeypot";
 import { money } from "@/lib/use-cart";
 
 const PLAN_KEY = "wasp-v11-atlas-plan";
@@ -50,6 +52,7 @@ export function Itinerary() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        website: hpValue(),
         name, email,
         brief: `ATLAS itinerary (${travelers} traveler${travelers === 1 ? "" : "s"}, ${month}): ${routes.map((d) => d.name).join(" → ")} (${days} days)`,
         source: "atlas",
@@ -109,6 +112,8 @@ export function Itinerary() {
               <label className="field"><span>Email</span><input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" /></label>
             </div>
             <button className="btn" type="button" onClick={send}>Request this route</button>
+            <Honeypot />
+            <Consent />
           </>
         )}
         {done ? <p style={{ marginTop: 16 }}>{done}</p> : null}

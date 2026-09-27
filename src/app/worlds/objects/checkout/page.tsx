@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { money, useCart } from "@/lib/use-cart";
+import { Consent } from "@/components/consent";
 
 export default function ObjectsCheckout() {
   const { items, subtotal, clear } = useCart("objects");
@@ -38,6 +39,7 @@ export default function ObjectsCheckout() {
         <label className="field"><span>Email</span><input name="email" type="email" required /></label>
         <label className="field"><span>Notes</span><textarea name="notes" /></label>
         <button className="btn" type="submit">Place simulated order</button>
+        <Consent />
       </form>
       {done ? <p style={{ marginTop: 16 }}>{done}</p> : null}
     </div>

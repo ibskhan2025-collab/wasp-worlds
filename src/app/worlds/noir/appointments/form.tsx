@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { loadJson, saveJson } from "@/lib/storage";
+import { Consent } from "@/components/consent";
+import { Honeypot, hpValue } from "@/components/honeypot";
 
 type Appt = { id: string; date: string; time: string; reason: string };
 
@@ -34,7 +36,7 @@ export function AppointmentForm() {
     const res = await fetch("/api/inquiries", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, brief: `NOIR appointment: ${reason} on ${date} at ${time}.`, source: "noir-appointments" }),
+      body: JSON.stringify({ website: hpValue(), name, email, brief: `NOIR appointment: ${reason} on ${date} at ${time}.`, source: "noir-appointments" }),
     });
     if (res.ok) {
       setAppts((a) => [{ id: `n${Date.now()}`, date, time, reason }, ...a].slice(0, 10));
@@ -63,6 +65,8 @@ export function AppointmentForm() {
         </select>
       </label>
       <button className="btn" type="button" onClick={send}>Request appointment</button>
+      <Honeypot />
+      <Consent />
       {msg ? <p style={{ marginTop: 12 }}>{msg}</p> : null}
       {appts.length ? (
         <div style={{ marginTop: 32 }}>

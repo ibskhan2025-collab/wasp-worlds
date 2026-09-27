@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { stillCollections } from "@/data/still";
 import { loadJson, saveJson } from "@/lib/storage";
+import { Consent } from "@/components/consent";
+import { Honeypot, hpValue } from "@/components/honeypot";
 
 type Enquiry = { id: string; alt: string; size: string };
 
@@ -35,7 +37,7 @@ export function PrintForm() {
     const res = await fetch("/api/inquiries", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, brief: `STILL print enquiry: "${alt}" at ${size}.`, source: "still-prints" }),
+      body: JSON.stringify({ website: hpValue(), name, email, brief: `STILL print enquiry: "${alt}" at ${size}.`, source: "still-prints" }),
     });
     if (res.ok) {
       setList((l) => [{ id: `s${Date.now()}`, alt, size }, ...l].slice(0, 10));
@@ -64,6 +66,8 @@ export function PrintForm() {
         <label className="field"><span>Email</span><input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" /></label>
       </div>
       <button className="btn" type="button" onClick={send}>Enquire</button>
+      <Honeypot />
+      <Consent />
       {msg ? <p style={{ marginTop: 12 }}>{msg}</p> : null}
       {list.length ? (
         <div style={{ marginTop: 24 }}>

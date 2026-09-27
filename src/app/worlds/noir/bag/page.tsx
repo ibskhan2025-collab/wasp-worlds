@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { money, useCart } from "@/lib/use-cart";
+import { Consent } from "@/components/consent";
+import { Honeypot, hpValue } from "@/components/honeypot";
 
 export default function NoirBag() {
   const { items, setQty, remove, subtotal, clear } = useCart("noir");
@@ -17,7 +19,7 @@ export default function NoirBag() {
     const res = await fetch("/api/orders/noir", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, items }),
+      body: JSON.stringify({ website: hpValue(), email, items }),
     });
     if (res.ok) {
       clear();
@@ -66,6 +68,8 @@ export default function NoirBag() {
           <button className="btn" type="button" onClick={checkout}>
             Checkout simulation
           </button>
+          <Honeypot />
+          <Consent />
         </div>
       ) : null}
       {done ? <p style={{ marginTop: 16 }}>{done}</p> : null}

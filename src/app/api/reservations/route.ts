@@ -1,25 +1,30 @@
 import { db } from "@/db";
 import { casaReservations } from "@/db/schema";
-import { clientKey, clampInt, isEmail, optStr, rateLimit, str } from "@/lib/server";
+import { clientKey, clampInt, emailError, isHoneypot, nameError, optStr, rateLimit, str } from "@/lib/server";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
   if (!rateLimit(`reservations:${clientKey(req)}`, 10, 60_000)) {
-    return Response.json({ ok: false, error: "Too many requests" }, { status: 429 });
+    return Response.json({ ok: false, error: "Too many requests — slow down a little." }, { status: 429 });
   }
   if (!db) {
     return Response.json({ ok: false, error: "Database not configured" }, { status: 503 });
   }
   try {
     const body = (await req.json()) as Record<string, unknown>;
-    const name = str(body.name, 200);
+    if (isHoneypot(body)) return Response.json({ ok: true, id: 0 });
+    const name = str(body.name, 100);
     const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : "";
+    const badName = nameError(name);
+    if (badName) return Response.json({ ok: false, error: badName }, { status: 400 });
+    const badEmail = emailError(email);
+    if (badEmail) return Response.json({ ok: false, error: badEmail }, { status: 400 });
     const dateRaw = str(body.date, 40);
     const time = str(body.time, 20);
     const party = clampInt(body.party, 1, 12);
-    if (!name || !isEmail(email) || !dateRaw || !time || party === null) {
-      return Response.json({ ok: false, error: "Name, valid email, date, time, party 1-12" }, { status: 400 });
+    if (!dateRaw || !time || party === null) {
+      return Response.json({ ok: false, error: "Date, time and party size (1–12) are required." }, { status: 400 });
     }
     const date = new Date(`${dateRaw}T00:00:00`);
     if (Number.isNaN(date.getTime())) {
@@ -36,7 +41,7 @@ export async function POST(req: Request) {
     const [row] = await db
       .insert(casaReservations)
       .values({
-        name,
+        name: name as string,
         email,
         phone: optStr(body.phone, 80),
         date: dateRaw,

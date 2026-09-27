@@ -1,27 +1,49 @@
 import { db } from "@/db";
 import { inquiries } from "@/db/schema";
-import { clientKey, isEmail, optStr, rateLimit, str } from "@/lib/server";
+import { and, eq, gt, sql } from "drizzle-orm";
+import { clientKey, emailError, isHoneypot, nameError, optStr, rateLimit, str, textError } from "@/lib/server";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
   if (!rateLimit(`inquiries:${clientKey(req)}`, 10, 60_000)) {
-    return Response.json({ ok: false, error: "Too many requests" }, { status: 429 });
+    return Response.json({ ok: false, error: "Too many requests — slow down a little." }, { status: 429 });
   }
   if (!db) {
     return Response.json({ ok: false, error: "Database not configured" }, { status: 503 });
   }
   try {
     const body = (await req.json()) as Record<string, unknown>;
-    const name = str(body.name, 200);
+    if (isHoneypot(body)) return Response.json({ ok: true, id: 0 });
+    const name = str(body.name, 100);
     const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : "";
-    if (!name || !isEmail(email)) {
-      return Response.json({ ok: false, error: "Name and valid email required" }, { status: 400 });
+    const badName = nameError(name);
+    if (badName) return Response.json({ ok: false, error: badName }, { status: 400 });
+    const badEmail = emailError(email);
+    if (badEmail) return Response.json({ ok: false, error: badEmail }, { status: 400 });
+    const brief = optStr(body.brief, 5000);
+    if (brief) {
+      const badBrief = textError(brief, "Message", 10, 5000);
+      if (badBrief) return Response.json({ ok: false, error: badBrief }, { status: 400 });
     }
+    const source = optStr(body.source, 100) ?? "site";
+    // Duplicate suppression: same email + source + brief within 10 min = resend/double-click.
+    const recent = await db
+      .select({ id: inquiries.id })
+      .from(inquiries)
+      .where(
+        and(
+          eq(inquiries.email, email),
+          eq(inquiries.source, source),
+          gt(inquiries.createdAt, sql`now() - interval '10 minutes'`),
+        ),
+      )
+      .limit(1);
+    if (recent.length) return Response.json({ ok: true, id: recent[0].id, duplicate: true });
     const [row] = await db
       .insert(inquiries)
       .values({
-        name,
+        name: name as string,
         email,
         company: optStr(body.company, 200),
         making: optStr(body.making, 1000),
