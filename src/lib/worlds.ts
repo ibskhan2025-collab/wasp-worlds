@@ -1,4 +1,4 @@
-import type { Intent, WorldId, WorldMeta } from "./types";
+import type { Intent, WorldAbout, WorldMeta } from "./types";
 
 export const WORLDS: WorldMeta[] = [
   { id: "casa", room: "01", name: "CASA", kind: "Hospitality", line: "A website that makes you want to go there.", href: "/worlds/casa", palette: "Terracotta / bone / walnut", tags: ["hospitality", "commerce", "place"], intents: ["business", "brand", "store"], atmosphere: "cinematic hospitality" },
@@ -17,8 +17,6 @@ export const WORLDS: WorldMeta[] = [
   { id: "nest", room: "14", name: "NEST", kind: "Architecture / Space", line: "What if the website itself became a place?", href: "/worlds/nest", palette: "Shadow gap / moss / plaster", tags: ["architecture", "place", "portfolio"], intents: ["portfolio", "brand", "business"], atmosphere: "spatial interface" },
   { id: "vector", room: "15", name: "VECTOR", kind: "Finance / Professional", line: "Serious information, presented with confidence instead of beige.", href: "/worlds/vector", palette: "Terminal / uptick / ledger", tags: ["finance", "b2b", "systems"], intents: ["business", "brand"], atmosphere: "sharp professional" },
 ];
-
-export function getWorld(id: WorldId) { return WORLDS.find((world) => world.id === id)!; }
 
 export function recommendWorlds(intent: Intent | null, interest: Record<string, number>) {
   const tagOwners = new Map<string, string[]>();
@@ -60,3 +58,111 @@ export const META_WORLDS = [
   { id: "machine", name: "MACHINE", line: "AI, automation and systems underneath the surface.", href: "/os" },
   { id: "archive", name: "THE ARCHIVE", line: "Everything worth keeping.", href: "/work" },
 ];
+
+export const WORLD_ABOUT: Record<string, WorldAbout> = {
+  casa: {
+    concept: "Hospitality websites always choose between atmosphere and utility. CASA refuses the choice.",
+    client: "Casa Valle (fictional), Ojai",
+    stack: ["Next.js App Router", "Drizzle + Postgres reservations", "validated server actions", "local bookings mirror"],
+    interactions: ["Menu search, filters, sort and favorites over one derived list", "Gallery with keyboard lightbox and closing CTA", "Reservation flow validated twice — client for speed, server for truth"],
+    challenges: ["Filtering a 12-dish menu without turning it into a spreadsheet", "Keeping candlelit photography legible at 320px", "A booking flow that feels like the evening, not a form"],
+  },
+  noir: {
+    concept: "Editorial and commerce are one object. The picture is shoppable; the bag is real.",
+    client: "NOIR (fictional fashion house)",
+    stack: ["Next.js App Router", "localStorage cart", "server-side repricing endpoint", "simulated checkout"],
+    interactions: ["Size-aware line items with quantity, subtotal and removal", "Lookbook looks that jump to their garments", "Wishlist, appointments and journal around the till"],
+    challenges: ["Black-on-black that reads expensive, not empty", "Asymmetric editorial layout intact from 320px to 1920px", "Totals the customer cannot edit in devtools"],
+  },
+  orbit: {
+    concept: "A portfolio claiming product craft should let you operate the product.",
+    client: "Orbit Systems (fictional)",
+    stack: ["Next.js App Router", "local-first store shaped for API swap", "validated CRUD", "CSV export"],
+    interactions: ["Customer and project CRUD with validation", "Inline stage moves", "Activity log derived from mutations", "Reports with live counts and CSV download"],
+    challenges: ["Dense data with tappable targets at 375px", "One dataset serving KPIs, tables and charts without drift", "Settings that re-skin without forking components"],
+  },
+  still: {
+    concept: "The photograph is the interface; everything else is a mat.",
+    client: "Still Studio (fictional)",
+    stack: ["Next.js App Router", "next/image grids", "shared Lightbox primitive", "localStorage favorites"],
+    interactions: ["Arrow-key lightbox with counter and captions", "Favorites driving a saved-only view", "Print enquiries with edition logic"],
+    challenges: ["An almost-empty page that still feels deliberate", "Honest aspect ratios across breakpoints", "Restraint as a technical discipline"],
+  },
+  signal: {
+    concept: "Proof of interactivity: a game with real rules, real feedback, real records.",
+    client: "Self-initiated",
+    stack: ["Canvas 2D loop", "requestAnimationFrame", "throttled state writes", "localStorage records"],
+    interactions: ["Distance-to-core collision with combo scoring", "Pause that truly freezes the timer", "Per-difficulty bests and a claimable records wall"],
+    challenges: ["No setState in the 60fps hot loop", "Hit detection fair on a phone thumb", "Pause/resume without losing elapsed time"],
+  },
+  objects: {
+    concept: "Independent retail deserves its own system — not a theme, not a marketplace listing.",
+    client: "Berg Objects & co. (fictional makers)",
+    stack: ["Next.js App Router", "shared cart engine with NOIR", "option/qty validation", "simulated till"],
+    interactions: ["Price slider, categories, search and four sorts in one pipeline", "Maker dossiers beside the catalogue", "In-situ gallery feeding product pages"],
+    challenges: ["Faceted filtering that never dead-ends wrongly", "Editorial rhythm that still converts", "Two stores, one honest engine"],
+  },
+  archive: {
+    concept: "A publication is a system of promises: keep your place, remember what you read.",
+    client: "The Archive (fictional quarterly)",
+    stack: ["Next.js App Router", "IntersectionObserver progress", "bookmarks in localStorage", "inquiries-backed newsletter"],
+    interactions: ["Read-state committed at 90% scroll", "Search across titles, deks and bodies", "Subscribe/unsubscribe round-trip"],
+    challenges: ["Six essays actually worth reading", "Two-column reading surviving mobile", "A newsletter with no funnel attached"],
+  },
+  motion: {
+    concept: "Motion design is not decoration; it is a timing specification you can read.",
+    client: "Self-initiated campaign",
+    stack: ["Scroll-linked CSS variables", "rAF-throttled observers", "cubic-bezier token system", "prefers-reduced-motion paths"],
+    interactions: ["Progress rail with chapter dots and smooth jumps", "Easing playground: curve, duration, replay", "Seven-rule principles manifesto"],
+    challenges: ["Six chapters, one shared timeline vocabulary", "Scroll-linked animation without jank on mid-range phones", "Stillness scored as a beat, not a bug"],
+  },
+  void: {
+    concept: "An art toy with a physics essay behind it: playful first, explainable second.",
+    client: "Self-initiated",
+    stack: ["Canvas 2D integration loop", "pointer physics", "persisted settings", "field-notes documentation"],
+    interactions: ["Attract/repel toggle, density slider, burst", "Typed glyphs injected into the field", "Stillness detection unlocking a formation"],
+    challenges: ["Drift that never settles and never explodes", "60fps with hundreds of motes", "Touch controls to replace the keyboard-only original"],
+  },
+  atlas: {
+    concept: "Travel planning is arithmetic dressed as daydreaming. Do both.",
+    client: "Atlas (fictional route studio)",
+    stack: ["Next.js App Router", "hand-authored SVG map", "itinerary state in localStorage", "validated trip requests"],
+    interactions: ["Clickable schematic map synced with filters", "Itinerary builder: reorder, travelers, month, totals", "Request posting a complete brief"],
+    challenges: ["A believable schematic from raw path data", "Reordering usable by thumb and arrow keys", "Six fictional routes that feel researched"],
+  },
+  forge: {
+    concept: "Engineers don't want design; they want the number, and proof the number is stable.",
+    client: "Forge Industries (fictional)",
+    stack: ["Next.js App Router", "SVG dimension generator", "derived spec maths", "validated quote flow"],
+    interactions: ["Load slider recomputing the diagram", "Variant-driven drawing geometry", "Three-question quote builder"],
+    challenges: ["Dimension lines drawn from data, not by hand", "Zero-decoration visuals pleasant for long sessions", "Quote state surviving reload"],
+  },
+  pulse: {
+    concept: "A record label is a typographic system with a release schedule attached.",
+    client: "Pulse Recordings (fictional)",
+    stack: ["Next.js App Router", "computed runtimes", "live countdown", "RSVP ledger (server)"],
+    interactions: ["Tracklists summing their own totals", "Countdown flipping to OUT NOW at release", "Tour RSVPs persisted with live counts"],
+    challenges: ["Oversized type that never breaks measure on small screens", "A music site with no audio that still feels loud", "Sold-out states that refuse politely"],
+  },
+  civic: {
+    concept: "Make complicated information understandable, then prove you did.",
+    client: "Northgate Borough (entirely fictional)",
+    stack: ["Next.js App Router", "keyword intent matcher", "persisted checklists", "validated issue reporter"],
+    interactions: ["Natural-language service finder", "Checklists with progress counts", "Issue reports returning references"],
+    challenges: ["Guidance reading like a real council minus the fog", "WCAG-level contrast without blandness", "Fiction labeled unmistakably as fiction"],
+  },
+  nest: {
+    concept: "Rooms are a graph. Draw the graph, let people walk on it.",
+    client: "Nest Atelier (fictional)",
+    stack: ["Next.js App Router", "interactive SVG floorplan", "material token set", "room-context enquiries"],
+    interactions: ["Plan-driven navigation, keyboard included", "Material switcher re-skinning the view", "Per-room enquiries carrying room + material"],
+    challenges: ["One material definition serving view and copy", "Mood/scale/relation notes per room", "Floorplan usable with a thumb"],
+  },
+  vector: {
+    concept: "Financial design is trust design. Say what the number is and isn't.",
+    client: "Vector Partners (fictional)",
+    stack: ["Next.js App Router", "hand-built SVG chart", "toggleable annotations", "validated call booking"],
+    interactions: ["14-quarter chart with drawdown labels", "Event-label toggle", "Insight essays with related links"],
+    challenges: ["A chart that feels sketched but is measured", "Disclaimers impossible to miss", "Legible axes at 320px"],
+  },
+};

@@ -8,8 +8,11 @@ export function useCart(store: "noir" | "objects") {
   const [items, setItems] = useState<CartItem[]>([]);
   const [ready, setReady] = useState(false);
 
+  // Hydrate persisted cart after mount (avoids SSR mismatch).
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setItems(loadCart(store));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setReady(true);
   }, [store]);
 

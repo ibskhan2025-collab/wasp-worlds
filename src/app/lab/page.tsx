@@ -20,7 +20,9 @@ const fallback: W = { serif: true, scale: 1, tracking: -0.04, space: 1, cols: 2,
 
 export default function LabPage() {
   const [w, setW] = useState<W>(fallback);
+  // Hydrate persisted workshop after mount (avoids SSR mismatch).
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setW(loadJson(WORKSHOP_KEY, fallback));
   }, []);
   useEffect(() => {

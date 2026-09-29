@@ -168,6 +168,10 @@ export default function VoidPage() {
         <div>SPACE = {repel ? "REPEL" : "ATTRACT"}</div>
         {discoveries.includes("void-still") ? <div>YOU HELD STILL. GOOD.</div> : null}
         <div><Link href="/worlds/void/notes" style={{ pointerEvents: "auto" }}>Field notes →</Link></div>
+        <div style={{ pointerEvents: "auto", display: "flex", gap: 12 }}>
+          <Link href="/start">Start a project →</Link>
+          <Link href="/worlds/signal">SIGNAL →</Link>
+        </div>
       </div>
       <div style={{ position: "absolute", bottom: 18, left: 18, right: 18, display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", zIndex: 2 }}>
         <button type="button" className="ghost" style={{ color: "#f4f1ea", borderColor: "#f4f1ea55" }} onClick={() => setRepel((v) => !v)} aria-pressed={repel}>

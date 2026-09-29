@@ -3,13 +3,30 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { WorldProof } from "@/components/worlds/world-proof";
 import { loadJson, saveJson } from "@/lib/storage";
 
 type Blip = { id: number; x: number; y: number; r: number; vx: number; vy: number; band: number; life: number };
 
-const BANDS = ["#e8b86d", "#d98a4a", "#f2d7a1"];
+type SigPalette = { bands: [string, string, string]; core: string; ring: string };
 
-export default function SignalPage() {
+const SIG_DEFAULT: SigPalette = { bands: ["#e8b86d", "#d98a4a", "#f2d7a1"], core: "#e8b86d", ring: "rgba(232, 184, 109, 0.2)" };
+
+function readPalette(canvas: HTMLCanvasElement): SigPalette {
+  try {
+    const css = getComputedStyle(canvas);
+    const v = (name: string, fb: string) => css.getPropertyValue(name).trim() || fb;
+    return {
+      bands: [v("--sig-b0", SIG_DEFAULT.bands[0]), v("--sig-b1", SIG_DEFAULT.bands[1]), v("--sig-b2", SIG_DEFAULT.bands[2])],
+      core: v("--sig-core", SIG_DEFAULT.core),
+      ring: v("--sig-ring", SIG_DEFAULT.ring),
+    };
+  } catch {
+    return SIG_DEFAULT;
+  }
+}
+
+export default function SignalPage({ bare = false }: { bare?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const blips = useRef<Blip[]>([]);
   const raf = useRef<number>(0);
@@ -74,6 +91,7 @@ export default function SignalPage() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    const pal = readPalette(canvas);
     let last = performance.now();
     let acc = 0;
     let elapsed = elapsedRef.current;
@@ -90,14 +108,14 @@ export default function SignalPage() {
         spawn(size);
         acc = 0;
       }
-      ctx.clearRect(0, 0, size, size);      ctx.strokeStyle = "#e8b86d33";
+      ctx.clearRect(0, 0, size, size);      ctx.strokeStyle = pal.ring;
       ctx.beginPath();
       ctx.arc(cx, cx, size * 0.46, 0, Math.PI * 2);
       ctx.stroke();
       ctx.beginPath();
       ctx.arc(cx, cx, size * 0.22, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.fillStyle = "#e8b86d";
+      ctx.fillStyle = pal.core;
       ctx.beginPath();
       ctx.arc(cx, cx, 6, 0, Math.PI * 2);
       ctx.fill();
@@ -109,7 +127,7 @@ export default function SignalPage() {
         const dx = b.x - cx;
         const dy = b.y - cy(cx);
         const dist = Math.hypot(dx, dy);
-        ctx.fillStyle = BANDS[b.band];
+        ctx.fillStyle = pal.bands[b.band];
         ctx.beginPath();
         ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
         ctx.fill();
@@ -188,7 +206,7 @@ export default function SignalPage() {
 
   return (
     <div className="signal-root">
-      <WorldExit id="signal" label="Room 05 · SIGNAL" />
+      {bare ? null : <WorldExit id="signal" label="Room 05 · SIGNAL" />}
       <div className="signal-stage">
         <p className="kicker">Intercept</p>
         <h1 style={{ fontSize: "clamp(3rem, 8vw, 6rem)", margin: "6px 0 8px" }}>SIGNAL</h1>
@@ -256,6 +274,13 @@ export default function SignalPage() {
             </div>
           </div>
         ) : null}
+        <div style={{ marginTop: 40, borderTop: "1px solid #e8b86d44", paddingTop: 20 }}>
+          <WorldProof
+            proves="Games are interfaces with scores. Loops, input, curves — the same craft any interactive campaign needs."
+            relatedHref="/worlds/void"
+            relatedName="VOID"
+          />
+        </div>
       </div>
     </div>
   );

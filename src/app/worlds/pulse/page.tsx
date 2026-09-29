@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { fmtSecs, releases } from "@/data/pulse";
+import { WorldProof } from "@/components/worlds/world-proof";
 import { TourList } from "./tour-list";
 
 export const metadata: Metadata = {
@@ -38,6 +39,11 @@ export default function PulsePage() {
         <p className="kicker" style={{ color: "#e23a3a" }}>On tour</p>
         <TourList />
       </section>
+      <WorldProof
+        proves="A label site that acts like a label. Releases as events, posters that sell tickets, campaigns that outlive Monday."
+        relatedHref="/worlds/motion"
+        relatedName="MOTION"
+      />
     </div>
   );
 }

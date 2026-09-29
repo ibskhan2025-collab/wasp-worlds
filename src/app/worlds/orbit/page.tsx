@@ -412,7 +412,7 @@ export default function OrbitPage() {
         </main>
       </div>
       <WorldProof
-        proves="Operational complexity handled in public: customers, pipeline, reports, exports — an interface people live in, not pages they land on. If your software needs operating, this is the proof."
+        proves="Software people live in, demonstrated live. Customers, pipeline, reports, exports. No laptop at twelve degrees."
         relatedHref="/worlds/forge"
         relatedName="FORGE"
       />

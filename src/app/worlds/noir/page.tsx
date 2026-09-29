@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { media } from "@/lib/media";
 import { WorldProof } from "@/components/worlds/world-proof";
+import { RealityShell } from "@/components/worlds/reality-shell";
 
 export default function NoirHome() {
   return (
     <div>
+      <RealityShell world="noir" current="classic" basePath="/worlds/noir" />
       <section className="noir-hero">
         <div>
           <h1>NOIR ATELIER</h1>
@@ -32,7 +34,7 @@ export default function NoirHome() {
         ))}
       </section>
       <WorldProof
-        proves="Editorial desire and commercial function are not enemies. NOIR makes the object wanted before the price appears — then still closes with sizes, bag, appointments and validated checkout. That is ecommerce as craft."
+        proves="Want first, price second. Sizes, bag, appointments and a till that adds up. Desire with plumbing."
         relatedHref="/worlds/objects"
         relatedName="OBJECTS"
       />

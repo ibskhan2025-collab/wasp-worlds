@@ -24,7 +24,7 @@ export default function ObjectsHome() {
         </p>
       </section>
       <WorldProof
-        proves="Commerce as craft, not plugin: discovery, desire, cart, checkout — every step designed and working. If you sell things, this is what your store could feel like."
+        proves="Discovery, desire, cart, checkout. Four verbs, each designed, each working. That's the whole store."
         relatedHref="/worlds/noir"
         relatedName="NOIR"
       />

@@ -17,9 +17,12 @@ export default function OsPage() {
   const [idea, setIdea] = useState("");
   const [note, setNote] = useState("");
 
+  // Hydrate persisted OS state after mount (avoids SSR mismatch).
   useEffect(() => {
     const saved = loadJson(OS_KEY, { projects: seedProjects, ideas: contentIdeas });
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setProjects(saved.projects);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIdeas(saved.ideas);
   }, []);
   useEffect(() => {

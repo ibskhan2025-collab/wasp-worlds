@@ -69,3 +69,16 @@ export const events = pgTable("events", {
   path: text("path").notNull().default("/"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const rsvps = pgTable("rsvps", {
+  id: serial("id").primaryKey(),
+  showId: text("show_id").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const civicIssues = pgTable("civic_issues", {
+  id: serial("id").primaryKey(),
+  what: text("what").notNull(),
+  where: text("where").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});

@@ -46,6 +46,14 @@ export type WorldMeta = {
   atmosphere: string;
 };
 
+export type WorldAbout = {
+  concept: string;
+  client: string;
+  stack: string[];
+  interactions: string[];
+  challenges: string[];
+};
+
 export type WaspState = {
   entered: boolean;
   visited: WorldId[];

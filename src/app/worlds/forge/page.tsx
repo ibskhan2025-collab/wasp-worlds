@@ -23,7 +23,7 @@ export default function ForgePage() {
       </header>
       <ForgeBrowser />
       <WorldProof
-        proves="Technical information made human: tolerances as diagrams, catalogues organized by problem, a quote path a busy buyer can finish. B2B clarity that still converts."
+        proves="An engineer will forgive an ugly page. They won't forgive a wrong number. Tolerances as diagrams, quotes in three steps, nothing decorative."
         relatedHref="/worlds/vector"
         relatedName="VECTOR"
       />

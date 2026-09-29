@@ -127,7 +127,3 @@ export function saveJson<T>(key: string, value: T) {
 }
 
 export { OS_KEY, WORKSHOP_KEY };
-
-export function persistBuilder(builder: BuilderState, current: WaspState) {
-  saveState({ ...current, builder });
-}

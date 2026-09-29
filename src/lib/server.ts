@@ -16,10 +16,6 @@ export function clientKey(req: Request) {
   );
 }
 
-export function isEmail(v: unknown) {
-  return emailError(v) === null;
-}
-
 const DISPOSABLE = new Set([
   "mailinator.com", "mailinator.net", "tempmail.com", "temp-mail.org", "guerrillamail.com",
   "10minutemail.com", "10minutemail.net", "throwawaymail.com", "yopmail.com", "yopmail.net",

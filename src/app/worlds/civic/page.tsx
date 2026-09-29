@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { WorldProof } from "@/components/worlds/world-proof";
 import { media } from "@/lib/media";
 import { Finder } from "./finder";
 import { ReportForm } from "./report-form";
@@ -32,6 +33,11 @@ export default function CivicPage() {
       </div>
       <Finder />
       <ReportForm />
+      <WorldProof
+        proves="Council websites fail in language first, layout second. Ours starts from the question a person actually asks, in words they actually use."
+        relatedHref="/worlds/vector"
+        relatedName="VECTOR"
+      />
     </div>
   );
 }

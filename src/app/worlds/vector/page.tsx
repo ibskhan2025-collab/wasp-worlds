@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { vectorInsights, vectorPractices } from "@/data/vector";
+import { WorldProof } from "@/components/worlds/world-proof";
 import { media } from "@/lib/media";
 import { PerfChart } from "./chart";
 import { CallForm } from "./call-form";
@@ -52,9 +53,14 @@ export default function VectorPage() {
           </Link>
         ))}
       </section>
-      <section style={{ padding: "8px 20px 80px", maxWidth: 960 }}>
+      <section style={{ padding: "8px 20px 40px", maxWidth: 960 }}>
         <CallForm />
       </section>
+      <WorldProof
+        proves="Finance design is trust design. Labeled numbers, visible fees, drawdowns shown. Serious without the beige."
+        relatedHref="/worlds/forge"
+        relatedName="FORGE"
+      />
     </div>
   );
 }

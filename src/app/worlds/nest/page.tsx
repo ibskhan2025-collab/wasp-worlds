@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { WorldProof } from "@/components/worlds/world-proof";
 import { nestRooms } from "@/data/nest";
 
 export const metadata: Metadata = {
@@ -35,7 +36,7 @@ export default function NestPage() {
           ))}
         </svg>
       </div>
-      <div style={{ padding: "0 20px 80px", maxWidth: 720 }}>
+      <div style={{ padding: "0 20px 40px", maxWidth: 720 }}>
         {nestRooms.map((r) => (
           <Link key={r.slug} href={`/worlds/nest/${r.slug}`} style={{ display: "flex", justifyContent: "space-between", padding: "14px 0", borderTop: "1px solid var(--line)" }}>
             <span><strong>{r.name}</strong><br /><span className="kicker">{r.light}</span></span>
@@ -43,6 +44,11 @@ export default function NestPage() {
           </Link>
         ))}
       </div>
+      <WorldProof
+        proves="The floorplan is the sitemap. Four rooms, four materials, one enquiry per room. A building you navigate like a building."
+        relatedHref="/worlds/atlas"
+        relatedName="ATLAS"
+      />
     </div>
   );
 }

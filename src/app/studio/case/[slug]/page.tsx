@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { caseStudies } from "@/data/studio";
+import { WORLD_ABOUT } from "@/lib/worlds";
 import { media } from "@/lib/media";
 
 const HERO: Record<string, string> = {
@@ -24,6 +25,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
   const c = caseStudies.find((x) => x.slug === slug);
   if (!c) notFound();
   const related = caseStudies.filter((x) => x.slug !== slug).slice(0, 2);
+  const about = WORLD_ABOUT[slug];
   const sections: [string, string][] = [
     ["02 — The idea", c.idea],
     ["03 — The problem", c.problem],
@@ -65,6 +67,20 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
         <h2 className="kicker">09 — What this proves</h2>
         <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.3rem" }}>{c.proves}</p>
       </section>
+      {about ? (
+        <section style={{ padding: "20px 0", borderTop: "1px solid var(--line)" }}>
+          <h2 className="kicker">Build notes — {about.client}</h2>
+          <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.15rem" }}>{about.concept}</p>
+          <p className="kicker" style={{ marginTop: 12 }}>Stack</p>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {about.stack.map((s) => <span key={s} className="chip">{s}</span>)}
+          </div>
+          <p className="kicker" style={{ marginTop: 12 }}>Hard parts</p>
+          <ul>
+            {about.challenges.map((ch) => <li key={ch}>{ch}</li>)}
+          </ul>
+        </section>
+      ) : null}
       <section style={{ padding: "20px 0", borderTop: "1px solid var(--line)" }}>
         <h2 className="kicker">10 — Related</h2>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>

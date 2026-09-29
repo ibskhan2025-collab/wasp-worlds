@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { WorldProof } from "@/components/worlds/world-proof";
 import { archiveCategories, archiveIssues } from "@/data/archive";
 import { loadJson, saveJson } from "@/lib/storage";
 
@@ -109,6 +110,11 @@ export default function ArchiveHome() {
         </div>
         {list.length === 0 ? <p>Nothing filed under that.</p> : null}
       </section>
+      <WorldProof
+        proves="Readers stay when a publication keeps its promises. Progress bars, memory, search that works — the unglamorous machinery of being read."
+        relatedHref="/worlds/still"
+        relatedName="STILL"
+      />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { WorldProof } from "@/components/worlds/world-proof";
 import { media } from "@/lib/media";
 
 const panels = [
@@ -156,6 +157,11 @@ export default function MotionPage() {
           </Link>
         </div>
       </section>
+      <WorldProof
+        proves="Most campaign motion is decoration with a timeline. Ours is specified like engineering, down to the millisecond."
+        relatedHref="/worlds/pulse"
+        relatedName="PULSE"
+      />
     </div>
   );
 }

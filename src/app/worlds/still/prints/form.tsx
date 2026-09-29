@@ -41,7 +41,7 @@ export function PrintForm() {
     });
     if (res.ok) {
       setList((l) => [{ id: `s${Date.now()}`, alt, size }, ...l].slice(0, 10));
-      setMsg("Noted. The studio confirms availability — editions sell out.");
+      setMsg("Noted. The studio confirms availability. Editions sell out.");
     } else setMsg("Could not send. Try again.");
   }
 

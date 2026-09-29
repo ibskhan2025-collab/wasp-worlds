@@ -3,6 +3,7 @@ import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { AtlasBrowser } from "./browser";
 import { AtlasMap } from "./map";
+import { WorldProof } from "@/components/worlds/world-proof";
 
 export const metadata: Metadata = {
   title: "ATLAS — Destinations you can explore before you arrive",
@@ -26,6 +27,11 @@ export default function AtlasPage() {
       </header>
       <AtlasMap />
       <AtlasBrowser />
+      <WorldProof
+        proves="Travel sites usually sell photos. This one sells arithmetic you can click: routes, days, travelers, totals. Somewhere is a system. Treat it like one."
+        relatedHref="/worlds/nest"
+        relatedName="NEST"
+      />
     </div>
   );
 }

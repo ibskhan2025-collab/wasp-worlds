@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useWasp } from "@/context/wasp-context";
 import { FEELS, INTENTS, MOTIONS } from "@/lib/types";
 import { INTENT_COPY, WORLDS, recommendWorlds } from "@/lib/worlds";
+import { REALITIES } from "@/lib/realities";
 import { pexels } from "@/lib/media";
 
 const ROOM_SPAN = ["span8", "span4", "span4", "span5", "span3", "span4", "span4", "span5", "span3", "span7", "span5", "span4", "span4", "span5", "span7"];
@@ -34,22 +35,22 @@ const ROOM_IMAGE: Record<string, string> = {
 const SELECTED = [
   {
     id: "casa",
-    editorial: "A restaurant site where booking a table feels like the evening starting early — atmosphere and utility in the same gesture. If hospitality can convert without groveling, so can you.",
+    editorial: "Booking a table feels like the evening starting early. Atmosphere and utility, same gesture.",
     capabilities: ["Reservations", "Editorial menu", "Gallery"],
   },
   {
     id: "noir",
-    editorial: "Fashion commerce that makes the object desirable before the price appears — then still closes: sizes, bag, validated checkout, appointments.",
+    editorial: "The object desirable before the price appears. Then it still closes: sizes, bag, checkout.",
     capabilities: ["Ecommerce", "Lookbook", "Appointments"],
   },
   {
     id: "orbit",
-    editorial: "Complex software made legible: customers, pipeline, reports, exports. Proof the studio handles operational products, not just marketing sites.",
+    editorial: "Software you operate, demonstrated live. Customers, pipeline, reports, exports.",
     capabilities: ["Dashboards", "CRUD", "Reports + CSV"],
   },
   {
     id: "forge",
-    editorial: "Industrial parts made human: spec tables, generated diagrams, a three-question quote flow. B2B clarity that still converts.",
+    editorial: "Parts with numbers you can trust and a quote flow a busy buyer finishes. B2B without the beige.",
     capabilities: ["Catalogues", "Diagrams", "Quote builder"],
   },
 ] as const;
@@ -294,7 +295,7 @@ export function Experience() {
               style={{ ["--room-image" as string]: `url(${ROOM_IMAGE[world.id]})` }}
             >
               <div>
-                <div className="room-id">ROOM {world.room} · WASP STUDY{rec ? " · FOR YOU" : ""}</div>
+                <div className="room-id">ROOM {world.room} · WASP STUDY · {(REALITIES[world.id] ?? []).length} REALITIES{rec ? " · FOR YOU" : ""}</div>
                 <h2>{world.name}</h2>
                 <div className="kind">{world.kind}</div>
                 <div className="room-palette">{world.palette}</div>

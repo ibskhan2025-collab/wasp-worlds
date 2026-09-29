@@ -31,8 +31,11 @@ export function WaspProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<WaspState>(defaultState);
   const [ready, setReady] = useState(false);
 
+  // Hydrate persisted state after mount (avoids SSR mismatch).
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setState(loadState());
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setReady(true);
   }, []);
 
