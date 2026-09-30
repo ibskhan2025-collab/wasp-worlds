@@ -32,6 +32,24 @@ const ROOM_IMAGE: Record<string, string> = {
   vector: pexels(37436278, 800),
 };
 
+const HOOK: Record<string, { bg: string; fg: string; accent: string; muted: string }> = {
+  casa: { bg: "#140f0c", fg: "#f3e8d8", accent: "#ff5a2e", muted: "#c9a98a" },
+  noir: { bg: "#0a0a0a", fg: "#f4f1ea", accent: "#f4f1ea", muted: "#8a8580" },
+  orbit: { bg: "#0d1420", fg: "#dfe8f2", accent: "#6fc3ff", muted: "#7f8fb0" },
+  still: { bg: "#0c0c0c", fg: "#ececec", accent: "#ff5a5a", muted: "#8a8a8a" },
+  signal: { bg: "#04070c", fg: "#9fd8ff", accent: "#6fc3ff", muted: "#5f7f99" },
+  objects: { bg: "#1a1a1a", fg: "#e8e4da", accent: "#e2c08d", muted: "#a89a80" },
+  archive: { bg: "#241a12", fg: "#e8ddc4", accent: "#c9a86d", muted: "#a89878" },
+  motion: { bg: "#000000", fg: "#f4f1ea", accent: "#e8b86d", muted: "#8a8580" },
+  void: { bg: "#020610", fg: "#bfe3ff", accent: "#3ddc84", muted: "#5f7f99" },
+  atlas: { bg: "#101418", fg: "#e8e4dc", accent: "#c98a3d", muted: "#8a938f" },
+  forge: { bg: "#14161a", fg: "#e8eaee", accent: "#ffb020", muted: "#9aa0ac" },
+  pulse: { bg: "#0d0716", fg: "#e9defc", accent: "#9d5cff", muted: "#8f7fb8" },
+  civic: { bg: "#0d1117", fg: "#e8eef2", accent: "#2e6bd8", muted: "#8a99a5" },
+  nest: { bg: "#101210", fg: "#e8e0d2", accent: "#c98a3d", muted: "#8a7f6e" },
+  vector: { bg: "#0b0e13", fg: "#dfe8f2", accent: "#6fc3ff", muted: "#7f8fb0" },
+};
+
 const SELECTED = [
   {
     id: "casa",
@@ -230,6 +248,8 @@ export function Experience() {
         </p>
       ) : null}
 
+      <HookRoom />
+
       <section id="selected" aria-label="Selected work" style={{ borderBottom: "1px solid var(--line)" }}>
         <div style={{ padding: "16px var(--pad) 8px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }} className="grid-2">
           <div>
@@ -387,6 +407,100 @@ export function Experience() {
         </div>
       ) : null}
     </div>
+  );
+}
+
+/**
+ * The hook: one room, alive, in the first viewport. Touch it and the room
+ * changes — bg, fg, accent, name, verb. Move across it and the motes lean
+ * in. Still frame under reduced motion. This is the site's thesis in 300px:
+ * don't look at examples. Touch one.
+ */
+function HookRoom() {
+  const [idx, setIdx] = useState(0);
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  const pal = useRef(HOOK[WORLDS[0].id]!);
+  const world = WORLDS[idx]!;
+  const p = HOOK[world.id]!;
+  pal.current = p;
+
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const W = (canvas.width = canvas.offsetWidth);
+    const H = (canvas.height = 300);
+    const ptr = { x: 0.5, y: 0.5, inside: false };
+    const dots: { x: number; y: number; r: number; s: number }[] = Array.from({ length: 70 }, () => ({
+      x: Math.random(), y: Math.random(), r: 0.8 + Math.random() * 2.2, s: 0.0004 + Math.random() * 0.001,
+    }));
+    const move = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      ptr.x = (e.clientX - rect.left) / rect.width;
+      ptr.y = (e.clientY - rect.top) / rect.height;
+      ptr.inside = true;
+    };
+    const leave = () => { ptr.inside = false; };
+    canvas.addEventListener("pointermove", move);
+    canvas.addEventListener("pointerleave", leave);
+    const paint = () => {
+      const c = pal.current;
+      ctx.fillStyle = c.bg;
+      ctx.fillRect(0, 0, W, H);
+      for (const d of dots) {
+        if (ptr.inside) {
+          d.x += (ptr.x - d.x) * 0.01;
+          d.y += (ptr.y - d.y) * 0.01;
+        } else {
+          d.y -= d.s;
+          if (d.y < -0.02) { d.y = 1.02; d.x = Math.random(); }
+        }
+        ctx.fillStyle = c.accent + "cc";
+        ctx.beginPath();
+        ctx.arc(d.x * W, d.y * H, d.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    };
+    if (reduced) {
+      paint();
+      return () => {
+        canvas.removeEventListener("pointermove", move);
+        canvas.removeEventListener("pointerleave", leave);
+      };
+    }
+    let raf = 0;
+    const loop = () => { paint(); raf = requestAnimationFrame(loop); };
+    raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      canvas.removeEventListener("pointermove", move);
+      canvas.removeEventListener("pointerleave", leave);
+    };
+  }, [idx]);
+
+  return (
+    <section aria-label="Touch a room" style={{ position: "relative", borderBottom: "1px solid var(--line)", overflow: "hidden" }}>
+      <canvas ref={ref} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} aria-hidden />
+      <div style={{ position: "relative", padding: "56px var(--pad) 48px", background: "transparent" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: p.muted, margin: 0 }}>TOUCH IT — ROOM {world.room} OF 15 · {(REALITIES[world.id] ?? []).length} REALITIES INSIDE</p>
+        <h2 style={{ color: p.fg, fontSize: "clamp(3rem, 11vw, 8rem)", lineHeight: 0.9, margin: "8px 0", fontWeight: 800, letterSpacing: "-0.04em" }}>{world.name}</h2>
+        <p style={{ color: p.muted, maxWidth: "52ch", fontSize: "1.05rem" }}>{world.line}</p>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 20 }}>
+          <button
+            type="button"
+            onClick={() => setIdx((idx + 1) % WORLDS.length)}
+            style={{ background: p.accent, color: p.bg, border: 0, padding: "14px 24px", fontWeight: 800, fontSize: 12, letterSpacing: "0.15em" }}
+          >
+            CHANGE THE ROOM ↻
+          </button>
+          <Link href={world.href} style={{ border: `1px solid ${p.accent}`, color: p.fg, padding: "14px 24px", fontSize: 12, letterSpacing: "0.15em" }}>
+            ENTER {world.name} →
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 }
 
