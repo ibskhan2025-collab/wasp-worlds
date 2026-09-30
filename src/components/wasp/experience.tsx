@@ -337,6 +337,9 @@ export function Experience() {
         <Link className="ghost" href="/studio">
           The studio
         </Link>
+        <Link className="ghost" href="/night">
+          Night →
+        </Link>
       </footer>
 
       {holy ? (

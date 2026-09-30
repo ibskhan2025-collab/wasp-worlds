@@ -69,6 +69,8 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#dfe9e4", "--fg": "#14302a", "--muted": "#5f7a70", "--line": "#bccfc6", "--accent": "#0f6f5c" }),
     ALT("catalogue", "Catalogue", "1974 mail-order print", "catalogue",
       { "--bg": "#e8ddc4", "--fg": "#2a2118", "--muted": "#7a6a54", "--line": "#c0ab7e", "--accent": "#8a3b1f" }),
+    ALT("turntable", "Turntable", "The catalogue as an object", "turntable",
+      { "--bg": "#141210", "--fg": "#efeae2", "--muted": "#a89a80", "--line": "rgba(239,234,226,0.2)", "--accent": "#e2c08d" }),
   ],
   archive: [
     CLASSIC("Parchment", "Newsprint, dense columns"),
@@ -97,6 +99,8 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#101418", "--fg": "#e8e4dc", "--muted": "#8a938f", "--line": "rgba(232,228,220,0.16)", "--accent": "#c98a3d" }),
     ALT("field", "Field", "Pencil, stamps, tape", "field",
       { "--bg": "#e4dcc8", "--fg": "#241f16", "--muted": "#6f6350", "--line": "#c6b891", "--accent": "#5a6e3f" }),
+    ALT("miniature", "Miniature", "A small world to explore", "miniature",
+      { "--bg": "#101418", "--fg": "#e8e4dc", "--muted": "#8a938f", "--line": "rgba(232,228,220,0.16)", "--accent": "#c98a3d" }),
   ],
   forge: [
     CLASSIC("Ops", "Light, utilitarian, dense"),

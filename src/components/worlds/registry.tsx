@@ -40,6 +40,7 @@ const R: Record<string, Record<string, ComponentType>> = {
   objects: {
     tidal: dynamic(() => import("@/components/worlds/objects-realities").then((m) => m.ObjectsTidal), { loading: loading("TIDAL") }),
     catalogue: dynamic(() => import("@/components/worlds/objects-realities").then((m) => m.ObjectsCatalogue), { loading: loading("CATALOGUE") }),
+    turntable: dynamic(() => import("@/components/worlds/objects-turntable").then((m) => m.ObjectsTurntable), { loading: loading("TURNTABLE") }),
   },
   archive: {
     typer: dynamic(() => import("@/components/worlds/archive-realities").then((m) => m.ArchiveTyper), { loading: loading("TYPER") }),
@@ -56,6 +57,7 @@ const R: Record<string, Record<string, ComponentType>> = {
   atlas: {
     expedition: dynamic(() => import("@/components/worlds/atlas-realities").then((m) => m.AtlasExpedition), { loading: loading("EXPEDITION") }),
     field: dynamic(() => import("@/components/worlds/atlas-realities").then((m) => m.AtlasField), { loading: loading("FIELD") }),
+    miniature: dynamic(() => import("@/components/worlds/atlas-miniature").then((m) => m.AtlasMiniature), { loading: loading("MINIATURE") }),
   },
   forge: {
     blueprint: dynamic(() => import("@/components/worlds/forge-realities").then((m) => m.ForgeBlueprint), { loading: loading("BLUEPRINT") }),
