@@ -28,6 +28,25 @@ export default function ProcessPage() {
         Enquiry
       </Link>
       <hr className="rule" />
+      <p className="kicker">Don&apos;t take our word — operate the artifacts</p>
+      <h2 className="display" style={{ fontSize: "clamp(2rem, 5vw, 3.6rem)" }}>Process you can touch.</h2>
+      <p className="lede">Other studios show sketches. We show working paperwork — every artifact below runs on real data, right now.</p>
+      <div className="grid-2" style={{ marginTop: 24 }}>
+        {[
+          ["Timing sheet", "Every frame specified before it renders.", "/worlds/motion/timing"],
+          ["Storyboard", "What the client approves first.", "/worlds/motion/storyboard"],
+          ["Stock ledger", "Everything on one page.", "/worlds/objects/shop/ledger"],
+          ["Spec compare", "Differences lit, winner by numbers.", "/worlds/forge/compare"],
+          ["Departures board", "Every route priced and boarding.", "/worlds/atlas/timetable"],
+          ["Setlist", "Runtimes, tour dates, honest scarcity.", "/worlds/pulse/setlist"],
+        ].map(([name, note, href]) => (
+          <Link key={href} href={href} className="panel" style={{ display: "block" }}>
+            <p className="kicker">{name} →</p>
+            <p>{note}</p>
+          </Link>
+        ))}
+      </div>
+      <hr className="rule" />
       <p className="kicker">The reassuring part</p>
       <h2 className="display" style={{ fontSize: "clamp(2rem, 5vw, 3.6rem)" }}>Certainty, itemized.</h2>
       <div className="grid-2" style={{ marginTop: 24 }}>

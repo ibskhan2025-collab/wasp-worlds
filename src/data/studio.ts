@@ -121,6 +121,19 @@ export const caseStudies = [
     system: "The NOIR cart engine, reskinned; option and quantity validation per piece; simulated till with server-side totals.",
     proves: "Commerce craft for small catalogues — discovery, desire and checkout designed as one material.",
   },
+  {
+    slug: "nest",
+    world: "NEST",
+    title: "A house with six ways in",
+    problem: "Architecture portfolios show finished photographs. The visitor never learns how the rooms relate, what the materials are, or what it feels like to stand in the plan.",
+    decision: "Build the same house six times: ink drawing, environmental simulation, walkable CSS-3D room, cardboard mockup, and real WebGL geometry — one room data set, six buildings.",
+    design: "Each reality re-expresses the same four rooms and materials: tracing paper, readouts, orbit controls, tape and cardboard, solids with edges.",
+    interaction: "Orbit the room by dragging. Switch materials and watch every solid re-finish. Zoom the WebGL plan, click a room, open its dossier.",
+    result: "One data set, six demonstrable levels of fidelity — from a sketch to geometry you can orbit. The clearest answer this site has to 'what does the building feel like'.",
+    idea: "Fidelity is a dial, not a deliverable. The same rooms should survive being drawn, simulated, walked, mocked up, and modelled.",
+    system: "Rooms and materials as data; CSS-3D walk with clamped orbit; raw three.js volume with raycast picking; reduced-motion stills throughout.",
+    proves: "Spatial interfaces at every budget of bytes — the same plan, honest at six fidelities.",
+  },
 ];
 
 export const sops = [
