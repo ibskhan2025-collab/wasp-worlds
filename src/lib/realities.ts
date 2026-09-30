@@ -161,6 +161,8 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#101210", "--fg": "#e8e0d2", "--muted": "#8a7f6e", "--line": "rgba(232,224,210,0.2)", "--accent": "#c98a3d" }),
     ALT("mockup", "Mockup", "Cardboard and tape", "mockup",
       { "--bg": "#d9c39a", "--fg": "#3a2f22", "--muted": "#7a6a54", "--line": "#3a2f22", "--accent": "#8a5a2e" }),
+    ALT("volume", "Volume", "Real geometry, WebGL", "volume",
+      { "--bg": "#101210", "--fg": "#e8e0d2", "--muted": "#8a7f6e", "--line": "rgba(232,224,210,0.2)", "--accent": "#c98a3d" }),
   ],
   vector: [
     CLASSIC("Terminal", "Dark, sharp, annotated"),

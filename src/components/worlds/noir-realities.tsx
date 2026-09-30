@@ -71,7 +71,7 @@ export function NoirFuture() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 1, background: "rgba(223,232,255,0.2)", border: "1px solid rgba(223,232,255,0.2)", marginTop: 24 }}>
           {noirProducts.map((p) => (
             <div key={p.id} style={{ background: "#05070d", padding: 16 }}>
-              <p style={{ fontSize: 10, color: "#6fc3ff", margin: 0 }}>SKU.{p.id.toUpperCase()} // {p.category.toUpperCase()}</p>
+              <p style={{ fontSize: 10, color: "#6fc3ff", margin: 0 }}>SKU.{p.id.toUpperCase()}{" // "}{p.category.toUpperCase()}</p>
               <p style={{ fontSize: "1.2rem", margin: "8px 0" }}>
                 <Link href={`/worlds/noir/product/${p.id}`} style={{ textDecoration: "underline" }}>{p.name}</Link>
               </p>

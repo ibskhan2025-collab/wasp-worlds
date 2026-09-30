@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { objectProducts } from "@/data/objects";
 import { loadJson, saveJson } from "@/lib/storage";
+import { RealityShell } from "@/components/worlds/reality-shell";
 import { money } from "@/lib/use-cart";
 
 const CATS = ["All", "Ceramic", "Seating", "Light", "Textile"];
@@ -41,7 +42,16 @@ export default function ObjectsShop() {
 
   return (
     <div style={{ padding: "12px 20px 80px" }}>
-      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20 }}>
+      <RealityShell
+        world="objects"
+        current="classic"
+        basePath="/worlds/objects/shop"
+        options={[
+          { id: "classic", label: "Grid", note: "Editorial cards" },
+          { id: "ledger", label: "Ledger", note: "Everything on one page", href: "/worlds/objects/shop/ledger" },
+        ]}
+      />
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20, marginTop: 12 }}>
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}

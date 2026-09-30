@@ -43,6 +43,19 @@ export function CasaOceanic() {
             {d.name} <span style={{ opacity: 0.6 }}>· {d.category}</span>
           </Link>
         ))}
+        <div style={{ border: "1px solid rgba(46,168,160,0.5)", padding: "20px", marginTop: 32 }}>
+          <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#2ea8a0", margin: "0 0 12px" }}>TIDE TABLE · WHAT THE WATER GIVES</p>
+          {[
+            ["0–2m · shallows", "Sea greens, small shells. Crudo territory."],
+            ["2–8m · the drop", "Prawns, head on. Garlic, smoke, bread for the oil."],
+            ["8m+ · the dark", "Whatever the boats bring. The kitchen decides, you accept."],
+          ].map(([zone, note]) => (
+            <div key={zone} style={{ display: "grid", gridTemplateColumns: "140px 1fr", gap: 12, padding: "10px 0", borderTop: "1px solid rgba(232,244,240,0.15)", fontSize: "0.95rem" }}>
+              <strong style={{ color: "#2ea8a0" }}>{zone}</strong>
+              <span style={{ color: "#9fd0d2" }}>{note}</span>
+            </div>
+          ))}
+        </div>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 28 }}>
           <Link href="/worlds/casa/reservations" style={{ background: "#2ea8a0", color: "#06222b", padding: "12px 20px", fontWeight: 700, fontSize: 12, letterSpacing: "0.15em" }}>DIVE IN — RESERVE →</Link>
         </div>

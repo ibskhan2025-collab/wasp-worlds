@@ -11,28 +11,31 @@ import type { WorldId } from "@/lib/types";
  * Full page navigation (not a theme swap): the next reality boots as its
  * own route after a 560ms wipe. Skipped entirely under reduced motion.
  */
-export function RealityShell({ world, current, basePath }: {
+export type ShellOption = { id: string; label: string; note: string; href?: string };
+
+export function RealityShell({ world, current, basePath, options: override }: {
   world: WorldId;
   current: string;
   basePath: string;
+  /** Sub-pages (shop, menu) pass their own option set with explicit hrefs. */
+  options?: ShellOption[];
 }) {
   const router = useRouter();
   const [wipe, setWipe] = useState<string | null>(null);
-  const options = REALITIES[world] ?? [];
+  const options: ShellOption[] = override ?? REALITIES[world] ?? [];
   if (options.length <= 1) return null;
 
-  function go(id: string) {
-    if (id === current || wipe) return;
-    const label = options.find((r) => r.id === id)?.label ?? id;
-    saveReality(world, id);
-    track("preference_set", { kind: "reality", value: `${world}:${id}` });
-    const target = id === "classic" ? basePath : `${basePath}/${id}`;
+  function go(opt: ShellOption) {
+    if (opt.id === current || wipe) return;
+    saveReality(world, opt.id);
+    track("preference_set", { kind: "reality", value: `${world}:${opt.id}` });
+    const target = opt.href ?? (opt.id === "classic" ? basePath : `${basePath}/${opt.id}`);
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
       router.push(target);
       return;
     }
-    setWipe(label);
+    setWipe(opt.label);
     window.setTimeout(() => router.push(target), 560);
   }
 
@@ -47,7 +50,7 @@ export function RealityShell({ world, current, basePath }: {
             className={current === r.id ? "chip-on" : "chip"}
             aria-pressed={current === r.id}
             title={r.note}
-            onClick={() => go(r.id)}
+            onClick={() => go(r)}
           >
             {r.label}
           </button>

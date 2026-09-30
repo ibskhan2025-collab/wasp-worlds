@@ -90,6 +90,7 @@ const R: Record<string, Record<string, ComponentType>> = {
     simulated: dynamic(() => import("@/components/worlds/nest-realities").then((m) => m.NestSimulated), { loading: loading("SIMULATED") }),
     mockup: dynamic(() => import("@/components/worlds/nest-realities").then((m) => m.NestMockup), { loading: loading("MOCKUP") }),
     walk: dynamic(() => import("@/components/worlds/nest-walk").then((m) => m.NestWalk), { loading: loading("WALK") }),
+    volume: dynamic(() => import("@/components/worlds/nest-volume").then((m) => m.NestVolume), { loading: loading("VOLUME") }),
   },
   vector: {
     ledger: dynamic(() => import("@/components/worlds/vector-realities").then((m) => m.VectorLedger), { loading: loading("LEDGER") }),

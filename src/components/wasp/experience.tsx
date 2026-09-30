@@ -281,8 +281,9 @@ export function Experience() {
         })}
       </section>
 
-      <div style={{ padding: "16px var(--pad) 8px", borderBottom: "1px solid var(--line)" }}>
-        <p className="ex-kicker">The exhibition · all 15 rooms</p>
+      <div style={{ padding: "16px var(--pad) 8px", borderBottom: "1px solid var(--line)", display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "baseline" }}>
+        <p className="ex-kicker" style={{ margin: 0 }}>The exhibition · all 15 rooms</p>
+        <Link className="kicker" href="/matrix" style={{ borderBottom: "1px solid currentColor" }}>Matrix view →</Link>
       </div>
       <div className="rooms">
         {WORLDS.map((world, i) => {

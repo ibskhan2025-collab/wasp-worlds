@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { createElement } from "react";
 import { getReality } from "@/lib/realities";
 import { WORLDS } from "@/lib/worlds";
 import { getRenderer } from "@/components/worlds/registry";
@@ -26,5 +27,5 @@ export default async function RealityPage({ params }: { params: Promise<{ id: st
   const meta = WORLDS.find((w) => w.id === world);
   const Renderer = meta ? getRenderer(world, reality) : null;
   if (!meta || !getReality(world as never, reality) || !Renderer) return notFound();
-  return <Renderer />;
+  return createElement(Renderer);
 }

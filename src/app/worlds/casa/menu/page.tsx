@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { dishes } from "@/data/casa";
+import { RealityShell } from "@/components/worlds/reality-shell";
 
 const CATS = ["All", "Fire", "Garden", "Sea", "Sweet", "Wine"] as const;
 
@@ -17,7 +18,16 @@ export default function CasaMenu() {
 
   return (
     <div style={{ padding: "28px 22px 80px", maxWidth: 920, margin: "0 auto" }}>
-      <p className="kicker">The list</p>
+      <RealityShell
+        world="casa"
+        current="classic"
+        basePath="/worlds/casa/menu"
+        options={[
+          { id: "classic", label: "Menu", note: "The printed list", href: "/worlds/casa/menu" },
+          { id: "oceanic", label: "Tide", note: "Ordered by depth", href: "/worlds/casa/menu/oceanic" },
+        ]}
+      />
+      <p className="kicker" style={{ marginTop: 12 }}>The list</p>
       <h1 style={{ fontFamily: "var(--font-lux)", fontSize: "clamp(3rem, 8vw, 6rem)", fontWeight: 500, margin: "6px 0 24px" }}>
         Menu
       </h1>
