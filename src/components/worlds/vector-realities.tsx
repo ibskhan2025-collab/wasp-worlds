@@ -83,3 +83,41 @@ export function VectorFiling() {
     </div>
   );
 }
+
+export function VectorSurface() {
+  return (
+    <div style={{ background: "#e8eef2", color: "#101418", minHeight: "100dvh", fontFamily: "var(--font-sans)" }}>
+      <WorldExit id="vector" label="Room 15 · VECTOR/SURFACE" />
+      <RealityShell world="vector" current="surface" basePath="/worlds/vector" />
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#0f6fbf" }}>QUIET BRIEFING · COFFEE PROVIDED</p>
+        <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.4rem)", fontWeight: 400, letterSpacing: "-0.02em", margin: "8px 0" }}>Money, explained calmly.</h1>
+        <p style={{ fontSize: "1.15rem", color: "#33414b", maxWidth: "52ch" }}>The same fourteen quarters and three essays, without the terminal glow. Some clients prefer daylight.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginTop: 24 }}>
+          {[
+            ["+58%", "since Q1 23"],
+            ["2", "drawdowns shown"],
+            ["0.6%", "top fee rate"],
+          ].map(([v, l]) => (
+            <div key={l} style={{ border: "1px solid #c3d2da", background: "#fff", padding: 16 }}>
+              <div style={{ fontSize: "2rem", fontWeight: 700 }}>{v}</div>
+              <div style={{ fontSize: "0.85rem", color: "#5f7280" }}>{l}</div>
+            </div>
+          ))}
+        </div>
+        {vectorInsights.map((a) => (
+          <Link key={a.slug} href={`/worlds/vector/${a.slug}`} style={{ display: "block", padding: "16px 0", borderBottom: "1px solid #c3d2da" }}>
+            <strong style={{ fontSize: "1.3rem", fontWeight: 400 }}>{a.title}</strong>
+            <div style={{ color: "#5f7280" }}>{a.dek}</div>
+          </Link>
+        ))}
+        <p style={{ marginTop: 16, fontSize: "0.9rem", color: "#5f7280" }}>Illustrative figures, daylight edition. Not advice. <Link href="/worlds/vector" style={{ textDecoration: "underline" }}>Terminal version →</Link></p>
+      </div>
+      <WorldProof
+        proves="The same numbers in daylight. Trust survives a change of lighting — that was the test."
+        relatedHref="/worlds/forge"
+        relatedName="FORGE"
+      />
+    </div>
+  );
+}

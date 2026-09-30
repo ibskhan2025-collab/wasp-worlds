@@ -771,6 +771,18 @@ a { color: inherit; text-decoration: none; }
   background: #efe9dc;
   color: #1a1712;
 }
+.sig-future .signal-root {
+  --bg: #04070c;
+  --fg: #9fd8ff;
+  --muted: #5f7f99;
+  --sig-b0: #9fd8ff;
+  --sig-b1: #6fc3ff;
+  --sig-b2: #d8ecff;
+  --sig-core: #ffffff;
+  --sig-ring: rgba(159, 216, 255, 0.22);
+  background: #04070c;
+  color: #9fd8ff;
+}
 .signal-stage {
   width: min(920px, 100%);
   margin: 0 auto;

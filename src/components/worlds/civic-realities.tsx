@@ -63,3 +63,28 @@ export function CivicPaperform() {
     </div>
   );
 }
+
+export function CivicKiosk() {
+  return (
+    <div style={{ background: "#0d1117", color: "#e8eef2", minHeight: "100dvh", fontFamily: "var(--font-sans)" }}>
+      <WorldExit id="civic" label="Room 13 · CIVIC/KIOSK" />
+      <RealityShell world="civic" current="kiosk" basePath="/worlds/civic" />
+      <div style={{ maxWidth: 640, margin: "0 auto", padding: "48px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#2e6bd8" }}>PUBLIC TERMINAL · TOUCH TO BEGIN · FICTIONAL</p>
+        <h1 style={{ fontSize: "clamp(2.4rem, 8vw, 4.6rem)", margin: "8px 0 24px" }}>What do you need?</h1>
+        {civicServices.map((s) => (
+          <Link
+            key={s.slug}
+            href={`/worlds/civic/${s.slug}`}
+            style={{ display: "block", padding: "22px 18px", border: "2px solid #e8eef2", marginBottom: 12, minHeight: 64 }}
+          >
+            <strong style={{ fontSize: "1.4rem" }}>{s.title}</strong>
+            <div style={{ color: "#8a99a5", fontSize: "0.95rem", marginTop: 4 }}>{s.intro}</div>
+            <div style={{ color: "#2e6bd8", fontSize: "0.85rem", marginTop: 6 }}>TAP TO CONTINUE →</div>
+          </Link>
+        ))}
+        <p style={{ fontSize: "0.85rem", color: "#8a99a5" }}>Demonstration kiosk. For real services, <Link href="/worlds/civic" style={{ textDecoration: "underline", color: "#e8eef2" }}>use the counter →</Link></p>
+      </div>
+    </div>
+  );
+}

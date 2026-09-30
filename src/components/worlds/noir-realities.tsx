@@ -59,3 +59,29 @@ export function NoirAnalog() {
     </div>
   );
 }
+
+export function NoirFuture() {
+  return (
+    <div style={{ background: "#05070d", color: "#dfe8ff", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="noir" label="Room 02 · NOIR/2049" />
+      <RealityShell world="noir" current="future" basePath="/worlds/noir" />
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#6fc3ff" }}>ATELIER 2049 · DROP 07 · FABRICATION ON DEMAND</p>
+        <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5.5rem)", margin: "8px 0", fontWeight: 400 }}>NOIR<span style={{ color: "#6fc3ff" }}>_FUTURE</span></h1>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 1, background: "rgba(223,232,255,0.2)", border: "1px solid rgba(223,232,255,0.2)", marginTop: 24 }}>
+          {noirProducts.map((p) => (
+            <div key={p.id} style={{ background: "#05070d", padding: 16 }}>
+              <p style={{ fontSize: 10, color: "#6fc3ff", margin: 0 }}>SKU.{p.id.toUpperCase()} // {p.category.toUpperCase()}</p>
+              <p style={{ fontSize: "1.2rem", margin: "8px 0" }}>
+                <Link href={`/worlds/noir/product/${p.id}`} style={{ textDecoration: "underline" }}>{p.name}</Link>
+              </p>
+              <p style={{ fontSize: "0.8rem", color: "#7f8fb0", margin: 0 }}>{p.fabric} · {p.sizes.join("/")}</p>
+              <p style={{ fontSize: "1.3rem", color: "#6fc3ff", margin: "8px 0 0" }}>{money(p.price)}</p>
+            </div>
+          ))}
+        </div>
+        <p style={{ marginTop: 16, fontSize: "0.85rem", color: "#7f8fb0" }}>Rendered on demand. Shipped from the future. <Link href="/worlds/noir/collection" style={{ textDecoration: "underline", color: "#6fc3ff" }}>Classic index →</Link></p>
+      </div>
+    </div>
+  );
+}

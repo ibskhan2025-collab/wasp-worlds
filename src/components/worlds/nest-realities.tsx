@@ -83,3 +83,26 @@ export function NestSimulated() {
     </div>
   );
 }
+
+export function NestMockup() {
+  return (
+    <div style={{ background: "#d9c39a", color: "#3a2f22", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="nest" label="Room 14 · NEST/MOCKUP" />
+      <RealityShell world="nest" current="mockup" basePath="/worlds/nest" />
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>CARDBOARD STUDY 1:4 · TAPE, NOT GLUE</p>
+        <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.4rem)", margin: "8px 0" }}>The house, mocked up.</h1>
+        {nestRooms.map((r, i) => (
+          <div key={r.slug} style={{ background: "#e6d3ab", border: "2px solid #3a2f22", boxShadow: "8px 8px 0 #3a2f2233", padding: 20, marginTop: 20, transform: `rotate(${i % 2 ? 0.7 : -0.7}deg)` }}>
+            <p style={{ fontSize: 11, letterSpacing: "0.2em", margin: 0 }}>PIECE {String(i + 1).padStart(2, "0")} · {r.size} · {r.light.toUpperCase()}</p>
+            <h2 style={{ fontSize: "1.7rem", margin: "6px 0" }}>
+              <Link href={`/worlds/nest/${r.slug}`} style={{ textDecoration: "underline" }}>{r.name}</Link>
+            </h2>
+            <p style={{ fontSize: "0.95rem" }}>{r.desc}</p>
+          </div>
+        ))}
+        <p style={{ marginTop: 20, fontSize: "0.85rem" }}>Held together with tape and intent. <Link href="/worlds/nest" style={{ textDecoration: "underline", fontWeight: 700 }}>See the real plan →</Link></p>
+      </div>
+    </div>
+  );
+}

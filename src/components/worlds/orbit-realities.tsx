@@ -101,3 +101,23 @@ export function OrbitCompact() {
     </div>
   );
 }
+
+export function OrbitRaw() {
+  const [s] = useState(loadOrbit);
+  const rows: string[] = [
+    ...s.customers.map((c) => `${c.id} | CUSTOMER | ${c.name} | ${c.company} | ${c.plan} | ${c.spend} | ${c.health} | ${c.email}`),
+    ...s.projects.map((p) => `${p.id} | PROJECT | ${p.name} | ${p.client} | ${p.stage} | ${p.due} | ${p.owner}`),
+    ...s.activity.slice(0, 20).map((a) => `${a.id} | EVENT | ${a.who} ${a.what} | ${a.when}`),
+  ];
+  return (
+    <div style={{ background: "#f4f4f0", color: "#111", minHeight: "100dvh", fontFamily: "monospace", fontSize: "0.8rem" }}>
+      <WorldExit id="orbit" label="Room 03 · ORBIT/RAW" />
+      <RealityShell world="orbit" current="brutalist" basePath="/worlds/orbit" />
+      <div style={{ padding: "16px" }}>
+        <p style={{ margin: 0 }}>ORBIT DATABASE DUMP — {rows.length} ROWS — READ ONLY</p>
+        <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-all", border: "3px solid #111", padding: 16, marginTop: 12 }}>{rows.join("\n")}</pre>
+        <p>Writes happen in the <Link href="/worlds/orbit" style={{ textDecoration: "underline", fontWeight: 700 }}>full console →</Link></p>
+      </div>
+    </div>
+  );
+}

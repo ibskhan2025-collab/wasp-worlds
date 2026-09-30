@@ -69,3 +69,42 @@ export function ObjectsCatalogue() {
     </div>
   );
 }
+
+export function ObjectsPlayful() {
+  return (
+    <div style={{ background: "#fff3d6", color: "#241a12", minHeight: "100dvh", fontFamily: "var(--font-shop)" }}>
+      <WorldExit id="objects" label="Room 06 · OBJECTS/PLAY" />
+      <RealityShell world="objects" current="playful" basePath="/worlds/objects" />
+      <header style={{ padding: "36px 20px 8px", textAlign: "center", transform: "rotate(-1deg)" }}>
+        <p style={{ fontWeight: 800, letterSpacing: "0.2em", fontSize: 12, color: "#e2542e" }}>★ BOING ★ POTS WITH PERSONALITY ★</p>
+        <h1 style={{ fontSize: "clamp(3rem, 12vw, 7rem)", margin: "8px 0", fontWeight: 900 }}>WOBBLY & PROUD</h1>
+      </header>
+      <div style={{ display: "flex", gap: 18, padding: "12px 20px 60px", overflowX: "auto" }}>
+        {objectProducts.map((p, i) => (
+          <Link
+            key={p.id}
+            href={`/worlds/objects/product/${p.id}`}
+            style={{
+              flex: "0 0 220px", background: "#fff", border: "3px solid #241a12", borderRadius: 24,
+              transform: `rotate(${i % 2 ? 1.5 : -1.5}deg)`, transition: "transform 200ms",
+              display: "block", overflow: "hidden",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "rotate(0deg) scale(1.05)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = `rotate(${i % 2 ? 1.5 : -1.5}deg)`)}
+          >
+            <img src={p.image} alt={p.name} loading="lazy" decoding="async" style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
+            <div style={{ padding: "12px 14px" }}>
+              <strong>{p.name}!</strong>
+              <div style={{ color: "#e2542e", fontWeight: 800 }}>{money(p.price)}</div>
+            </div>
+          </Link>
+        ))}
+      </div>
+      <WorldProof
+        proves="Elastic shelves, same stock. Play is a layout strategy, not a lack of one."
+        relatedHref="/worlds/pulse"
+        relatedName="PULSE"
+      />
+    </div>
+  );
+}

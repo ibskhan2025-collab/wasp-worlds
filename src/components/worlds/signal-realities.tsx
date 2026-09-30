@@ -27,3 +27,13 @@ export function SignalPaper() {
     </div>
   );
 }
+
+export function SignalFuture() {
+  return (
+    <div className="sig-future">
+      <WorldExit id="signal" label="Room 05 · SIGNAL/QUANTUM" />
+      <RealityShell world="signal" current="future" basePath="/worlds/signal" />
+      <SignalPage bare />
+    </div>
+  );
+}

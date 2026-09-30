@@ -64,3 +64,29 @@ export function AtlasField() {
     </div>
   );
 }
+
+export function AtlasCinema() {
+  return (
+    <div style={{ background: "#0b0d10", color: "#e8e4dc", minHeight: "100dvh" }}>
+      <WorldExit id="atlas" label="Room 10 · ATLAS/CINEMA" />
+      <RealityShell world="atlas" current="cinematic" basePath="/worlds/atlas" />
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 20px" }}>
+        <p style={{ fontFamily: "var(--font-code)", fontSize: 11, letterSpacing: "0.3em", color: "#c98a3d", textAlign: "center" }}>SIX ROUTES · SLOW CINEMA · NO ITINERARY, ONLY LONGING</p>
+        {destinations.map((d) => (
+          <figure key={d.slug} style={{ margin: "56px 0" }}>
+            <div style={{ borderTop: "9vh solid #000", borderBottom: "9vh solid #000", background: "#000" }}>
+              <img src={d.image} alt={d.name} loading="lazy" decoding="async" style={{ width: "100%", aspectRatio: "2.39/1", objectFit: "cover", display: "block", filter: "brightness(0.85)" }} />
+            </div>
+            <figcaption style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", padding: "12px 4px" }}>
+              <Link href={`/worlds/atlas/${d.slug}`} style={{ fontFamily: "var(--font-display)", fontSize: "1.8rem" }}>{d.name}</Link>
+              <span style={{ fontFamily: "var(--font-code)", fontSize: 12, color: "#c98a3d" }}>{d.region.toUpperCase()} · {d.season.toUpperCase()} · {d.days} DAYS</span>
+            </figcaption>
+          </figure>
+        ))}
+        <div style={{ textAlign: "center", paddingBottom: 80 }}>
+          <p style={{ fontFamily: "var(--font-code)", fontSize: 12, letterSpacing: "0.2em" }}>FIN · <Link href="/worlds/atlas/itinerary" style={{ textDecoration: "underline" }}>PLAN FOR REAL →</Link></p>
+        </div>
+      </div>
+    </div>
+  );
+}

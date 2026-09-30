@@ -77,3 +77,29 @@ export function StillContact() {
     </div>
   );
 }
+
+export function StillGallery() {
+  const [open, setOpen] = useState<number | null>(null);
+  const images = stillCollections.flatMap((c) => c.images);
+  return (
+    <div style={{ background: "#e6ddc8", color: "#201a12", minHeight: "100dvh", fontFamily: "var(--font-serif)" }}>
+      <WorldExit id="still" label="Room 04 · STILL/GALLERY" />
+      <RealityShell world="still" current="gallery" basePath="/worlds/still" />
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "56px 20px 80px", textAlign: "center" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.35em" }}>HUNG STRAIGHT · ONE WALL</p>
+        {images.map((img, i) => (
+          <figure key={img.src} style={{ margin: "64px auto", maxWidth: i % 3 === 0 ? 760 : 520 }}>
+            <button type="button" onClick={() => setOpen(i)} aria-label={`Open ${img.alt}`} style={{ border: "12px solid #fffdf6", padding: 0, background: "#fffdf6", boxShadow: "0 18px 50px rgba(32,26,18,0.25)", width: "100%" }}>
+              <img src={img.src} alt={img.alt} loading="lazy" decoding="async" style={{ width: "100%", display: "block", filter: "grayscale(0.85)" }} />
+            </button>
+            <figcaption style={{ marginTop: 12, fontSize: "0.9rem", fontStyle: "italic" }}>{i + 1}. {img.alt}</figcaption>
+          </figure>
+        ))}
+        <p><Link href="/worlds/still/prints" style={{ textDecoration: "underline" }}>Take one home →</Link></p>
+      </div>
+      {open !== null ? (
+        <Lightbox images={images.map((g) => ({ src: g.src, alt: g.alt }))} index={open} onClose={() => setOpen(null)} onMove={setOpen} />
+      ) : null}
+    </div>
+  );
+}

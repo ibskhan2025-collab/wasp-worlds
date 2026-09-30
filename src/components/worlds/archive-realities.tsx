@@ -68,9 +68,35 @@ export function ArchiveTerminal() {
         {a.body.map((p) => (
           <p key={p.slice(0, 32)} style={{ lineHeight: 1.7 }}>&gt; {p}</p>
         ))}
-        <p style={{ color: "#7a8f72" }}>$ <span style={{ animation: "blink 1s steps(2) infinite" }}>█</span> <Link href={`/worlds/archive/${a.slug}`} style={{ color: "#3ddc84", textDecoration: "underline" }}>open full article →</Link></p>
+        <p style={{ color: "#7a8f72" }}>$ <span style={{ animation: "blink 1s steps(2) infinite" }}>|</span> <Link href={`/worlds/archive/${a.slug}`} style={{ color: "#3ddc84", textDecoration: "underline" }}>open full article →</Link></p>
         <style>{`@keyframes blink { 50% { opacity: 0; } }`}</style>
       </div>
+    </div>
+  );
+}
+
+export function ArchivePoster() {
+  return (
+    <div style={{ background: "#14100c", color: "#f3ead8", minHeight: "100dvh" }}>
+      <WorldExit id="archive" label="Room 07 · ARCHIVE/POSTER" />
+      <RealityShell world="archive" current="poster" basePath="/worlds/archive" />
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#e23a3a" }}>PASTED OVERNIGHT · READ BY MORNING</p>
+        {archiveIssues.map((a, i) => (
+          <article key={a.slug} style={{ borderBottom: "1px solid rgba(243,234,216,0.2)", padding: "40px 0", transform: `rotate(${i % 2 ? 0.4 : -0.4}deg)` }}>
+            <p style={{ fontSize: 11, letterSpacing: "0.25em", color: "#e23a3a", margin: 0 }}>{a.category.toUpperCase()} · {a.read.toUpperCase()}</p>
+            <h2 style={{ fontSize: "clamp(2.6rem, 8vw, 6rem)", lineHeight: 0.9, letterSpacing: "-0.03em", margin: "10px 0" }}>
+              <Link href={`/worlds/archive/${a.slug}`}>{a.title}</Link>
+            </h2>
+            <p style={{ fontSize: "1.2rem", color: "#f3ead8bb", maxWidth: "40ch" }}>{a.dek}</p>
+          </article>
+        ))}
+      </div>
+      <WorldProof
+        proves="Headlines as objects. Six essays set like protest posters — still fully readable."
+        relatedHref="/worlds/motion"
+        relatedName="MOTION"
+      />
     </div>
   );
 }

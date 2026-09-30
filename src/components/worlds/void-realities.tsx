@@ -131,3 +131,64 @@ export function VoidInk() {
     </div>
   );
 }
+
+export function VoidReactor() {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  const [level, setLevel] = useState(62);
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    let raf = 0;
+    let t = 0;
+    const W = (canvas.width = canvas.offsetWidth);
+    const H = (canvas.height = 380);
+    const loop = () => {
+      t += 1;
+      ctx.fillStyle = "rgba(10,13,18,0.22)";
+      ctx.fillRect(0, 0, W, H);
+      ctx.strokeStyle = "rgba(159,216,255,0.25)";
+      ctx.lineWidth = 1;
+      for (let g = 0; g < 5; g++) {
+        ctx.beginPath();
+        for (let x = 0; x <= W; x += 8) {
+          const y = H / 2 + Math.sin(x / 60 + t / (18 + g * 6) + g) * (14 + g * 10) * (level / 62);
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+      ctx.fillStyle = "#ff5a5a";
+      ctx.font = "11px monospace";
+      ctx.fillText(`CORE ${level}% · CONTAINMENT NOMINAL`, 14, 24);
+      ctx.strokeStyle = "#ff5a5a";
+      ctx.strokeRect(14, H - 44, 120, 10);
+      ctx.fillRect(14, H - 44, (120 * level) / 100, 10);
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [level]);
+  return (
+    <div style={{ background: "#0a0d12", color: "#9fd8ff", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="void" label="Room 09 · VOID/REACTOR" />
+      <RealityShell world="void" current="reactor" basePath="/worlds/void" />
+      <div style={{ maxWidth: 860, margin: "0 auto", padding: "28px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>CHARGED FIELD · DO NOT TAP GLASS</p>
+        <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.6rem)", margin: "8px 0" }}>REACTOR</h1>
+        <canvas ref={ref} style={{ width: "100%", display: "block", border: "1px solid rgba(159,216,255,0.3)" }} aria-label="Charged waveform field" />
+        <label style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 14, fontSize: 12 }}>
+          OUTPUT {level}%
+          <input type="range" min={5} max={100} value={level} onChange={(e) => setLevel(Number(e.target.value))} aria-label="Reactor output" style={{ flex: 1 }} />
+        </label>
+        <p style={{ fontSize: "0.85rem", color: "#5f7f99" }}>Same void, charged. The waveforms respond to output, not to you — some rooms prefer it that way.</p>
+      </div>
+      <WorldProof
+        proves="Ambient systems with teeth: a field that performs whether or not anyone touches it."
+        relatedHref="/worlds/signal"
+        relatedName="SIGNAL"
+      />
+    </div>
+  );
+}

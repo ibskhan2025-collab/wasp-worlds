@@ -81,3 +81,38 @@ export function MotionCinema() {
     </div>
   );
 }
+
+const SWELL = ["MOVE", "CUT", "HOLD", "BLUR", "BURN", "AGAIN"];
+
+export function MotionOceanic() {
+  return (
+    <div style={{ background: "#06222b", color: "#e8f4f0", minHeight: "100dvh" }}>
+      <WorldExit id="motion" label="Room 08 · MOTION/FLUID" />
+      <RealityShell world="motion" current="oceanic" basePath="/worlds/motion" />
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "48px 20px 80px" }}>
+        <p style={{ fontFamily: "var(--font-code)", fontSize: 11, letterSpacing: "0.3em", color: "#2ea8a0" }}>FLUID TIMING · EVERYTHING DRIFTS</p>
+        <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.6rem, 8vw, 5.5rem)", margin: "8px 0 8px" }}>Motion, underwater.</h1>
+        <p style={{ color: "#9fd0d2", maxWidth: "52ch" }}>Same six chapters, rescored for water: longer easings, slower reveals, nothing that snaps. Duration ×1.8 across the board.</p>
+        {SWELL.map((s, i) => (
+          <section key={s} style={{ marginTop: 40 }}>
+            <p style={{ fontFamily: "var(--font-code)", fontSize: 11, letterSpacing: "0.25em", color: "#2ea8a0", margin: 0 }}>SWELL 0{i + 1}</p>
+            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(3rem, 12vw, 7rem)", lineHeight: 0.9, margin: "6px 0" }}>{s}</h2>
+            <svg viewBox="0 0 400 36" width="100%" height="36" preserveAspectRatio="none" aria-hidden style={{ display: "block" }}>
+              <path d={`M0,18 Q50,${6 + i * 2} 100,18 T200,18 T300,18 T400,18`} fill="none" stroke="#2ea8a0" strokeWidth="2" opacity={0.9 - i * 0.1} />
+              <path d={`M0,26 Q50,${16 + i * 2} 100,26 T200,26 T300,26 T400,26`} fill="none" stroke="#2ea8a0" strokeWidth="1" opacity="0.45" />
+            </svg>
+          </section>
+        ))}
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 40 }}>
+          <Link href="/worlds/motion" style={{ border: "1px solid #2ea8a0", color: "#e8f4f0", padding: "12px 20px", fontSize: 12, letterSpacing: "0.15em" }}>BACK TO DRY LAND →</Link>
+          <Link href="/worlds/motion/principles" style={{ border: "1px solid #e8f4f055", color: "#e8f4f0", padding: "12px 20px", fontSize: 12, letterSpacing: "0.15em" }}>PRINCIPLES →</Link>
+        </div>
+      </div>
+      <WorldProof
+        proves="The same campaign at half tempo. Timing is a material — change the material, change the film."
+        relatedHref="/worlds/pulse"
+        relatedName="PULSE"
+      />
+    </div>
+  );
+}

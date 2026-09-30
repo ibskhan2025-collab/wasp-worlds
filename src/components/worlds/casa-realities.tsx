@@ -84,3 +84,31 @@ export function CasaAnalog() {
     </div>
   );
 }
+
+export function CasaZen() {
+  return (
+    <div style={{ background: "#f2efe6", color: "#2a2723", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
+      <WorldExit id="casa" label="Room 01 · CASA/ZEN" />
+      <RealityShell world="casa" current="zen" basePath="/worlds/casa" />
+      <div style={{ maxWidth: 560, margin: "0 auto", padding: "64px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.35em", textAlign: "center" }}>一期一会 · ONE TIME, ONE MEETING</p>
+        <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 4.6rem)", fontWeight: 400, textAlign: "center", margin: "16px 0 8px" }}>Casa, quietly.</h1>
+        <p style={{ textAlign: "center", fontStyle: "italic", color: "#7a7268" }}>Five courses. No choices. No photos at the table.</p>
+        <div style={{ marginTop: 48 }}>
+          {["First — clear broth, yuzu, chive oil", "Second — leek, ember, brown butter", "Third — quail, honey, grilled citrus", "Fourth — rib, marrow butter, onion", "Sweet — olive oil cake, citrus leaf"].map((c, i) => (
+            <div key={c} style={{ padding: "28px 0", borderTop: "1px solid rgba(42,39,35,0.25)", textAlign: "center" }}>
+              <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#7a7268", margin: 0 }}>0{i + 1}</p>
+              <p style={{ fontSize: "1.4rem", margin: "8px 0 0" }}>{c}</p>
+            </div>
+          ))}
+        </div>
+        <p style={{ textAlign: "center", marginTop: 40 }}>Two seatings nightly: 17:30, 20:30. <Link href="/worlds/casa/reservations" style={{ textDecoration: "underline" }}>Reserve in silence →</Link></p>
+      </div>
+      <WorldProof
+        proves="Restraint as hospitality: five courses, no menu to decode, booking in one gesture."
+        relatedHref="/worlds/still"
+        relatedName="STILL"
+      />
+    </div>
+  );
+}

@@ -63,3 +63,39 @@ export function PulseVinyl() {
     </div>
   );
 }
+
+export function PulseOceanic() {
+  return (
+    <div style={{ background: "#04121e", color: "#bfe0ff", minHeight: "100dvh", fontFamily: "var(--font-sans)" }}>
+      <WorldExit id="pulse" label="Room 12 · PULSE/SUBMERGED" />
+      <RealityShell world="pulse" current="oceanic" basePath="/worlds/pulse" />
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "48px 20px 80px", textAlign: "center" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.35em", color: "#2e98c9" }}>RECORDED AT DEPTH · SLOW REVERB ONLY</p>
+        <h1 style={{ fontSize: "clamp(3rem, 11vw, 7rem)", lineHeight: 0.9, margin: "12px 0", fontWeight: 800 }}>SUBMERGED</h1>
+        {releases.map((r) => {
+          const total = r.tracks.reduce((n, t) => n + t.secs, 0);
+          return (
+            <div key={r.slug} style={{ borderTop: "1px solid rgba(191,224,255,0.25)", padding: "28px 0" }}>
+              <p style={{ color: "#2e98c9", fontSize: 12, letterSpacing: "0.25em", margin: 0 }}>{r.artist.toUpperCase()} · {r.tracks.length} TRACKS · {fmtSecs(total)}</p>
+              <h2 style={{ fontSize: "2rem", margin: "8px 0" }}>
+                <Link href={`/worlds/pulse/${r.slug}`} style={{ textDecoration: "underline" }}>{r.title}</Link>
+              </h2>
+              <p style={{ color: "#5f8fb0", maxWidth: "46ch", margin: "0 auto" }}>{r.note}</p>
+            </div>
+          );
+        })}
+        <div style={{ marginTop: 24 }}>
+          {shows.filter((s) => s.status !== "Sold out").slice(0, 3).map((s) => (
+            <p key={s.id} style={{ color: "#5f8fb0" }}>{s.date} — {s.city}, {s.venue}</p>
+          ))}
+          <p><Link href="/worlds/pulse" style={{ color: "#2e98c9", textDecoration: "underline" }}>Surface for tickets →</Link></p>
+        </div>
+      </div>
+      <WorldProof
+        proves="The label at forty fathoms: slower, bluer, same release dates. Mood is a mix setting."
+        relatedHref="/worlds/motion"
+        relatedName="MOTION"
+      />
+    </div>
+  );
+}

@@ -85,3 +85,33 @@ export function ForgeDatasheet() {
     </div>
   );
 }
+
+export function ForgeAnalog() {
+  return (
+    <div style={{ background: "#d8cfb8", color: "#2a241c", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="forge" label="Room 11 · FORGE/MICROFICHE" />
+      <RealityShell world="forge" current="analog" basePath="/worlds/forge" />
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>MICROFICHE · DRAWER 11 · DO NOT REMOVE</p>
+        <h1 style={{ fontSize: "clamp(2.2rem, 6vw, 3.8rem)", margin: "8px 0", fontWeight: 400 }}>Parts, on film.</h1>
+        <p style={{ fontSize: "0.9rem" }}>Scanned 1987, digitized reluctantly. Dimensions verified against the bench copy.</p>
+        {forgeProducts.map((p, i) => (
+          <article key={p.slug} style={{ border: "2px solid #2a241c", marginTop: 20, padding: 18, background: "#e2d8bd", transform: `rotate(${i % 2 ? 0.4 : -0.4}deg)` }}>
+            <p style={{ margin: 0, fontSize: 11 }}>FRAME {String(i + 1).padStart(3, "0")} · {p.family.toUpperCase()} · LEAD {p.lead.toUpperCase()}</p>
+            <h2 style={{ fontSize: "1.6rem", margin: "6px 0" }}>
+              <Link href={`/worlds/forge/${p.slug}`} style={{ textDecoration: "underline" }}>{p.name}</Link>
+            </h2>
+            <p style={{ fontSize: "0.9rem" }}>{p.desc}</p>
+            <p style={{ fontSize: "0.85rem", margin: 0 }}>LOAD {p.load}kN · TOL {p.tolerance} · {p.finishes.join(" / ")}</p>
+          </article>
+        ))}
+        <p style={{ marginTop: 20, fontSize: "0.85rem" }}>For current stock, <Link href="/worlds/forge" style={{ textDecoration: "underline" }}>see the ops floor →</Link></p>
+      </div>
+      <WorldProof
+        proves="Forty years of parts on forty-year-old film. Specs outlive their medium — good data survives any rendering."
+        relatedHref="/worlds/vector"
+        relatedName="VECTOR"
+      />
+    </div>
+  );
+}
