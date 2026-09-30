@@ -7,7 +7,7 @@ import { WorldProof } from "@/components/worlds/world-proof";
 import { dishes } from "@/data/casa";
 import { money } from "@/lib/use-cart";
 
-const shell = (id: "oceanic" | "analog") => (
+const shell = (id: "oceanic" | "analog" | "counter" | "cellar") => (
   <>
     <WorldExit id="casa" label={`Room 01 · CASA/${id.toUpperCase()}`} />
     <RealityShell world="casa" current={id} basePath="/worlds/casa" />
@@ -94,6 +94,93 @@ export function CasaAnalog() {
         </div>
         <p style={{ textAlign: "center", marginTop: 24, fontSize: "0.85rem", fontStyle: "italic" }}>Printed daily at noon. This copy is already out of date.</p>
       </div>
+    </div>
+  );
+}
+
+export function CasaCounter() {
+  const fire = dishes.filter((d) => d.category === "Fire");
+  const cold = dishes.filter((d) => d.category !== "Fire");
+  const station = (d: (typeof dishes)[number]) =>
+    d.category === "Fire" ? "OAK · FIRED TO ORDER" : d.category === "Sea" ? "COLD SIDE" : d.category === "Wine" ? "CELLAR · BY THE GLASS" : "GARDEN · MORNING CUT";
+  return (
+    <div style={{ background: "#140f0c", color: "#f3e8d8", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      {shell("counter")}
+      <div style={{ maxWidth: 880, margin: "0 auto", padding: "32px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#ff5a2e" }}>THE PASS · EIGHT SEATS · TONIGHT&apos;S RAIL</p>
+        <h1 style={{ fontSize: "clamp(3rem, 11vw, 7rem)", margin: "8px 0", fontWeight: 700, letterSpacing: "-0.02em" }}>COUNTER</h1>
+        <p style={{ maxWidth: "52ch", color: "#c9a98a" }}>Sit at the pass and eat in fire order. Tickets go up, food comes down. Same menu as the dining room — no secrets, just heat.</p>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#ff5a2e", marginTop: 32 }}>FIRED FIRST · FROM THE OAK</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 12 }}>
+          {fire.map((d, i) => (
+            <article key={d.id} style={{ border: "1px solid rgba(243,232,216,0.25)", borderTop: "4px solid #ff5a2e", padding: 16, background: "#1c1410" }}>
+              <p style={{ fontSize: 10, letterSpacing: "0.2em", color: "#ff5a2e", margin: 0 }}>TICKET {String(i + 1).padStart(3, "0")} · {station(d)}</p>
+              <h2 style={{ fontSize: "1.3rem", margin: "8px 0" }}>
+                <Link href={`/worlds/casa/menu/${d.id}`} style={{ textDecoration: "underline" }}>{d.name}</Link>
+              </h2>
+              <p style={{ fontSize: "0.85rem", color: "#c9a98a", margin: 0 }}>{d.desc}</p>
+              <p style={{ fontSize: "0.8rem", fontStyle: "italic", color: "#8a6f52" }}>{d.note}</p>
+              <p style={{ fontSize: "1.2rem", margin: "8px 0 0" }}>{money(d.price)}</p>
+            </article>
+          ))}
+        </div>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#c9a98a", marginTop: 32 }}>HOLDING · COLD SIDE, GARDEN, CELLAR</p>
+        {cold.map((d) => (
+          <Link key={d.id} href={`/worlds/casa/menu/${d.id}`} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "12px 0", borderBottom: "1px dashed rgba(243,232,216,0.25)" }}>
+            <span><span style={{ fontSize: 10, letterSpacing: "0.2em", color: "#c9a98a" }}>{station(d)} · </span>{d.name} <span style={{ opacity: 0.6 }}>· {d.category}</span></span>
+            <span style={{ whiteSpace: "nowrap" }}>{money(d.price)}</span>
+          </Link>
+        ))}
+        <div style={{ marginTop: 28 }}>
+          <Link href="/worlds/casa/reservations" style={{ background: "#ff5a2e", color: "#140f0c", padding: "12px 24px", fontWeight: 700, fontSize: 12, letterSpacing: "0.15em" }}>TAKE A STOOL →</Link>
+        </div>
+      </div>
+      <WorldProof
+        proves="The kitchen as interface: fire order, stations, tickets — ordering without leaving the heat."
+        relatedHref="/worlds/forge"
+        relatedName="FORGE"
+      />
+    </div>
+  );
+}
+
+export function CasaCellar() {
+  const wines = dishes.filter((d) => d.category === "Wine");
+  const food = dishes.filter((d) => d.category !== "Wine");
+  return (
+    <div style={{ background: "#171008", color: "#e9dcc0", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
+      {shell("cellar")}
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "48px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.35em", textAlign: "center", color: "#b98a3d" }}>BIN · GLASS · BOTTLE · ROOM 01C</p>
+        <h1 style={{ fontSize: "clamp(3rem, 10vw, 6rem)", fontWeight: 400, textAlign: "center", margin: "12px 0" }}>The Cellar Book</h1>
+        <p style={{ textAlign: "center", fontStyle: "italic", color: "#a08a60" }}>Short on purpose. Everything pours by the glass; bottles on request.</p>
+        <div style={{ marginTop: 40, borderTop: "2px solid #b98a3d" }}>
+          {wines.map((w, i) => (
+            <div key={w.id} style={{ display: "grid", gridTemplateColumns: "64px 1fr auto", gap: 16, padding: "20px 0", borderBottom: "1px solid rgba(185,138,61,0.4)" }}>
+              <span style={{ fontSize: "2rem", color: "#b98a3d", fontStyle: "italic" }}>{String(i + 1).padStart(2, "0")}</span>
+              <span>
+                <Link href={`/worlds/casa/menu/${w.id}`} style={{ fontSize: "1.4rem", textDecoration: "underline" }}>{w.name}</Link>
+                <br /><span style={{ color: "#c9b48a" }}>{w.desc}</span>
+                <br /><span style={{ fontSize: "0.85rem", fontStyle: "italic", color: "#a08a60" }}>{w.note}</span>
+              </span>
+              <span style={{ fontSize: "1.3rem", whiteSpace: "nowrap" }}>{money(w.price)}</span>
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#b98a3d", marginTop: 40 }}>WHAT IT DRINKS WITH</p>
+        {food.slice(0, 6).map((d) => (
+          <div key={d.id} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "10px 0", borderBottom: "1px dashed rgba(185,138,61,0.35)" }}>
+            <span>{d.name} <em style={{ fontSize: "0.85rem", color: "#a08a60" }}>· {d.category}</em></span>
+            <Link href={`/worlds/casa/menu/${d.id}`} style={{ textDecoration: "underline", whiteSpace: "nowrap", fontSize: "0.9rem" }}>pair it →</Link>
+          </div>
+        ))}
+        <p style={{ textAlign: "center", marginTop: 32, fontStyle: "italic", color: "#a08a60" }}>The room decides the rest. <Link href="/worlds/casa/reservations" style={{ textDecoration: "underline" }}>Book the corner table →</Link></p>
+      </div>
+      <WorldProof
+        proves="A wine list that behaves like one: bins, pours, and pairings that point at real plates."
+        relatedHref="/worlds/objects"
+        relatedName="OBJECTS"
+      />
     </div>
   );
 }

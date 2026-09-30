@@ -90,3 +90,66 @@ export function AtlasCinema() {
     </div>
   );
 }
+
+export function AtlasTimetable() {
+  return (
+    <div style={{ background: "#101418", color: "#e8e4dc", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="atlas" label="Room 10 · ATLAS/TIMETABLE" />
+      <RealityShell world="atlas" current="timetable" basePath="/worlds/atlas" />
+      <div style={{ maxWidth: 820, margin: "0 auto", padding: "32px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#c98a3d" }}>DEPARTURES · ALL LINES RUNNING · {destinations.length} ROUTES</p>
+        <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0" }}>Timetable.</h1>
+        <div style={{ borderTop: "3px solid #e8e4dc", marginTop: 24 }}>
+          {destinations.map((d) => (
+            <div key={d.slug} style={{ display: "grid", gridTemplateColumns: "90px 1fr auto", gap: 12, padding: "14px 4px", borderBottom: "1px solid rgba(232,228,220,0.25)", alignItems: "center" }}>
+              <span style={{ color: "#c98a3d", fontWeight: 700 }}>{d.season.slice(0, 3).toUpperCase()} · {d.days}D</span>
+              <span>
+                <Link href={`/worlds/atlas/${d.slug}`} style={{ fontSize: "1.2rem", textDecoration: "underline" }}>{d.name}</Link>
+                <br /><span style={{ fontSize: "0.8rem", color: "#8a938f" }}>{d.region} · ★ {d.rating} · {d.stops.length} stops</span>
+              </span>
+              <span style={{ textAlign: "right" }}>{money(d.price)}<br /><span style={{ fontSize: 10, color: "#c98a3d", letterSpacing: "0.2em" }}>BOARDING</span></span>
+            </div>
+          ))}
+        </div>
+        <p style={{ marginTop: 24 }}>On time, every season. <Link href="/worlds/atlas/itinerary" style={{ textDecoration: "underline", color: "#c98a3d" }}>Plan for real →</Link></p>
+      </div>
+      <WorldProof
+        proves="Travel as transit: the valley on a departures board — every route priced, dated, and boarding."
+        relatedHref="/worlds/orbit"
+        relatedName="ORBIT"
+      />
+    </div>
+  );
+}
+
+export function AtlasPostcards() {
+  return (
+    <div style={{ background: "#e4dcc8", color: "#241f16", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
+      <WorldExit id="atlas" label="Room 10 · ATLAS/POSTCARDS" />
+      <RealityShell world="atlas" current="postcards" basePath="/worlds/atlas" />
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 20px 80px", textAlign: "center" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.35em" }}>SPIN THE RACK · POSTAGE PAID · WISH YOU WERE HERE</p>
+        <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", fontWeight: 400, margin: "8px 0" }}>Postcards.</h1>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 20, marginTop: 32, textAlign: "left" }}>
+          {destinations.map((d, i) => (
+            <Link key={d.slug} href={`/worlds/atlas/${d.slug}`} style={{ display: "block", background: "#faf7f0", border: "1px solid #241f16", textDecoration: "none", color: "inherit", transform: `rotate(${i % 2 ? 1 : -1}deg)` }}>
+              <img src={d.image} alt={d.name} loading="lazy" decoding="async" style={{ width: "100%", height: 150, objectFit: "cover", display: "block", borderBottom: "1px solid #241f16" }} />
+              <div style={{ padding: "12px 14px" }}>
+                <p style={{ fontSize: 10, letterSpacing: "0.25em", color: "#5a6e3f", margin: 0 }}>{d.region.toUpperCase()} · {d.season.toUpperCase()}</p>
+                <p style={{ fontSize: "1.2rem", margin: "6px 0" }}>{d.name}</p>
+                <p style={{ fontSize: "0.85rem", fontStyle: "italic", color: "#6f6350" }}>{d.blurb}</p>
+                <p style={{ fontSize: "0.9rem", margin: "8px 0 0" }}>{money(d.price)} · {d.days} days ★ {d.rating}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+        <p style={{ marginTop: 32 }}>Send one, then come see it. <Link href="/worlds/atlas/itinerary" style={{ textDecoration: "underline" }}>Plan for real →</Link></p>
+      </div>
+      <WorldProof
+        proves="Souvenirs that sell the trip: every postcard is a priced, rated, bookable route."
+        relatedHref="/worlds/still"
+        relatedName="STILL"
+      />
+    </div>
+  );
+}

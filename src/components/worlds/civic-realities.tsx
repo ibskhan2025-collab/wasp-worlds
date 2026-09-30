@@ -88,3 +88,69 @@ export function CivicKiosk() {
     </div>
   );
 }
+
+export function CivicChamber() {
+  return (
+    <div style={{ background: "#1c1611", color: "#ece4d2", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
+      <WorldExit id="civic" label="Room 13 · CIVIC/CHAMBER" />
+      <RealityShell world="civic" current="chamber" basePath="/worlds/civic" />
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "40px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#c9a86d" }}>ORDER OF BUSINESS · {civicServices.length} MOTIONS · PUBLIC GALLERY OPEN</p>
+        <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", fontWeight: 400, margin: "8px 0" }}>Chamber.</h1>
+        <p style={{ fontStyle: "italic", color: "#a89878" }}>Every service as a motion before the council — moved, seconded, sourced.</p>
+        {civicServices.map((s, i) => (
+          <article key={s.slug} style={{ borderTop: "1px solid rgba(236,228,210,0.3)", padding: "20px 0" }}>
+            <p style={{ fontSize: 11, letterSpacing: "0.25em", color: "#c9a86d", margin: 0 }}>MOTION {i + 1} · {s.dept.toUpperCase()} · CARRIED</p>
+            <h2 style={{ fontSize: "1.7rem", margin: "8px 0" }}>
+              <Link href={`/worlds/civic/${s.slug}`} style={{ textDecoration: "underline" }}>{s.title}</Link>
+            </h2>
+            <p style={{ color: "#c9b891" }}>{s.intro}</p>
+            <p style={{ fontSize: "0.85rem", color: "#a89878" }}>{s.steps.length} steps recorded · {s.source}</p>
+          </article>
+        ))}
+        <p style={{ marginTop: 24, fontStyle: "italic" }}>Session adjourned. <Link href="/worlds/civic" style={{ textDecoration: "underline" }}>Back to the counter →</Link></p>
+      </div>
+      <WorldProof
+        proves="Democracy legible: motions, departments, sources — civic services with the minutes attached."
+        relatedHref="/worlds/archive"
+        relatedName="ARCHIVE"
+      />
+    </div>
+  );
+}
+
+export function CivicDesk() {
+  const depts = [...new Set(civicServices.map((s) => s.dept))];
+  return (
+    <div style={{ background: "#e9e2d0", color: "#2a241c", minHeight: "100dvh", fontFamily: "var(--font-sans)" }}>
+      <WorldExit id="civic" label="Room 13 · CIVIC/DESK" />
+      <RealityShell world="civic" current="desk" basePath="/worlds/civic" />
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "40px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>FRONT DESK · TAKE A NUMBER · NOW SERVING 14</p>
+        <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0" }}>What brings you in?</h1>
+        <p style={{ color: "#6a6254" }}>Say it in your own words — the desk hears keywords, not form fields.</p>
+        {depts.map((dept) => (
+          <section key={dept} style={{ marginTop: 28, border: "2px solid #2a241c", background: "#faf7f0" }}>
+            <p style={{ fontSize: 11, letterSpacing: "0.25em", margin: 0, padding: "12px 16px", background: "#2a241c", color: "#e9e2d0" }}>DESK · {dept.toUpperCase()}</p>
+            {civicServices.filter((s) => s.dept === dept).map((s) => (
+              <div key={s.slug} style={{ padding: "14px 16px", borderTop: "1px solid rgba(42,36,28,0.2)" }}>
+                <Link href={`/worlds/civic/${s.slug}`} style={{ fontWeight: 700, fontSize: "1.15rem", textDecoration: "underline" }}>{s.title}</Link>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 8 }}>
+                  {s.keywords.slice(0, 5).map((k) => (
+                    <span key={k} style={{ fontSize: 11, border: "1px solid #2a241c", padding: "2px 8px", borderRadius: 20 }}>“{k}”</span>
+                  ))}
+                </div>
+                <p style={{ fontSize: "0.85rem", color: "#6a6254", margin: "8px 0 0" }}>{s.steps.length} steps · {s.intro}</p>
+              </div>
+            ))}
+          </section>
+        ))}
+      </div>
+      <WorldProof
+        proves="Triage, not forms: the desk understands plain words — keywords in, steps out."
+        relatedHref="/worlds/orbit"
+        relatedName="ORBIT"
+      />
+    </div>
+  );
+}

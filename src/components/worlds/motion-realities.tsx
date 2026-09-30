@@ -116,3 +116,77 @@ export function MotionOceanic() {
     </div>
   );
 }
+
+export function MotionStoryboard() {
+  return (
+    <div style={{ background: "#efe9dc", color: "#1a1712", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="motion" label="Room 08 · MOTION/BOARDS" />
+      <RealityShell world="motion" current="storyboard" basePath="/worlds/motion" />
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: "32px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.25em" }}>BOARDS · REV C · PINNED, NOT RENDERED</p>
+        <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.6rem, 8vw, 5.5rem)", margin: "8px 0", letterSpacing: "-0.04em" }}>Before it moves.</h1>
+        <p style={{ maxWidth: "56ch", fontSize: "0.95rem" }}>The same six chapters as thumbnail boards — what the client approves before a single frame renders.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16, marginTop: 28 }}>
+          {CHAPTERS.map((c, i) => (
+            <figure key={c.t} style={{ margin: 0, border: "2px solid #1a1712", background: "#faf7f0", padding: 12 }}>
+              <div style={{ aspectRatio: "16/9", background: `repeating-linear-gradient(45deg, #1a1712 0 2px, transparent 2px 10px)`, border: "1px solid #1a1712", display: "grid", placeItems: "center" }}>
+                <span style={{ background: "#faf7f0", padding: "4px 12px", fontWeight: 700, fontSize: "1.4rem" }}>{c.t}</span>
+              </div>
+              <figcaption style={{ marginTop: 10, fontSize: "0.8rem" }}>
+                <strong>SC {String(i + 1).padStart(2, "0")}</strong> · {c.spec} · {c.frames} FR
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        <div style={{ marginTop: 28 }}>
+          <Link href="/worlds/motion/commissions" style={{ background: "#1a1712", color: "#efe9dc", padding: "12px 20px", fontSize: 12, letterSpacing: "0.15em" }}>BOARD YOUR CAMPAIGN →</Link>
+        </div>
+      </div>
+      <WorldProof
+        proves="Pre-production as product: boards clients can read — approval before render, never after."
+        relatedHref="/worlds/still"
+        relatedName="STILL"
+      />
+    </div>
+  );
+}
+
+export function MotionCredits() {
+  const crew: [string, string][] = [
+    ["MOVE", "performed by the full bleed"],
+    ["CUT", "edited without mercy"],
+    ["HOLD", "stillness, holding for 144 frames"],
+    ["BLUR", "in-betweening at speed"],
+    ["BURN", "heat, rising on a spring"],
+    ["AGAIN", "the loop, uncredited as usual"],
+  ];
+  return (
+    <div style={{ background: "#000", color: "#f4f1ea", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="motion" label="Room 08 · MOTION/CREDITS" />
+      <RealityShell world="motion" current="credits" basePath="/worlds/motion" />
+      <div style={{ maxWidth: 560, margin: "0 auto", padding: "64px 20px 80px", textAlign: "center" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.4em", color: "#8a8580" }}>AFTER THE LOOP · STAY SEATED</p>
+        <div style={{ marginTop: 48 }}>
+          {crew.map(([who, role]) => (
+            <div key={who} style={{ margin: "36px 0" }}>
+              <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#8a8580", margin: 0 }}>{role.toUpperCase()}</p>
+              <p style={{ fontSize: "2rem", margin: "6px 0", fontWeight: 700 }}>{who}</p>
+            </div>
+          ))}
+          <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#8a8580", marginTop: 48 }}>TIMING BY</p>
+          <p style={{ fontSize: "2rem", fontWeight: 700 }}>THE SHEET</p>
+          <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#8a8580", marginTop: 36 }}>NO FRAMES WERE HARMED</p>
+        </div>
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginTop: 48 }}>
+          <Link href="/worlds/motion/principles" style={{ border: "1px solid #f4f1ea", color: "#f4f1ea", padding: "12px 20px", fontSize: 12, letterSpacing: "0.15em" }}>PRINCIPLES →</Link>
+          <Link href="/worlds/motion/commissions" style={{ background: "#f4f1ea", color: "#000", padding: "12px 20px", fontSize: 12, letterSpacing: "0.15em" }}>GET IN THE CREDITS →</Link>
+        </div>
+      </div>
+      <WorldProof
+        proves="Credit where due: even the loop gets named — craft visible down to the last frame."
+        relatedHref="/worlds/archive"
+        relatedName="ARCHIVE"
+      />
+    </div>
+  );
+}

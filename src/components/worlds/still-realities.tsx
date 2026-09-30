@@ -103,3 +103,70 @@ export function StillGallery() {
     </div>
   );
 }
+
+export function StillDarkroom() {
+  const trays = stillCollections;
+  return (
+    <div style={{ background: "#120d0d", color: "#e8d8c8", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="still" label="Room 04 · STILL/DARKROOM" />
+      <RealityShell world="still" current="darkroom" basePath="/worlds/still" />
+      <div style={{ maxWidth: 820, margin: "0 auto", padding: "40px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#ff5a5a" }}>SAFELIGHT · THREE TRAYS · DON&apos;T OPEN THE DOOR</p>
+        <h1 style={{ fontSize: "clamp(2.8rem, 9vw, 6rem)", margin: "8px 0" }}>Darkroom.</h1>
+        <p style={{ maxWidth: "52ch", color: "#a89880" }}>Every collection as a developing tray: dev, stop, fix. Times are the edit — what stays in the soup longest is what matters.</p>
+        {trays.map((t, ti) => (
+          <section key={t.id} style={{ marginTop: 36, border: "1px solid rgba(232,216,200,0.3)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", padding: "16px 20px", borderBottom: "1px solid rgba(232,216,200,0.3)", background: "#1a1212" }}>
+              <strong style={{ fontSize: "1.4rem" }}>TRAY {ti + 1} · {t.title}</strong>
+              <span style={{ fontSize: 12, color: "#ff5a5a" }}>{t.year} · DEV 0{ti + 2}:00 · AGITATE</span>
+            </div>
+            {t.images.map((img, ii) => (
+              <div key={img.src} style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: 16, padding: "16px 20px", borderTop: ii ? "1px dashed rgba(232,216,200,0.25)" : "none" }}>
+                <img src={img.src} alt={img.alt} loading="lazy" decoding="async" style={{ width: 120, height: 90, objectFit: "cover", filter: "grayscale(1) brightness(0.85) sepia(0.3)" }} />
+                <div>
+                  <p style={{ margin: 0, fontSize: "0.95rem" }}>{img.alt}</p>
+                  <p style={{ margin: "4px 0 0", fontSize: 12, color: "#a89880" }}>{img.w}×{img.h} · {t.note}</p>
+                </div>
+              </div>
+            ))}
+          </section>
+        ))}
+        <p style={{ marginTop: 28 }}>Washed and hung. <Link href="/worlds/still/prints" style={{ textDecoration: "underline" }}>Take one home →</Link></p>
+      </div>
+      <WorldProof
+        proves="Process as presentation: the darkroom makes editing visible — every frame earned its place in the tray."
+        relatedHref="/worlds/noir"
+        relatedName="NOIR"
+      />
+    </div>
+  );
+}
+
+export function StillFolio() {
+  const plates = stillCollections.flatMap((c) => c.images.map((img) => ({ ...img, from: c.title })));
+  const [i, setI] = useState(0);
+  const plate = plates[i];
+  return (
+    <div style={{ background: "#f4f1ea", color: "#111", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
+      <WorldExit id="still" label="Room 04 · STILL/FOLIO" />
+      <RealityShell world="still" current="folio" basePath="/worlds/still" />
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 20px 80px", textAlign: "center" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.35em" }}>FOLIO · ONE PLATE AT A TIME · {i + 1} / {plates.length}</p>
+        <figure style={{ margin: "32px auto", maxWidth: 720 }}>
+          <img src={plate.src} alt={plate.alt} style={{ width: "100%", display: "block", filter: "grayscale(0.9)", border: "1px solid #111" }} />
+          <figcaption style={{ marginTop: 16, fontStyle: "italic" }}>Plate {i + 1} — {plate.alt} <span style={{ color: "#6a655e" }}>(from “{plate.from}”)</span></figcaption>
+        </figure>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+          <button type="button" onClick={() => setI((i - 1 + plates.length) % plates.length)} aria-label="Previous plate" style={{ border: "2px solid #111", background: "transparent", padding: "10px 22px", fontSize: 12, letterSpacing: "0.15em" }}>← PREV</button>
+          <button type="button" onClick={() => setI((i + 1) % plates.length)} aria-label="Next plate" style={{ border: "2px solid #111", background: "#111", color: "#f4f1ea", padding: "10px 22px", fontSize: 12, letterSpacing: "0.15em" }}>NEXT →</button>
+        </div>
+        <p style={{ marginTop: 24 }}><Link href="/worlds/still/prints" style={{ textDecoration: "underline" }}>Take one home →</Link></p>
+      </div>
+      <WorldProof
+        proves="Attention as luxury: one plate, full-bleed, nothing competing — the slowest way to look, on purpose."
+        relatedHref="/worlds/archive"
+        relatedName="ARCHIVE"
+      />
+    </div>
+  );
+}

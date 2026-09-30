@@ -99,3 +99,85 @@ export function PulseOceanic() {
     </div>
   );
 }
+
+export function PulseSetlist() {
+  const set = releases[0];
+  const encore = releases[1].tracks.slice(0, 2);
+  return (
+    <div style={{ background: "#ece8df", color: "#111", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="pulse" label="Room 12 · PULSE/SETLIST" />
+      <RealityShell world="pulse" current="setlist" basePath="/worlds/pulse" />
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "32px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>TAPED TO THE STAGE · DO NOT REMOVE · {set.tracks.length} SONGS + ENCORE</p>
+        <h1 style={{ fontSize: "clamp(2.6rem, 9vw, 5.5rem)", margin: "8px 0", fontWeight: 900 }}>SETLIST</h1>
+        <p style={{ fontSize: 12, letterSpacing: "0.2em" }}>TONIGHT: {set.artist.toUpperCase()} PLAYS “{set.title.toUpperCase()}” FRONT TO BACK</p>
+        <ol style={{ listStyle: "none", margin: "28px 0 0", padding: 0, borderTop: "3px solid #111" }}>
+          {set.tracks.map((t, i) => (
+            <li key={t.name} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "12px 4px", borderBottom: "1px solid #111", fontSize: "1.05rem" }}>
+              <span><strong style={{ marginRight: 12 }}>{String(i + 1).padStart(2, "0")}</strong>{t.name}</span>
+              <span>{fmtSecs(t.secs)}</span>
+            </li>
+          ))}
+        </ol>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", marginTop: 24 }}>ENCORE (IF LOUD ENOUGH)</p>
+        {encore.map((t, i) => (
+          <p key={t.name} style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px dashed #111", padding: "8px 4px", margin: 0 }}>
+            <span>E{i + 1} · {t.name}</span><span>{fmtSecs(t.secs)}</span>
+          </p>
+        ))}
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", marginTop: 32 }}>ON TOUR</p>
+        {shows.map((s) => (
+          <p key={s.id} style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid rgba(17,17,17,0.25)", padding: "8px 4px", margin: 0 }}>
+            <span>{s.date} — {s.city}, {s.venue}</span>
+            <strong style={{ color: s.status === "Sold out" ? "#8a8a8a" : s.status === "Low" ? "#b24a2e" : "#1d7a35" }}>{s.status.toUpperCase()}</strong>
+          </p>
+        ))}
+        <p style={{ marginTop: 24 }}><Link href={`/worlds/pulse/${set.slug}`} style={{ textDecoration: "underline", fontWeight: 700 }}>The record behind the night →</Link></p>
+      </div>
+      <WorldProof
+        proves="The gig as interface: set order, runtimes, tour dates with honest scarcity — fandom that converts."
+        relatedHref="/worlds/motion"
+        relatedName="MOTION"
+      />
+    </div>
+  );
+}
+
+export function PulseBooth() {
+  return (
+    <div style={{ background: "#0d0716", color: "#e9defc", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="pulse" label="Room 12 · PULSE/BOOTH" />
+      <RealityShell world="pulse" current="booth" basePath="/worlds/pulse" />
+      <div style={{ maxWidth: 860, margin: "0 auto", padding: "32px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#9d5cff" }}>BOOTH · TWO DECKS · CRATES BELOW</p>
+        <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0" }}>Booth.</h1>
+        <p style={{ color: "#8f7fb8" }}>The catalogue as crates. Every record with its full runtime — add them up, that is the night.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 12, marginTop: 28 }}>
+          {releases.map((r) => {
+            const total = r.tracks.reduce((n, t) => n + t.secs, 0);
+            return (
+              <div key={r.slug} style={{ border: "1px solid rgba(233,222,252,0.3)", background: "#150c24", padding: 18 }}>
+                <p style={{ fontSize: 10, letterSpacing: "0.25em", color: "#9d5cff", margin: 0 }}>CRATE · {r.artist.toUpperCase()} · {fmtSecs(total)} TOTAL</p>
+                <h2 style={{ fontSize: "1.5rem", margin: "8px 0" }}>
+                  <Link href={`/worlds/pulse/${r.slug}`} style={{ color: "#e9defc", textDecoration: "underline" }}>{r.title}</Link>
+                </h2>
+                {r.tracks.map((t, i) => (
+                  <p key={t.name} style={{ display: "flex", justifyContent: "space-between", fontSize: "0.85rem", borderBottom: "1px dashed rgba(233,222,252,0.2)", padding: "5px 0", margin: 0 }}>
+                    <span><span style={{ color: "#8f7fb8" }}>{String(i + 1).padStart(2, "0")}</span> {t.name}</span>
+                    <span>{fmtSecs(t.secs)}</span>
+                  </p>
+                ))}
+              </div>
+            );
+          })}
+        </div>
+        <p style={{ marginTop: 24, color: "#8f7fb8" }}>Crates dug. <Link href="/worlds/pulse" style={{ color: "#9d5cff", textDecoration: "underline" }}>Back to the label →</Link></p>
+      </div>
+      <WorldProof
+        proves="Crates, not cards: the catalogue organized the way DJs think — by runtime, by night."
+        relatedHref="/worlds/archive"
+        relatedName="ARCHIVE"
+      />
+    </div>
+  );
+}

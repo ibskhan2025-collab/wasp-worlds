@@ -121,3 +121,79 @@ export function VectorSurface() {
     </div>
   );
 }
+
+export function VectorChart() {
+  const max = Math.max(...vectorQuarters.map((q) => q.v));
+  const min = Math.min(...vectorQuarters.map((q) => q.v));
+  return (
+    <div style={{ background: "#0b0e13", color: "#dfe8f2", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="vector" label="Room 15 · VECTOR/CHART" />
+      <RealityShell world="vector" current="chart" basePath="/worlds/vector" />
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#6fc3ff" }}>INDEX · Q1 23 – Q2 26 · DRAWDOWNS LABELLED, NOT SMOOTHED</p>
+        <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0" }}>Chart.</h1>
+        <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 260, borderBottom: "2px solid #dfe8f2", borderLeft: "2px solid #dfe8f2", padding: "12px 12px 0", marginTop: 24 }}>
+          {vectorQuarters.map((q) => {
+            const h = 20 + Math.round(((q.v - min) / (max - min)) * 200);
+            const bad = q.event && (q.event.includes("shock") || q.event.includes("Drawdown"));
+            return (
+              <div key={q.q} title={`${q.q}: ${q.v}${q.event ? ` — ${q.event}` : ""}`} style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%" }}>
+                {q.event ? <span style={{ fontSize: 9, color: bad ? "#ff5a5a" : "#6fc3ff", writingMode: "vertical-rl", margin: "0 auto 4px", letterSpacing: "0.1em" }}>{q.event.toUpperCase()}</span> : <span style={{ height: 14 }} />}
+                <div style={{ height: h, background: bad ? "#ff5a5a" : "#6fc3ff" }} />
+                <span style={{ fontSize: 9, color: "#7f8fb0", marginTop: 4, textAlign: "center" }}>{q.q}</span>
+              </div>
+            );
+          })}
+        </div>
+        <p style={{ fontSize: "0.9rem", color: "#7f8fb0", marginTop: 16 }}>100 → {max}. Fell twice, labelled both times. A chart that edits its falls is a brochure. <Link href="/worlds/vector" style={{ color: "#6fc3ff", textDecoration: "underline" }}>Terminal version →</Link></p>
+        {vectorInsights.map((a) => (
+          <p key={a.slug} style={{ borderTop: "1px solid rgba(223,232,242,0.2)", padding: "10px 0", margin: 0 }}>
+            <Link href={`/worlds/vector/${a.slug}`} style={{ color: "#dfe8f2", textDecoration: "underline" }}>{a.title}</Link>
+            <span style={{ color: "#7f8fb0" }}> · {a.dek}</span>
+          </p>
+        ))}
+      </div>
+      <WorldProof
+        proves="Honest axes: every quarter plotted, every fall named — the chart a sceptic would draw."
+        relatedHref="/worlds/orbit"
+        relatedName="ORBIT"
+      />
+    </div>
+  );
+}
+
+export function VectorLetter() {
+  const lead = vectorInsights[0];
+  const rest = vectorInsights.slice(1);
+  const latest = vectorQuarters[vectorQuarters.length - 1];
+  return (
+    <div style={{ background: "#faf8f2", color: "#141414", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
+      <WorldExit id="vector" label="Room 15 · VECTOR/LETTER" />
+      <RealityShell world="vector" current="letter" basePath="/worlds/vector" />
+      <div style={{ maxWidth: 640, margin: "0 auto", padding: "56px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.35em", textAlign: "center" }}>QUARTERLY LETTER · {latest.q} · INDEX {latest.v}</p>
+        <h1 style={{ fontSize: "clamp(2.2rem, 6vw, 3.6rem)", fontWeight: 400, textAlign: "center", margin: "16px 0 8px" }}>{lead.title}</h1>
+        <p style={{ textAlign: "center", fontStyle: "italic", color: "#555" }}>{lead.dek} — {lead.date}</p>
+        <div style={{ marginTop: 36 }}>
+          {lead.body.map((para, i) => (
+            <p key={i} style={{ fontSize: "1.12rem", lineHeight: 1.75, margin: "0 0 1.3em" }}>{para}</p>
+          ))}
+        </div>
+        <p style={{ textAlign: "center" }}><Link href={`/worlds/vector/${lead.slug}`} style={{ textDecoration: "underline" }}>Read in the terminal →</Link></p>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", marginTop: 44 }}>PREVIOUS LETTERS</p>
+        {rest.map((a) => (
+          <p key={a.slug} style={{ borderTop: "1px solid rgba(20,20,20,0.2)", padding: "12px 0", margin: 0 }}>
+            <Link href={`/worlds/vector/${a.slug}`} style={{ textDecoration: "underline", fontSize: "1.1rem" }}>{a.title}</Link>
+            <br /><span style={{ fontSize: "0.9rem", color: "#555" }}>{a.dek} · {a.date}</span>
+          </p>
+        ))}
+        <p style={{ marginTop: 24, fontSize: "0.85rem", color: "#555" }}>Not advice. Past performance, labelled honestly above.</p>
+      </div>
+      <WorldProof
+        proves="The letter investors actually read: full thinking, plain figures, drawdowns included."
+        relatedHref="/worlds/archive"
+        relatedName="ARCHIVE"
+      />
+    </div>
+  );
+}

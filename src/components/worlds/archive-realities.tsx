@@ -100,3 +100,79 @@ export function ArchivePoster() {
     </div>
   );
 }
+
+export function ArchiveStacks() {
+  const cats = [...new Set(archiveIssues.map((a) => a.category))];
+  return (
+    <div style={{ background: "#241a12", color: "#e8ddc4", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
+      <WorldExit id="archive" label="Room 07 · ARCHIVE/STACKS" />
+      <RealityShell world="archive" current="stacks" basePath="/worlds/archive" />
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#c9a86d" }}>CLOSED STACKS · FETCHED BY HAND · {archiveIssues.length} VOLUMES</p>
+        <h1 style={{ fontSize: "clamp(2.8rem, 9vw, 6rem)", fontWeight: 400, margin: "8px 0" }}>The Stacks.</h1>
+        <p style={{ fontStyle: "italic", color: "#a89878" }}>Every issue shelved by section. Pull a spine — the full essay is on the shelf behind it.</p>
+        {cats.map((cat) => (
+          <section key={cat} style={{ marginTop: 36 }}>
+            <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#c9a86d" }}>SECTION · {cat.toUpperCase()}</p>
+            <div style={{ display: "flex", alignItems: "flex-end", gap: 6, borderBottom: "12px solid #3a2c1c", paddingBottom: 0, paddingTop: 12 }}>
+              {archiveIssues.filter((a) => a.category === cat).map((a) => (
+                <Link key={a.slug} href={`/worlds/archive/${a.slug}`} title={`${a.title} — ${a.dek}`}
+                  style={{ display: "block", width: 64 + (a.title.length % 3) * 14, height: 190 + (a.body.length % 3) * 22, background: a.featured ? "#8a3b1f" : "#4a3a26", color: "#e8ddc4", textDecoration: "none", padding: "12px 8px", borderLeft: "3px solid rgba(232,221,196,0.35)" }}>
+                  <span style={{ display: "block", transform: "rotate(180deg)", writingMode: "vertical-rl", fontSize: "0.8rem", height: "100%", overflow: "hidden" }}>{a.title}</span>
+                </Link>
+              ))}
+            </div>
+            {archiveIssues.filter((a) => a.category === cat).map((a) => (
+              <p key={a.slug} style={{ fontSize: "0.9rem", margin: "8px 0 0" }}>
+                <Link href={`/worlds/archive/${a.slug}`} style={{ textDecoration: "underline" }}>{a.title}</Link>
+                <span style={{ color: "#a89878" }}> · {a.dek} · {a.read}</span>
+              </p>
+            ))}
+          </section>
+        ))}
+      </div>
+      <WorldProof
+        proves="The library as interface: shelves you can pull from — every spine opens the real essay."
+        relatedHref="/worlds/still"
+        relatedName="STILL"
+      />
+    </div>
+  );
+}
+
+export function ArchiveReading() {
+  const lead = archiveIssues.find((a) => a.featured) ?? archiveIssues[0];
+  const rest = archiveIssues.filter((a) => a.slug !== lead.slug);
+  return (
+    <div style={{ background: "#faf7f0", color: "#141210", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
+      <WorldExit id="archive" label="Room 07 · ARCHIVE/READING" />
+      <RealityShell world="archive" current="reading" basePath="/worlds/archive" />
+      <div style={{ maxWidth: 640, margin: "0 auto", padding: "56px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.35em", textAlign: "center" }}>READING ROOM · SILENCE FROM 09:00 · {lead.read} READ</p>
+        <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.2rem)", fontWeight: 400, textAlign: "center", margin: "16px 0 8px" }}>{lead.title}</h1>
+        <p style={{ textAlign: "center", fontStyle: "italic", color: "#6a6254" }}>{lead.dek} — {lead.author}, {lead.date}</p>
+        <div style={{ marginTop: 40 }}>
+          {lead.body.map((para, i) => (
+            <p key={i} style={{ fontSize: "1.15rem", lineHeight: 1.75, margin: "0 0 1.4em" }}>
+              {i === 0 ? <span style={{ float: "left", fontSize: "4.2rem", lineHeight: 0.85, paddingRight: 10, fontWeight: 700 }}>{para.charAt(0)}</span> : null}
+              {i === 0 ? para.slice(1) : para}
+            </p>
+          ))}
+        </div>
+        <p style={{ textAlign: "center" }}><Link href={`/worlds/archive/${lead.slug}`} style={{ textDecoration: "underline" }}>Continue in the issue →</Link></p>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", marginTop: 48 }}>ALSO ON THE TABLE</p>
+        {rest.map((a) => (
+          <p key={a.slug} style={{ borderTop: "1px solid rgba(20,18,16,0.2)", padding: "12px 0", margin: 0 }}>
+            <Link href={`/worlds/archive/${a.slug}`} style={{ textDecoration: "underline", fontSize: "1.1rem" }}>{a.title}</Link>
+            <br /><span style={{ fontSize: "0.9rem", color: "#6a6254" }}>{a.dek} · {a.read}</span>
+          </p>
+        ))}
+      </div>
+      <WorldProof
+        proves="Reading as the product: full essays, set for stamina — the archive earns keep-you-here minutes."
+        relatedHref="/worlds/motion"
+        relatedName="MOTION"
+      />
+    </div>
+  );
+}

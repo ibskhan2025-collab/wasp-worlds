@@ -60,6 +60,77 @@ export function NoirAnalog() {
   );
 }
 
+export function NoirRunway() {
+  return (
+    <div style={{ background: "#0a0a0a", color: "#f4f1ea", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="noir" label="Room 02 · NOIR/RUNWAY" />
+      <RealityShell world="noir" current="runway" basePath="/worlds/noir" />
+      <header style={{ padding: "40px 20px 8px", textAlign: "center" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.35em", color: "#8a8580" }}>AUTUMN · LOOKS 01–{String(noirProducts.length).padStart(2, "0")} · ONE PASS, NO ENCORE</p>
+        <h1 style={{ fontSize: "clamp(3rem, 12vw, 8rem)", margin: "8px 0", fontWeight: 900, letterSpacing: "-0.02em" }}>RUNWAY</h1>
+        <p style={{ color: "#8a8580" }}>The collection in show order. Walk, pause, turn. Prices after the lights.</p>
+      </header>
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "24px 20px 80px" }}>
+        <div style={{ width: 2, margin: "0 auto", background: "linear-gradient(#f4f1ea, transparent)", height: 48 }} aria-hidden />
+        {noirProducts.map((p, i) => (
+          <article key={p.id} style={{ textAlign: "center", padding: "36px 0", borderBottom: "1px solid rgba(244,241,234,0.15)" }}>
+            <p style={{ fontSize: 11, letterSpacing: "0.4em", color: "#8a8580", margin: 0 }}>LOOK {String(i + 1).padStart(2, "0")}</p>
+            <h2 style={{ fontSize: "2.2rem", margin: "8px 0", textTransform: "uppercase" }}>{p.name}</h2>
+            <p style={{ color: "#b9b2a6", maxWidth: "46ch", margin: "0 auto" }}>{p.desc}</p>
+            <p style={{ fontSize: 12, color: "#8a8580" }}>{p.fabric} · {p.colors.join(" / ")}</p>
+            <p>
+              <Link href={`/worlds/noir/product/${p.id}`} style={{ color: "#f4f1ea", textDecoration: "underline" }}>{money(p.price)} — view the piece →</Link>
+            </p>
+          </article>
+        ))}
+        <p style={{ textAlign: "center", marginTop: 32 }}>Front row ends here. <Link href="/worlds/noir/appointments" style={{ textDecoration: "underline" }}>Book the showroom →</Link></p>
+      </div>
+      <WorldProof
+        proves="Desire, sequenced: the show as a sales instrument — every look numbered, every look buyable."
+        relatedHref="/worlds/motion"
+        relatedName="MOTION"
+      />
+    </div>
+  );
+}
+
+export function NoirAtelier() {
+  return (
+    <div style={{ background: "#efe9dc", color: "#1a1712", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
+      <WorldExit id="noir" label="Room 02 · NOIR/ATELIER" />
+      <RealityShell world="noir" current="atelier" basePath="/worlds/noir" />
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>CUTTING TABLE · TOILES, NOT SAMPLES</p>
+        <h1 style={{ fontSize: "clamp(2.8rem, 9vw, 6rem)", fontWeight: 400, margin: "8px 0" }}>The Atelier</h1>
+        <p style={{ maxWidth: "56ch", fontStyle: "italic", color: "#6b6254" }}>Every garment before it is a garment: cloth, sizes, and the note pinned to the toile. Same pieces as the shop — six weeks earlier.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 1, background: "#1a1712", border: "1px solid #1a1712", marginTop: 32 }}>
+          {noirProducts.map((p) => (
+            <div key={p.id} style={{ background: "#efe9dc", padding: 20 }}>
+              <p style={{ fontSize: 10, letterSpacing: "0.25em", color: "#8a3b1f", margin: 0 }}>PATTERN {p.id.toUpperCase()}</p>
+              <h2 style={{ fontSize: "1.5rem", margin: "8px 0" }}>
+                <Link href={`/worlds/noir/product/${p.id}`} style={{ textDecoration: "underline" }}>{p.name}</Link>
+              </h2>
+              <dl style={{ fontSize: "0.85rem", margin: 0 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px dotted #6b6254", padding: "4px 0" }}><dt>Cloth</dt><dd style={{ margin: 0 }}>{p.fabric}</dd></div>
+                <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px dotted #6b6254", padding: "4px 0" }}><dt>Colour</dt><dd style={{ margin: 0 }}>{p.colors.join(", ")}</dd></div>
+                <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px dotted #6b6254", padding: "4px 0" }}><dt>Sizes</dt><dd style={{ margin: 0 }}>{p.sizes.join(" · ")}</dd></div>
+                <div style={{ display: "flex", justifyContent: "space-between", padding: "4px 0" }}><dt>Price</dt><dd style={{ margin: 0 }}>{money(p.price)}</dd></div>
+              </dl>
+              <p style={{ fontSize: "0.85rem", fontStyle: "italic", color: "#6b6254" }}>“{p.desc}”</p>
+            </div>
+          ))}
+        </div>
+        <p style={{ marginTop: 24 }}>Toiles become garments at fittings. <Link href="/worlds/noir/appointments" style={{ textDecoration: "underline" }}>Book a fitting →</Link></p>
+      </div>
+      <WorldProof
+        proves="Craft as evidence: patterns, cloths, and prices on one table — luxury that shows its working."
+        relatedHref="/worlds/forge"
+        relatedName="FORGE"
+      />
+    </div>
+  );
+}
+
 export function NoirFuture() {
   return (
     <div style={{ background: "#05070d", color: "#dfe8ff", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>

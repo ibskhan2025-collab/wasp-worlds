@@ -783,6 +783,30 @@ a { color: inherit; text-decoration: none; }
   background: #04070c;
   color: #9fd8ff;
 }
+.sig-arcade .signal-root {
+  --bg: #0b0d12;
+  --fg: #ffd23f;
+  --muted: #8a93a5;
+  --sig-b0: #ffd23f;
+  --sig-b1: #ff5a5a;
+  --sig-b2: #7df9ff;
+  --sig-core: #ffffff;
+  --sig-ring: rgba(255, 210, 63, 0.25);
+  background: #0b0d12;
+  color: #ffd23f;
+}
+.sig-pocket .signal-root {
+  --bg: #9aa27e;
+  --fg: #23281c;
+  --muted: #5a6e3f;
+  --sig-b0: #23281c;
+  --sig-b1: #3a4034;
+  --sig-b2: #23281c;
+  --sig-core: #11150c;
+  --sig-ring: rgba(35, 40, 28, 0.3);
+  background: #9aa27e;
+  color: #23281c;
+}
 .signal-stage {
   width: min(920px, 100%);
   margin: 0 auto;
