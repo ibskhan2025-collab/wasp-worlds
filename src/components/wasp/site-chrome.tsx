@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useWasp } from "@/context/wasp-context";
+import { CommandPalette } from "@/components/wasp/command-palette";
 
 const LINKS = [
   { href: "/", label: "Work" },
@@ -69,6 +70,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
                 {link.label}
               </Link>
             ))}
+            <CommandPalette />
           </nav>
         </header>
       ) : null}
