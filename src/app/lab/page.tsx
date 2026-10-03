@@ -129,6 +129,9 @@ export default function LabPage() {
       <p className="kicker" style={{ marginTop: 32 }}>Experiments — raw, playable, unfinished on purpose</p>
       <LiquidType />
       <Boids />
+      <PosterGen />
+      <ShaderPlay />
+      <RoomGen />
     </div>
   );
 }
@@ -276,6 +279,230 @@ function Boids() {
       <p className="kicker">02 · Boids — sixty specks, three rules, no leader</p>
       <canvas ref={ref} style={{ width: "100%", height: 260, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="Flocking specks following separation, alignment and cohesion" />
       <p style={{ fontSize: "0.9rem", color: "var(--muted)" }}>Separation, alignment, cohesion. The flock is never computed — only the three rules are.</p>
+    </section>
+  );
+}
+
+function rng(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** Poster generator: seeded shapes + a word. Same seed, same poster — always. */
+function PosterGen() {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  const [seed, setSeed] = useState(3);
+  const [word, setWord] = useState("WASP");
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const W = (canvas.width = canvas.offsetWidth);
+    const H = (canvas.height = 240);
+    const r = rng(seed * 1337);
+    const pals = [
+      ["#0b0b0c", "#ffe34d", "#ff4d2e"],
+      ["#f3f1ec", "#0b0b0c", "#3fd6a0"],
+      ["#1b1a17", "#e8ff3a", "#4f8cff"],
+    ];
+    const pal = pals[Math.floor(r() * pals.length)] ?? pals[0];
+    ctx.fillStyle = pal[0];
+    ctx.fillRect(0, 0, W, H);
+    for (let i = 0; i < 6; i++) {
+      ctx.fillStyle = r() > 0.5 ? pal[1] : pal[2];
+      ctx.globalAlpha = 0.15 + r() * 0.5;
+      if (r() > 0.5) ctx.fillRect(r() * W, r() * H, r() * W * 0.6, r() * 14 + 4);
+      else {
+        ctx.beginPath();
+        ctx.arc(r() * W, r() * H, r() * 70 + 12, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
+    const w = (word || "WASP").toUpperCase().slice(0, 12);
+    const size = Math.min(W / (w.length * 0.62), H * 0.5);
+    ctx.font = `900 ${size}px sans-serif`;
+    ctx.fillStyle = pal[1];
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(w, W / 2, H / 2);
+    ctx.font = "600 10px monospace";
+    ctx.fillStyle = pal[2];
+    ctx.textAlign = "left";
+    ctx.fillText(`SEED ${seed}`, 12, H - 14);
+  }, [seed, word]);
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">03 · Generative poster — same seed, same poster</p>
+      <canvas ref={ref} style={{ width: "100%", height: 240, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="Generated poster" />
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
+        <button type="button" onClick={() => setSeed((s) => s + 1)} style={{ border: "1px solid var(--fg)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12 }}>
+          New poster ({seed})
+        </button>
+        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12 }}>
+          Word
+          <input value={word} maxLength={12} onChange={(e) => setWord(e.target.value)} aria-label="Poster word" style={{ border: "1px solid var(--line)", background: "transparent", color: "var(--fg)", padding: "8px 12px" }} />
+        </label>
+      </div>
+    </section>
+  );
+}
+
+const FRAG = `precision highp float;
+uniform vec2 u_res; uniform float u_time; uniform float u_scale; uniform float u_warp;
+void main(){
+  vec2 p = (gl_FragCoord.xy - 0.5*u_res)/u_res.y * u_scale;
+  float t = u_time*0.25;
+  for(int i=0;i<4;i++){
+    p += u_warp*0.35*vec2(sin(p.y*1.7+t), cos(p.x*1.5-t));
+  }
+  float v = 0.5+0.5*sin(p.x*2.0+p.y*1.3);
+  vec3 col = mix(vec3(0.02,0.02,0.03), vec3(1.0,0.89,0.30), smoothstep(0.35,0.75,v));
+  col = mix(col, vec3(0.1,0.5,0.9), smoothstep(0.8,1.0,v));
+  gl_FragColor = vec4(col,1.0);
+}`;
+
+/** Shader playground: hand-written GLSL, scale + warp as live uniforms. */
+function ShaderPlay() {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  const uni = useRef({ scale: 3, warp: 0.6 });
+  const [scale, setScale] = useState(3);
+  const [warp, setWarp] = useState(0.6);
+  const [ok, setOk] = useState(true);
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const gl = canvas.getContext("webgl");
+    if (!gl) {
+      queueMicrotask(() => setOk(false));
+      return;
+    }
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const vs = gl.createShader(gl.VERTEX_SHADER);
+    const fs = gl.createShader(gl.FRAGMENT_SHADER);
+    if (!vs || !fs) {
+      queueMicrotask(() => setOk(false));
+      return;
+    }
+    gl.shaderSource(vs, "attribute vec2 a; void main(){gl_Position=vec4(a,0.,1.);}");
+    gl.compileShader(vs);
+    gl.shaderSource(fs, FRAG);
+    gl.compileShader(fs);
+    if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
+      queueMicrotask(() => setOk(false));
+      return;
+    }
+    const pr = gl.createProgram();
+    if (!pr) {
+      queueMicrotask(() => setOk(false));
+      return;
+    }
+    gl.attachShader(pr, vs);
+    gl.attachShader(pr, fs);
+    gl.linkProgram(pr);
+    gl.useProgram(pr);
+    const b = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, b);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(pr, "a");
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const uRes = gl.getUniformLocation(pr, "u_res");
+    const uTime = gl.getUniformLocation(pr, "u_time");
+    const uScale = gl.getUniformLocation(pr, "u_scale");
+    const uWarp = gl.getUniformLocation(pr, "u_warp");
+    let raf = 0;
+    const t0 = performance.now();
+    const paint = (t: number) => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = 240;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.uniform2f(uRes, canvas.width, canvas.height);
+      gl.uniform1f(uTime, t);
+      gl.uniform1f(uScale, uni.current.scale);
+      gl.uniform1f(uWarp, uni.current.warp);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    };
+    if (reduced) {
+      paint(1.5);
+      return;
+    }
+    const loop = () => {
+      paint((performance.now() - t0) / 1000);
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">04 · Shader playground — four-iteration domain warp, live uniforms</p>
+      {ok ? (
+        <canvas ref={ref} style={{ width: "100%", height: 240, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="GLSL domain-warp shader" />
+      ) : (
+        <p style={{ border: "1px solid var(--line)", padding: 20, marginTop: 12 }}>WebGL unavailable here — the canvas experiments above still run.</p>
+      )}
+      <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginTop: 12 }}>
+        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 200 }}>
+          Scale {scale.toFixed(1)}
+          <input type="range" min={1} max={9} step={0.1} value={scale} onChange={(e) => { const v = Number(e.target.value); uni.current.scale = v; setScale(v); }} aria-label="Scale" style={{ flex: 1 }} />
+        </label>
+        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 200 }}>
+          Warp {warp.toFixed(2)}
+          <input type="range" min={0} max={1.6} step={0.02} value={warp} onChange={(e) => { const v = Number(e.target.value); uni.current.warp = v; setWarp(v); }} aria-label="Warp" style={{ flex: 1 }} />
+        </label>
+      </div>
+    </section>
+  );
+}
+
+/** Room generator: seeded packing lays out rooms left to right, wrapping at the plot edge. */
+function RoomGen() {
+  const [seed, setSeed] = useState(4);
+  const [rooms, setRooms] = useState(6);
+  const r = rng(seed * 4211);
+  const cells: { x: number; y: number; w: number; h: number }[] = [];
+  let x = 0;
+  let y = 0;
+  for (let i = 0; i < rooms; i++) {
+    const w = 60 + Math.floor(r() * 110);
+    const h = 50 + Math.floor(r() * 90);
+    if (x + w > 420) {
+      x = 0;
+      y += 100;
+    }
+    cells.push({ x, y, w, h });
+    x += w;
+  }
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">05 · Room generator — change one decision, the room changes</p>
+      <svg viewBox="-10 -10 460 300" style={{ width: "100%", border: "1px solid var(--line)", marginTop: 12, background: "var(--bg)" }} role="img" aria-label={`Generated plan with ${rooms} rooms`}>
+        {cells.map((c, i) => (
+          <g key={i}>
+            <rect x={c.x} y={c.y} width={c.w} height={c.h} fill={i % 3 === 0 ? "rgba(232,184,109,0.12)" : "transparent"} stroke="var(--fg)" strokeOpacity={0.4} />
+            <text x={c.x + 6} y={c.y + 16} fontSize={9} fontFamily="monospace" fill="var(--muted)">
+              R{String(i + 1).padStart(2, "0")} · {Math.floor((c.w * c.h) / 100)}m²
+            </text>
+          </g>
+        ))}
+      </svg>
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
+        <button type="button" onClick={() => setSeed((s) => s + 1)} style={{ border: "1px solid var(--fg)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12 }}>
+          New plan ({seed})
+        </button>
+        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 200 }}>
+          Rooms {rooms}
+          <input type="range" min={3} max={12} value={rooms} onChange={(e) => setRooms(Number(e.target.value))} aria-label="Rooms" style={{ flex: 1 }} />
+        </label>
+      </div>
     </section>
   );
 }

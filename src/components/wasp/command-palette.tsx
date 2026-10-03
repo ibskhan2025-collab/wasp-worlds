@@ -28,6 +28,25 @@ const PAGES: Entry[] = [
   { title: "OBJECTS case study", sub: "Commerce with materials", href: "/studio/case/objects", keys: "objects case breakdown" },
 ];
 
+/**
+ * The palette answers, not just lists. Keyword intents over the live index —
+ * retrieval, not generation: it can only point at things that exist.
+ */
+const INTENTS: { match: RegExp; say: string; picks: string[] }[] = [
+  { match: /restaurant|cafe|caf\u00e9|bar|food|menu|booking|reservation|hospitality|bistro/, say: "For a restaurant, start with CASA — real bookings, diet-filtered menu. CIVIC shows the accessibility bar we'd hold it to.", picks: ["/worlds/casa", "/worlds/civic", "/studio/case/casa"] },
+  { match: /e-?commerce|shop|store|sell|product|cart|checkout|fashion|retail/, say: "Two commerce builds, different customers: OBJECTS (maker-led) and NOIR (editorial). Both have working carts.", picks: ["/worlds/objects", "/worlds/noir", "/studio/case/objects"] },
+  { match: /saas|dashboard|admin|crm|software|internal tool|crud|product ui/, say: "ORBIT is the working SaaS: CRUD, derived metrics, CSV export — plus a forecast reality of the same data.", picks: ["/worlds/orbit", "/worlds/orbit/forecast", "/worlds/vector"] },
+  { match: /data|analytics|chart|visuali|report|statistic|finance|numbers/, say: "VECTOR draws a financial series honestly, drawdowns labelled. ORBIT derives KPIs from live mutations.", picks: ["/worlds/vector/chart", "/worlds/orbit", "/worlds/vector"] },
+  { match: /3d|three|webgl|spatial|immersive|architect|walkthrough|render/, say: "Real geometry only where space explains something: NEST volume (WebGL), plus four CSS-3D spatial realities.", picks: ["/worlds/nest/volume", "/3d", "/worlds/forge/viewer"] },
+  { match: /weird|strange|experiment|fun|surprise|odd|art|generative|creative cod/, say: "The Lab is where things stay rough. VOID is the weirdest finished world.", picks: ["/lab", "/worlds/void", "/worlds/signal"] },
+  { match: /difficult|hard|technical|complex|impressive|engineering|clever/, say: "Technically hardest: FORGE compare (one spec, many outputs), NEST volume (plan to geometry), SIGNAL (60fps loop, no setState).", picks: ["/worlds/forge/compare", "/worlds/nest/volume", "/worlds/signal"] },
+  { match: /brand|identity|logo|launch|label|music|campaign|marketing/, say: "PULSE is a label with countdown and RSVPs; MOTION is a campaign with a timing spec.", picks: ["/worlds/pulse/setlist", "/worlds/motion/timing", "/worlds/noir"] },
+  { match: /price|cost|budget|how much|quote|rate/, say: "Depends on scope, honestly. The intake asks a range so the first reply can be specific.", picks: ["/start", "/process"] },
+  { match: /contact|email|hire|talk|call|work with/, say: "Fastest way is the intake. Three clicks, no account.", picks: ["/start"] },
+  { match: /what can you|what do you|capabilit|services|offer|help with/, say: "Design and build, as one motion. The matrix is the proof — pick the room closest to your problem.", picks: ["/matrix", "/realities", "/start"] },
+  { match: /don'?t know|not sure|no idea|help me decide|confused|unsure/, say: "Most common starting point. Tell us the problem; the intake works out the rest.", picks: ["/start", "/process", "/matrix"] },
+];
+
 function buildIndex(): Entry[] {
   const out: Entry[] = [...PAGES];
   for (const w of WORLDS) {
@@ -94,6 +113,17 @@ export function CommandPalette() {
       .slice(0, 10);
   }, [q, index]);
 
+  const answer = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    if (needle.length < 3) return null;
+    const hit = INTENTS.find((i) => i.match.test(needle));
+    if (!hit) return null;
+    const picks = hit.picks
+      .map((h) => index.find((e) => e.href === h))
+      .filter((e): e is Entry => Boolean(e));
+    return { say: hit.say, picks };
+  }, [q, index]);
+
   function go(href: string) {
     setOpen(false);
     router.push(href);
@@ -137,7 +167,19 @@ export function CommandPalette() {
               <kbd>esc</kbd>
             </div>
             <ul id="palette-list" role="listbox" className="palette-list">
-              {results.length === 0 ? (
+              {answer ? (
+                <li className="palette-answer">
+                  <p>{answer.say}</p>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
+                    {answer.picks.map((p) => (
+                      <button key={p.href} type="button" onClick={() => go(p.href)} className="palette-pick">
+                        {p.title} →
+                      </button>
+                    ))}
+                  </div>
+                </li>
+              ) : null}
+              {results.length === 0 && !answer ? (
                 <li className="palette-empty">Nothing by that name. Try “noir”, “ledger”, “lab”, “os”.</li>
               ) : null}
               {results.map((e, i) => (

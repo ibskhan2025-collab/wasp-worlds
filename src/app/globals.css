@@ -1249,6 +1249,16 @@ input, textarea, select { max-width: 100%; }
   overflow-y: auto;
 }
 .palette-empty { padding: 20px 16px; color: var(--muted); }
+.palette-answer { padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.palette-answer p { margin: 0; font-size: 0.98rem; }
+.palette-pick {
+  background: transparent;
+  border: 1px solid var(--fg);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+}
 .palette-item {
   display: flex;
   width: 100%;

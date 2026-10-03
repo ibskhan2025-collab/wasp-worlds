@@ -79,6 +79,10 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
           <ul>
             {about.challenges.map((ch) => <li key={ch}>{ch}</li>)}
           </ul>
+          <p className="kicker" style={{ marginTop: 12 }}>Under the hood</p>
+          <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.15rem" }}>{about.machine}</p>
+          <p className="kicker" style={{ marginTop: 12 }}>Didn&apos;t ship</p>
+          <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.15rem" }}>{about.failed}</p>
         </section>
       ) : null}
       <section style={{ padding: "20px 0", borderTop: "1px solid var(--line)" }}>

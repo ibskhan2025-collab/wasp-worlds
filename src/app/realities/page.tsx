@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { REALITIES } from "@/lib/realities";
-import { WORLDS } from "@/lib/worlds";
+import { WORLD_ABOUT, WORLDS } from "@/lib/worlds";
 
 export const metadata: Metadata = {
   title: "Realities — one thing, many ways to experience it",
@@ -22,7 +22,9 @@ export default function RealitiesPage() {
         density, sometimes a whole dimension. Never a theme switch. Same content, same data, different building.
       </p>
       <div style={{ marginTop: 32 }}>
-        {WORLDS.map((w) => (
+        {WORLDS.map((w) => {
+          const about = WORLD_ABOUT[w.id];
+          return (
           <section key={w.id} style={{ padding: "28px 0", borderTop: "1px solid var(--line)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "baseline" }}>
               <h2 style={{ fontFamily: "var(--font-display)", fontSize: "1.9rem", margin: 0 }}>
@@ -47,8 +49,19 @@ export default function RealitiesPage() {
                 );
               })}
             </div>
+            {about ? (
+              <div className="grid-2" style={{ marginTop: 16 }}>
+                <p style={{ margin: 0, fontSize: "0.95rem" }}>
+                  <span className="kicker">Under the hood — </span>{about.machine}
+                </p>
+                <p style={{ margin: 0, fontSize: "0.95rem" }}>
+                  <span className="kicker">Didn&apos;t ship — </span>{about.failed}
+                </p>
+              </div>
+            ) : null}
           </section>
-        ))}
+          );
+        })}
       </div>
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 32 }}>
         <Link className="btn" href="/matrix">Matrix view →</Link>

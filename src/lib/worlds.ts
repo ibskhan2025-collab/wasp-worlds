@@ -66,6 +66,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Next.js App Router", "Drizzle + Postgres reservations", "validated server actions", "local bookings mirror"],
     interactions: ["Menu search, filters, sort and favorites over one derived list", "Gallery with keyboard lightbox and closing CTA", "Reservation flow validated twice — client for speed, server for truth"],
     challenges: ["Filtering a 12-dish menu without turning it into a spreadsheet", "Keeping candlelit photography legible at 320px", "A booking flow that feels like the evening, not a form"],
+    machine: "One dishes table feeding five realities, the gallery and a Postgres bookings ledger.",
+    failed: "A candlelight reality that was only dim CSS. Cut for being a theme, not a reality.",
   },
   noir: {
     concept: "Editorial and commerce are one object. The picture is shoppable; the bag is real.",
@@ -73,6 +75,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Next.js App Router", "localStorage cart", "server-side repricing endpoint", "simulated checkout"],
     interactions: ["Size-aware line items with quantity, subtotal and removal", "Lookbook looks that jump to their garments", "Wishlist, appointments and journal around the till"],
     challenges: ["Black-on-black that reads expensive, not empty", "Asymmetric editorial layout intact from 320px to 1920px", "Totals the customer cannot edit in devtools"],
+    machine: "One product table feeding collection, lookbook, ledger, runway and atelier — plus a server that reprices every order.",
+    failed: "A 3D showroom prototype that weighed 40MB. Killed on the scales.",
   },
   orbit: {
     concept: "A portfolio claiming product craft should let you operate the product.",
@@ -80,6 +84,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Next.js App Router", "local-first store shaped for API swap", "validated CRUD", "CSV export"],
     interactions: ["Customer and project CRUD with validation", "Inline stage moves", "Activity log derived from mutations", "Reports with live counts and CSV download"],
     challenges: ["Dense data with tappable targets at 375px", "One dataset serving KPIs, tables and charts without drift", "Settings that re-skin without forking components"],
+    machine: "A local-first store with validated CRUD; KPIs, tables, charts and the activity log derive from the same mutations.",
+    failed: "A monochrome terminal skin that hid the data it was meant to clarify.",
   },
   still: {
     concept: "The photograph is the interface; everything else is a mat.",
@@ -87,6 +93,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Next.js App Router", "next/image grids", "shared Lightbox primitive", "localStorage favorites"],
     interactions: ["Arrow-key lightbox with counter and captions", "Favorites driving a saved-only view", "Print enquiries with edition logic"],
     challenges: ["An almost-empty page that still feels deliberate", "Honest aspect ratios across breakpoints", "Restraint as a technical discipline"],
+    machine: "Collections as data; one shared Lightbox, keyboard map and favorites store serving four gallery layouts.",
+    failed: "Infinite-scroll walls. Photography deserves an ending.",
   },
   signal: {
     concept: "Proof of interactivity: a game with real rules, real feedback, real records.",
@@ -94,6 +102,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Canvas 2D loop", "requestAnimationFrame", "throttled state writes", "localStorage records"],
     interactions: ["Distance-to-core collision with combo scoring", "Pause that truly freezes the timer", "Per-difficulty bests and a claimable records wall"],
     challenges: ["No setState in the 60fps hot loop", "Hit detection fair on a phone thumb", "Pause/resume without losing elapsed time"],
+    machine: "One canvas engine, five palettes through CSS variables — same rules, new light. Cabinet and handheld are frames, not forks.",
+    failed: "A difficulty that adapted to the player. Felt rigged, because it was.",
   },
   objects: {
     concept: "Independent retail deserves its own system — not a theme, not a marketplace listing.",
@@ -101,6 +111,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Next.js App Router", "shared cart engine with NOIR", "option/qty validation", "simulated till"],
     interactions: ["Price slider, categories, search and four sorts in one pipeline", "Maker dossiers beside the catalogue", "In-situ gallery feeding product pages"],
     challenges: ["Faceted filtering that never dead-ends wrongly", "Editorial rhythm that still converts", "Two stores, one honest engine"],
+    machine: "NOIR's cart engine reskinned; filters, variants and till share one validation path.",
+    failed: "Colorways with names nobody could spell into search.",
   },
   archive: {
     concept: "A publication is a system of promises: keep your place, remember what you read.",
@@ -108,6 +120,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Next.js App Router", "IntersectionObserver progress", "bookmarks in localStorage", "inquiries-backed newsletter"],
     interactions: ["Read-state committed at 90% scroll", "Search across titles, deks and bodies", "Subscribe/unsubscribe round-trip"],
     challenges: ["Six essays actually worth reading", "Two-column reading surviving mobile", "A newsletter with no funnel attached"],
+    machine: "Essays as data with read-state at 90% scroll, search over titles, deks and bodies, plus a newsletter round-trip.",
+    failed: "Auto-read that marked essays read. Reading can't be inferred.",
   },
   motion: {
     concept: "Motion design is not decoration; it is a timing specification you can read.",
@@ -115,6 +129,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Scroll-linked CSS variables", "rAF-throttled observers", "cubic-bezier token system", "prefers-reduced-motion paths"],
     interactions: ["Progress rail with chapter dots and smooth jumps", "Easing playground: curve, duration, replay", "Seven-rule principles manifesto"],
     challenges: ["Six chapters, one shared timeline vocabulary", "Scroll-linked animation without jank on mid-range phones", "Stillness scored as a beat, not a bug"],
+    machine: "Chapters as data, one easing-token system, rAF-throttled scroll observers, reduced-motion twins for everything.",
+    failed: "A scroll-jacked pinned sequence. The page fought the reader and lost.",
   },
   void: {
     concept: "An art toy with a physics essay behind it: playful first, explainable second.",
@@ -122,6 +138,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Canvas 2D integration loop", "pointer physics", "persisted settings", "field-notes documentation"],
     interactions: ["Attract/repel toggle, density slider, burst", "Typed glyphs injected into the field", "Stillness detection unlocking a formation"],
     challenges: ["Drift that never settles and never explodes", "60fps with hundreds of motes", "Touch controls to replace the keyboard-only original"],
+    machine: "Integration-loop particle fields; each reality changes the forces, never the renderer contract.",
+    failed: "Four thousand particles on low-end phones. Ambition met the GPU.",
   },
   atlas: {
     concept: "Travel planning is arithmetic dressed as daydreaming. Do both.",
@@ -129,6 +147,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Next.js App Router", "hand-authored SVG map", "itinerary state in localStorage", "validated trip requests"],
     interactions: ["Clickable schematic map synced with filters", "Itinerary builder: reorder, travelers, month, totals", "Request posting a complete brief"],
     challenges: ["A believable schematic from raw path data", "Reordering usable by thumb and arrow keys", "Six fictional routes that feel researched"],
+    machine: "Destinations as data with map coordinates; filters, timetable, postcards and itinerary all read the same table.",
+    failed: "A spinning 3D globe. Beautiful, useless for choosing.",
   },
   forge: {
     concept: "Engineers don't want design; they want the number, and proof the number is stable.",
@@ -136,6 +156,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Next.js App Router", "SVG dimension generator", "derived spec maths", "validated quote flow"],
     interactions: ["Load slider recomputing the diagram", "Variant-driven drawing geometry", "Three-question quote builder"],
     challenges: ["Dimension lines drawn from data, not by hand", "Zero-decoration visuals pleasant for long sessions", "Quote state surviving reload"],
+    machine: "Parts as data; SVG dimensions, CSS-3D solids and the compare table all derive from the same spec.",
+    failed: "Photorealistic renders. Engineers wanted the number.",
   },
   pulse: {
     concept: "A record label is a typographic system with a release schedule attached.",
@@ -143,6 +165,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Next.js App Router", "computed runtimes", "live countdown", "RSVP ledger (server)"],
     interactions: ["Tracklists summing their own totals", "Countdown flipping to OUT NOW at release", "Tour RSVPs persisted with live counts"],
     challenges: ["Oversized type that never breaks measure on small screens", "A music site with no audio that still feels loud", "Sold-out states that refuse politely"],
+    machine: "Releases as data with computed runtimes; countdown, setlist and booth all sum the same tracks.",
+    failed: "Autoplay audio. Nobody asked, everybody muted.",
   },
   civic: {
     concept: "Make complicated information understandable, then prove you did.",
@@ -150,6 +174,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Next.js App Router", "keyword intent matcher", "persisted checklists", "validated issue reporter"],
     interactions: ["Natural-language service finder", "Checklists with progress counts", "Issue reports returning references"],
     challenges: ["Guidance reading like a real council minus the fog", "WCAG-level contrast without blandness", "Fiction labeled unmistakably as fiction"],
+    machine: "Services as data with keyword intents; finder, checklists and issue reporter share one matcher.",
+    failed: "A chatbot. A form with good matching beat it.",
   },
   nest: {
     concept: "Rooms are a graph. Draw the graph, let people walk on it.",
@@ -157,6 +183,8 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Next.js App Router", "interactive SVG floorplan", "material token set", "room-context enquiries"],
     interactions: ["Plan-driven navigation, keyboard included", "Material switcher re-skinning the view", "Per-room enquiries carrying room + material"],
     challenges: ["One material definition serving view and copy", "Mood/scale/relation notes per room", "Floorplan usable with a thumb"],
+    machine: "Rooms and materials as data; SVG plan, CSS-3D walk and WebGL volume all read the same graph.",
+    failed: "A fly-through animation. Pretty corridor, zero agency.",
   },
   vector: {
     concept: "Financial design is trust design. Say what the number is and isn't.",
@@ -164,5 +192,7 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Next.js App Router", "hand-built SVG chart", "toggleable annotations", "validated call booking"],
     interactions: ["14-quarter chart with drawdown labels", "Event-label toggle", "Insight essays with related links"],
     challenges: ["A chart that feels sketched but is measured", "Disclaimers impossible to miss", "Legible axes at 320px"],
+    machine: "Quarters as data with labelled events; chart, letter and insights narrate the same series.",
+    failed: "A live-ticker aesthetic. Money deserves slower type.",
   },
 };

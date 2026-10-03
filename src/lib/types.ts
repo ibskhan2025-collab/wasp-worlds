@@ -52,6 +52,8 @@ export type WorldAbout = {
   stack: string[];
   interactions: string[];
   challenges: string[];
+  machine: string;
+  failed: string;
 };
 
 export type WaspState = {
