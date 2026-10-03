@@ -20,6 +20,7 @@ export default function ProcessPage() {
             <div>
               <h2 style={{ margin: 0, fontFamily: "var(--font-display)", fontSize: "1.8rem" }}>{s.name}</h2>
               <p>{s.text}</p>
+              <p style={{ marginTop: 8 }}><Link href={s.proof[1]} style={{ textDecoration: "underline", fontSize: "0.95rem" }}>See it for real: {s.proof[0]} →</Link></p>
             </div>
           </li>
         ))}

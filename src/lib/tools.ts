@@ -32,6 +32,8 @@ export function estimateScope(input: {
   motion: string;
   integrations: number;
   complexity: string;
+  ambition?: string;
+  content?: string;
 }) {
   let weeksLow = 3;
   let weeksHigh = 5;
@@ -67,6 +69,10 @@ export function estimateScope(input: {
     weeksLow += 2;
     weeksHigh += 5;
   }
+  const ambitionMult = input.ambition === "Clear and solid" ? 0.8 : input.ambition === "Unusual, memorable" ? 1.4 : 1;
+  const contentMult = input.content === "Fully ready" ? 0.9 : input.content === "Not started" ? 1.35 : 1;
+  weeksLow *= ambitionMult * contentMult;
+  weeksHigh *= ambitionMult * contentMult;
   return {
     weeksLow: Math.round(weeksLow * 10) / 10,
     weeksHigh: Math.round(weeksHigh * 10) / 10,

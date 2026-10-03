@@ -85,6 +85,23 @@ export default function StudioPage() {
       <Link className="btn" href="/studio/services" style={{ marginTop: 24 }}>
         All services
       </Link>
+      <hr className="rule" />
+      <p className="kicker">Manifesto — seven lines we work by</p>
+      <ol style={{ listStyle: "none", padding: 0, marginTop: 16 }}>
+        {[
+          "A website is not a set of pages. It is a place that does a job.",
+          "If it can't do the thing, it's a brochure with better fonts.",
+          "Design and development are one motion, not two departments.",
+          "Every state is a design: empty, loading, broken, done.",
+          "Motion must carry information, or get out.",
+          "If it can't be used with a keyboard, it isn't finished.",
+          "Show the work. Fictional things are labelled fictional.",
+        ].map((t, i) => (
+          <li key={t} style={{ padding: "12px 0", borderTop: "1px solid var(--line)", fontFamily: "var(--font-display)", fontSize: "1.4rem" }}>
+            <span className="kicker" style={{ marginRight: 12 }}>{String(i + 1).padStart(2, "0")}</span>{t}
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }

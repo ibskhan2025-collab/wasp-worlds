@@ -50,22 +50,22 @@ export const services = [
 ];
 
 export const processSteps = [
-  { n: "01", name: "Enquiry", text: "You write. We read. If it's not a fit, we say so." },
-  { n: "02", name: "Qualification", text: "Budget, timeline, decision-makers. Adults in the room." },
-  { n: "03", name: "Consultation", text: "A real conversation. Not a pitch deck with a pulse." },
-  { n: "04", name: "Strategy", text: "What the thing is for, who it is for, what it must not become." },
-  { n: "05", name: "Proposal", text: "Scope, sequence, cost. Written so you can argue with it." },
-  { n: "06", name: "Agreement", text: "Paperwork. Boundaries. The boring things that keep work kind." },
-  { n: "07", name: "Payment", text: "A start fee so the calendar can mean it." },
-  { n: "08", name: "Onboarding", text: "Access, people, existing assets, the ugly spreadsheet." },
-  { n: "09", name: "Content", text: "Words and pictures. We will not invent your voice for you." },
-  { n: "10", name: "Design", text: "Direction, then pages, then the awkward middle, then the thing." },
-  { n: "11", name: "Development", text: "It becomes real. Interactions stop being promises." },
-  { n: "12", name: "QA", text: "Broken links, bad focus states, the iPhone in the other hand." },
-  { n: "13", name: "Launch", text: "DNS, analytics, a quiet hour, then the public." },
-  { n: "14", name: "Handoff", text: "You can operate it. Or we stay. Your choice, priced honestly." },
-  { n: "15", name: "Case study", text: "Only if there's something true to say." },
-  { n: "16", name: "Continued growth", text: "The site is not finished. Businesses aren't." },
+  { n: "01", name: "Enquiry", text: "You write. We read. If it's not a fit, we say so.", proof: ["Project builder", "/start"] },
+  { n: "02", name: "Qualification", text: "Budget, timeline, decision-makers. Adults in the room.", proof: ["Client fit score", "/tools/fit"] },
+  { n: "03", name: "Consultation", text: "A real conversation. Not a pitch deck with a pulse.", proof: ["Brief generator", "/tools/brief"] },
+  { n: "04", name: "Strategy", text: "What the thing is for, who it is for, what it must not become.", proof: ["CASA: one job, filling tables", "/worlds/casa"] },
+  { n: "05", name: "Proposal", text: "Scope, sequence, cost. Written so you can argue with it.", proof: ["Scope builder", "/tools/scope"] },
+  { n: "06", name: "Agreement", text: "Paperwork. Boundaries. The boring things that keep work kind.", proof: ["OS documents", "/os"] },
+  { n: "07", name: "Payment", text: "A start fee so the calendar can mean it.", proof: ["OS sales", "/os"] },
+  { n: "08", name: "Onboarding", text: "Access, people, existing assets, the ugly spreadsheet.", proof: ["OS SOPs", "/os"] },
+  { n: "09", name: "Content", text: "Words and pictures. We will not invent your voice for you.", proof: ["ARCHIVE: content as data", "/worlds/archive"] },
+  { n: "10", name: "Design", text: "Direction, then pages, then the awkward middle, then the thing.", proof: ["Five CASA realities", "/worlds/casa"] },
+  { n: "11", name: "Development", text: "It becomes real. Interactions stop being promises.", proof: ["Under the hood", "/realities"] },
+  { n: "12", name: "QA", text: "Broken links, bad focus states, the iPhone in the other hand.", proof: ["Accessibility checker", "/tools/a11y"] },
+  { n: "13", name: "Launch", text: "DNS, analytics, a quiet hour, then the public.", proof: ["Conversion checklist", "/tools/conversion"] },
+  { n: "14", name: "Handoff", text: "You can operate it. Or we stay. Your choice, priced honestly.", proof: ["OS projects", "/os"] },
+  { n: "15", name: "Case study", text: "Only if there's something true to say.", proof: ["Work: fifteen rooms", "/studio/work"] },
+  { n: "16", name: "Continued growth", text: "The site is not finished. Businesses aren't.", proof: ["Lab: where next starts", "/lab"] },
 ];
 
 export const caseStudies = [

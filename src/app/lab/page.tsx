@@ -132,6 +132,9 @@ export default function LabPage() {
       <PosterGen />
       <ShaderPlay />
       <RoomGen />
+      <Fountain />
+      <Drone />
+      <Terrain />
     </div>
   );
 }
@@ -346,6 +349,25 @@ function PosterGen() {
         <button type="button" onClick={() => setSeed((s) => s + 1)} style={{ border: "1px solid var(--fg)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12 }}>
           New poster ({seed})
         </button>
+        <button
+          type="button"
+          onClick={() => {
+            const c = ref.current;
+            if (!c) return;
+            c.toBlob((b) => {
+              if (!b) return;
+              const u = URL.createObjectURL(b);
+              const a = document.createElement("a");
+              a.href = u;
+              a.download = `wasp-poster-${seed}.png`;
+              a.click();
+              URL.revokeObjectURL(u);
+            });
+          }}
+          style={{ border: "1px solid var(--line)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12 }}
+        >
+          Download PNG
+        </button>
         <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12 }}>
           Word
           <input value={word} maxLength={12} onChange={(e) => setWord(e.target.value)} aria-label="Poster word" style={{ border: "1px solid var(--line)", background: "transparent", color: "var(--fg)", padding: "8px 12px" }} />
@@ -501,6 +523,224 @@ function RoomGen() {
         <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 200 }}>
           Rooms {rooms}
           <input type="range" min={3} max={12} value={rooms} onChange={(e) => setRooms(Number(e.target.value))} aria-label="Rooms" style={{ flex: 1 }} />
+        </label>
+      </div>
+    </section>
+  );
+}
+
+/** Fountain: click or tap to emit. Gravity is a slider, including upside down. */
+function Fountain() {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  const [g, setG] = useState(300);
+  const gRef = useRef(g);
+  useEffect(() => {
+    gRef.current = g;
+  }, [g]);
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let raf = 0;
+    let last = performance.now();
+    let ps: { x: number; y: number; vx: number; vy: number; l: number }[] = [];
+    const fg = getComputedStyle(document.body).getPropertyValue("--fg").trim() || "#fff";
+    const bg = getComputedStyle(document.body).getPropertyValue("--bg").trim() || "#000";
+    const emit = (px: number, py: number) => {
+      for (let i = 0; i < 40; i++) {
+        ps.push({ x: px, y: py, vx: (Math.random() - 0.5) * 200, vy: -150 - Math.random() * 250, l: 2 });
+      }
+    };
+    if (reduced) {
+      emit(canvas.width / 2, canvas.height - 20);
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = fg;
+      for (const p of ps) ctx.fillRect(p.x, p.y, 3, 3);
+      return;
+    }
+    const dn = (e: PointerEvent) => {
+      const r = canvas.getBoundingClientRect();
+      emit(((e.clientX - r.left) / r.width) * canvas.width, ((e.clientY - r.top) / r.height) * canvas.height);
+    };
+    canvas.addEventListener("pointerdown", dn);
+    const frame = (n: number) => {
+      const dt = Math.min(0.05, (n - last) / 1000);
+      last = n;
+      ctx.fillStyle = "rgba(0,0,0,0.3)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      for (const p of ps) {
+        p.vy += gRef.current * dt;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.l -= dt;
+        if (p.y > canvas.height) { p.y = canvas.height; p.vy *= -0.5; }
+        ctx.fillStyle = fg;
+        ctx.globalAlpha = Math.max(0, p.l / 2);
+        ctx.fillRect(p.x, p.y, 3, 3);
+      }
+      ctx.globalAlpha = 1;
+      ps = ps.filter((p) => p.l > 0);
+      raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+    return () => {
+      cancelAnimationFrame(raf);
+      canvas.removeEventListener("pointerdown", dn);
+    };
+  }, []);
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">06 · Particle fountain — click to emit, gravity goes negative</p>
+      <canvas ref={ref} width={400} height={176} style={{ width: "100%", height: 176, display: "block", border: "1px solid var(--line)", marginTop: 12, touchAction: "none", cursor: "crosshair" }} aria-label="Particle fountain: click or tap to emit" />
+      <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, marginTop: 12 }}>
+        Gravity {g}
+        <input type="range" min={-300} max={900} step={10} value={g} onChange={(e) => setG(Number(e.target.value))} aria-label="Gravity" style={{ flex: 1 }} />
+      </label>
+    </section>
+  );
+}
+
+/** Drone: three oscillators through a filter into an analyser. Sound starts only on press. */
+function Drone() {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  const ac = useRef<{ ctx: AudioContext; o: OscillatorNode[]; an: AnalyserNode } | null>(null);
+  const [on, setOn] = useState(false);
+  const [f, setF] = useState(110);
+  async function toggle() {
+    if (on) {
+      ac.current?.o.forEach((o) => { try { o.stop(); } catch { /* already stopped */ } });
+      try { await ac.current?.ctx.close(); } catch { /* already closed */ }
+      ac.current = null;
+      setOn(false);
+      return;
+    }
+    const Ctx = window.AudioContext;
+    if (!Ctx) return;
+    const ctx = new Ctx();
+    const g = ctx.createGain();
+    const an = ctx.createAnalyser();
+    g.gain.value = 0.12;
+    an.fftSize = 128;
+    g.connect(an);
+    an.connect(ctx.destination);
+    const o = [1, 1.5, 2.01].map((m) => {
+      const x = ctx.createOscillator();
+      x.type = "sawtooth";
+      x.frequency.value = f * m;
+      const fl = ctx.createBiquadFilter();
+      fl.frequency.value = 600;
+      x.connect(fl);
+      fl.connect(g);
+      x.start();
+      return x;
+    });
+    ac.current = { ctx, o, an };
+    setOn(true);
+  }
+  useEffect(() => {
+    ac.current?.o.forEach((o, i) => { o.frequency.value = f * [1, 1.5, 2.01][i]; });
+  }, [f]);
+  useEffect(() => {
+    if (!on) return;
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx || !ac.current) return;
+    const an = ac.current.an;
+    const b = new Uint8Array(an.frequencyBinCount);
+    let raf = 0;
+    const fg = getComputedStyle(document.body).getPropertyValue("--fg").trim() || "#fff";
+    const draw = () => {
+      an.getByteFrequencyData(b);
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = fg;
+      b.forEach((v, i) => {
+        ctx.fillRect(i * 6.2, canvas.height - v * 0.65, 5, v * 0.65);
+      });
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => cancelAnimationFrame(raf);
+  }, [on]);
+  useEffect(() => () => {
+    ac.current?.o.forEach((o) => { try { o.stop(); } catch { /* already stopped */ } });
+    ac.current?.ctx.close().catch(() => {});
+  }, []);
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">07 · Audio visualiser — three oscillators, no samples</p>
+      <canvas ref={ref} width={400} height={120} style={{ width: "100%", height: 120, display: "block", border: "1px solid var(--line)", marginTop: 12 }} role="img" aria-label={on ? "Live audio spectrum" : "Audio visualiser, silent"} />
+      <div style={{ display: "flex", gap: 12, marginTop: 12, alignItems: "center" }}>
+        <button type="button" onClick={toggle} style={{ border: "1px solid var(--fg)", background: on ? "var(--fg)" : "transparent", color: on ? "var(--bg)" : "var(--fg)", padding: "10px 18px", fontSize: 12, fontWeight: 700 }}>
+          {on ? "■ Stop" : "▶ Start drone"}
+        </button>
+        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1 }}>
+          Pitch {f}Hz
+          <input type="range" min={55} max={220} value={f} onChange={(e) => setF(Number(e.target.value))} aria-label="Pitch" style={{ flex: 1 }} />
+        </label>
+      </div>
+      <p style={{ fontSize: 11, color: "var(--muted)" }}>Sound starts only when you press the button.</p>
+    </section>
+  );
+}
+
+/** Terrain: ridge lines from summed sine octaves. Every seed a landscape; same seed, same land. */
+function Terrain() {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  const [seed, setSeed] = useState(7);
+  const [ridges, setRidges] = useState(46);
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const W = (canvas.width = canvas.offsetWidth);
+    const H = (canvas.height = 220);
+    const fg = getComputedStyle(document.body).getPropertyValue("--fg").trim() || "#fff";
+    const bg = getComputedStyle(document.body).getPropertyValue("--bg").trim() || "#000";
+    const h = (i: number, j: number, oct: number) => {
+      let v = 0;
+      for (let o = 0; o < oct; o++) {
+        const f = 2 ** o;
+        v += (Math.sin(i * 0.11 * f + seed * 1.7 + o) * Math.cos(j * 0.17 * f + seed * 0.9)) / f;
+      }
+      return v;
+    };
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+    for (let k = ridges; k >= 0; k--) {
+      const d = k / ridges;
+      ctx.beginPath();
+      ctx.moveTo(0, H);
+      for (let x = 0; x <= W; x += 8) {
+        const y = H * (0.35 + d * 0.6) - h(x / 8, k, 3) * 60 * (1 - d * 0.5) - Math.sin(x * 0.01 + k) * 8;
+        ctx.lineTo(x, y);
+      }
+      ctx.lineTo(W, H);
+      ctx.closePath();
+      ctx.fillStyle = bg;
+      ctx.fill();
+      ctx.strokeStyle = fg;
+      ctx.globalAlpha = 0.5 - d * 0.4;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+  }, [seed, ridges]);
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">08 · Procedural terrain — ridge lines, seeded</p>
+      <canvas ref={ref} style={{ width: "100%", height: 220, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="Procedural terrain" />
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
+        <button type="button" onClick={() => setSeed((s) => s + 1)} style={{ border: "1px solid var(--fg)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12 }}>
+          New terrain ({seed})
+        </button>
+        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 200 }}>
+          Ridges {ridges}
+          <input type="range" min={8} max={80} value={ridges} onChange={(e) => setRidges(Number(e.target.value))} aria-label="Ridges" style={{ flex: 1 }} />
         </label>
       </div>
     </section>

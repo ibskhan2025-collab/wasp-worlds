@@ -129,8 +129,10 @@ function Cost() {
   const [motion, setMotion] = useState("subtle");
   const [integrations, setIntegrations] = useState(1);
   const [complexity, setComplexity] = useState("mid");
+  const [ambition, setAmbition] = useState("Distinctive");
+  const [content, setContent] = useState("Partly ready");
   const [rush, setRush] = useState(false);
-  const result = estimateScope({ type, pages, ecommerce, cms, custom, motion, integrations, complexity });
+  const result = estimateScope({ type, pages, ecommerce, cms, custom, motion, integrations, complexity, ambition, content });
   const weeksLow = rush ? Math.round(result.weeksLow * 1.25 * 10) / 10 : result.weeksLow;
   const weeksHigh = rush ? Math.round(result.weeksHigh * 1.25 * 10) / 10 : result.weeksHigh;
   return (
@@ -167,6 +169,20 @@ function Cost() {
             <option value="high">High</option>
           </select>
         </label>
+        <label className="field"><span>Ambition</span>
+          <select value={ambition} onChange={(e) => setAmbition(e.target.value)}>
+            <option>Clear and solid</option>
+            <option>Distinctive</option>
+            <option>Unusual, memorable</option>
+          </select>
+        </label>
+        <label className="field"><span>Content readiness</span>
+          <select value={content} onChange={(e) => setContent(e.target.value)}>
+            <option>Fully ready</option>
+            <option>Partly ready</option>
+            <option>Not started</option>
+          </select>
+        </label>
       </div>
       <div className="panel">
         <p className="kicker">Estimated effort</p>
@@ -175,7 +191,7 @@ function Cost() {
         <label style={{ display: "block", marginTop: 8 }}><input type="checkbox" checked={rush} onChange={(e) => setRush(e.target.checked)} /> Compressed timeline (+25% — rush costs focus)</label>
         <p style={{ fontSize: "0.85rem", color: "var(--muted)" }}>Indicative only. Assumes one decision-maker and content on schedule — the two variables that move every project.</p>
         <div style={{ marginTop: 12 }}>
-          <ToolCta tool="Scope / cost range" payload={`Scope estimate from WASP tools: ${type} site, ${pages} pages${ecommerce ? ", ecommerce" : ""}${cms ? ", CMS" : ""}, ${integrations} integrations, ${complexity} complexity${rush ? ", rushed" : ""} → ${weeksLow}–${weeksHigh} weeks.`} />
+          <ToolCta tool="Scope / cost range" payload={`Scope estimate from WASP tools: ${type} site, ${pages} pages${ecommerce ? ", ecommerce" : ""}${cms ? ", CMS" : ""}, ${integrations} integrations, ${complexity} complexity, ${ambition.toLowerCase()}, content ${content.toLowerCase()}${rush ? ", rushed" : ""} → ${weeksLow}–${weeksHigh} weeks.`} />
         </div>
       </div>
     </div>
