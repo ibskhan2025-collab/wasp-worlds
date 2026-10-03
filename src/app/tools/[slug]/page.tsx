@@ -61,7 +61,7 @@ function ToolCta({ tool, payload }: { tool: string; payload?: string }) {
 function Audit() {
   const [url, setUrl] = useState("");
   const [out, setOut] = useState("");
-  const [fetched, setFetched] = useState<Record<string, string> | null>(null);
+  const [fetched, setFetched] = useState<Record<string, unknown> | null>(null);
   async function run() {
     setOut("Trying to fetch…");
     setFetched(null);
@@ -73,11 +73,15 @@ function Audit() {
         return;
       }
       setFetched(data);
-      setOut("Fetched what the server could see. This is not a full audit.");
+      const checks = (data.checks ?? []) as { label: string; ok: boolean | string; detail: string }[];
+      const pass = checks.filter((c) => c.ok === true).length;
+      setOut(`Fetched what the server could see: ${pass}/${checks.length} checks pass. This is not a full audit.`);
     } catch {
       setOut("Could not reach the audit endpoint.");
     }
   }
+  const checks = ((fetched?.checks ?? []) as { label: string; ok: boolean | string; detail: string }[]);
+  const rest = fetched ? Object.entries(fetched).filter(([k]) => k !== "checks" && k !== "fetched") : [];
   return (
     <div>
       <label className="field">
@@ -86,9 +90,21 @@ function Audit() {
       </label>
       <button className="btn" type="button" onClick={run}>Attempt fetch</button>
       <p style={{ marginTop: 12 }}>{out}</p>
+      {checks.length ? (
+        <div className="panel" style={{ marginTop: 16 }}>
+          {checks.map((c) => (
+            <p key={c.label} style={{ display: "flex", gap: 10, margin: "8px 0" }}>
+              <strong aria-label={c.ok === true ? "pass" : c.ok === "warn" ? "warning" : "fail"}>
+                {c.ok === true ? "✓" : c.ok === "warn" ? "!" : "✗"}
+              </strong>
+              <span><strong>{c.label}.</strong> {c.detail}</span>
+            </p>
+          ))}
+        </div>
+      ) : null}
       {fetched ? (
         <div className="panel" style={{ marginTop: 16 }}>
-          {Object.entries(fetched).map(([k, v]) => (
+          {rest.map(([k, v]) => (
             <p key={k}><strong>{k}:</strong> {String(v)}</p>
           ))}
         </div>
@@ -113,7 +129,10 @@ function Cost() {
   const [motion, setMotion] = useState("subtle");
   const [integrations, setIntegrations] = useState(1);
   const [complexity, setComplexity] = useState("mid");
+  const [rush, setRush] = useState(false);
   const result = estimateScope({ type, pages, ecommerce, cms, custom, motion, integrations, complexity });
+  const weeksLow = rush ? Math.round(result.weeksLow * 1.25 * 10) / 10 : result.weeksLow;
+  const weeksHigh = rush ? Math.round(result.weeksHigh * 1.25 * 10) / 10 : result.weeksHigh;
   return (
     <div className="grid-2">
       <div>
@@ -151,10 +170,12 @@ function Cost() {
       </div>
       <div className="panel">
         <p className="kicker">Estimated effort</p>
-        <p style={{ fontSize: "2.4rem" }}>{result.weeksLow} – {result.weeksHigh} weeks</p>
+        <p style={{ fontSize: "2.4rem" }}>{weeksLow} – {weeksHigh} weeks{rush ? " · rushed" : ""}</p>
         <p>{result.note}</p>
+        <label style={{ display: "block", marginTop: 8 }}><input type="checkbox" checked={rush} onChange={(e) => setRush(e.target.checked)} /> Compressed timeline (+25% — rush costs focus)</label>
+        <p style={{ fontSize: "0.85rem", color: "var(--muted)" }}>Indicative only. Assumes one decision-maker and content on schedule — the two variables that move every project.</p>
         <div style={{ marginTop: 12 }}>
-          <ToolCta tool="Scope / cost range" payload={`Scope estimate from WASP tools: ${type} site, ${pages} pages${ecommerce ? ", ecommerce" : ""}${cms ? ", CMS" : ""}, ${integrations} integrations, ${complexity} complexity → ${result.weeksLow}–${result.weeksHigh} weeks.`} />
+          <ToolCta tool="Scope / cost range" payload={`Scope estimate from WASP tools: ${type} site, ${pages} pages${ecommerce ? ", ecommerce" : ""}${cms ? ", CMS" : ""}, ${integrations} integrations, ${complexity} complexity${rush ? ", rushed" : ""} → ${weeksLow}–${weeksHigh} weeks.`} />
         </div>
       </div>
     </div>

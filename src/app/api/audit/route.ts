@@ -48,10 +48,40 @@ export async function POST(req: Request) {
       html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i)?.[1] ??
       html.match(/<meta[^>]+content=["']([^"']*)["'][^>]+name=["']description["']/i)?.[1] ??
       "(no meta description)";
+    const h1count = (html.match(/<h1[\s>]/gi) ?? []).length;
     const h1 = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)?.[1]?.replace(/<[^>]+>/g, "").trim() ?? "(no h1)";
     const viewport = /name=["']viewport["']/i.test(html) ? "present" : "missing";
     const imgs = html.match(/<img\b[^>]*>/gi)?.length ?? 0;
     const imgsNoAlt = html.match(/<img\b(?![^>]*\balt=)[^>]*>/gi)?.length ?? 0;
+    const links = (html.match(/<a\b[^>]*href=/gi) ?? []).length;
+    const forms = (html.match(/<form\b/gi) ?? []).length;
+    const scripts = (html.match(/<script\b/gi) ?? []).length;
+    const nofollow = (html.match(/rel=["'][^"']*nofollow/gi) ?? []).length;
+    const canonical = /<link[^>]+rel=["']canonical["']/i.test(html);
+    const robots = /<meta[^>]+name=["']robots["']/i.test(html);
+    const og = /property=["']og:title["']/i.test(html) && /property=["']og:image["']/i.test(html);
+    const ogAny = /property=["']og:/i.test(html);
+    const jsonLd = /<script[^>]+type=["']application\/ld\+json["']/i.test(html);
+    const lang = /<html[^>]+\blang=/i.test(html);
+    type Verdict = boolean | "warn";
+    const checks: { label: string; ok: Verdict; detail: string }[] = [
+      { label: "Responds successfully", ok: res.status >= 200 && res.status < 300, detail: `HTTP ${res.status}.` },
+      { label: "Page title present (10–65 chars)", ok: title.length >= 10 && title.length <= 65 ? true : title && title !== "(no title)" ? "warn" : false, detail: title },
+      { label: "Meta description (50–170 chars)", ok: desc.length >= 50 && desc.length <= 170 ? true : desc && desc !== "(no meta description)" ? "warn" : false, detail: desc.slice(0, 120) },
+      { label: "Exactly one H1", ok: h1count === 1 ? true : h1count === 0 ? false : "warn", detail: `${h1count} found in the served HTML.` },
+      { label: "Language declared on <html>", ok: lang, detail: lang ? "Yes." : "Missing lang attribute." },
+      { label: "Mobile viewport meta tag", ok: viewport === "present", detail: viewport === "present" ? "Present." : "Missing." },
+      { label: "Images have alt attributes", ok: imgs === 0 ? "warn" : imgsNoAlt === 0, detail: imgs ? `${imgs - imgsNoAlt} of ${imgs} images have alt.` : "No <img> in served HTML." },
+      { label: "Canonical link", ok: canonical, detail: canonical ? "Present." : "Missing; useful when URLs can have duplicates." },
+      { label: "Open Graph title and image", ok: og ? true : ogAny ? "warn" : false, detail: "Controls how links look when shared." },
+      { label: "Robots directive", ok: robots ? true : "warn", detail: robots ? "Present." : "No robots meta directive; not automatically a problem." },
+      { label: "Structured data", ok: jsonLd ? true : "warn", detail: jsonLd ? "JSON-LD detected." : "No JSON-LD detected." },
+      { label: "Links present", ok: links > 0, detail: `${links} anchors with href found.` },
+      { label: "Forms present", ok: forms > 0 ? "warn" : true, detail: forms ? `${forms} form(s) found; test validation and confirmation states.` : "No forms in served HTML." },
+      { label: "Scripts", ok: scripts <= 12 ? true : "warn", detail: `${scripts} script tags in served HTML.` },
+      { label: "No-follow links", ok: nofollow === 0 ? true : "warn", detail: `${nofollow} nofollow link(s) detected.` },
+      { label: "Page weight (HTML only)", ok: buf.byteLength < 300_000 ? true : "warn", detail: `${Math.round(buf.byteLength / 1024)} KB of HTML.` },
+    ];
     return Response.json({
       fetched: true,
       status: String(res.status),
@@ -61,6 +91,7 @@ export async function POST(req: Request) {
       viewport,
       images: String(imgs),
       imagesMissingAlt: String(imgsNoAlt),
+      checks,
       note: "Surface signals only. Not a complete audit, performance lab, or accessibility certification.",
     });
   } catch {
