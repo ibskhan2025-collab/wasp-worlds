@@ -1,7 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import dynamic from "next/dynamic";
+import "@fontsource-variable/space-grotesk";
 import { loadJson, saveJson, WORKSHOP_KEY } from "@/lib/storage";
+
+const Lab3D = dynamic(() => import("@/components/lab/lab-3d"), {
+  ssr: false,
+  loading: () => <p style={{ padding: 16, fontSize: 12 }}>Loading 3D…</p>,
+});
 
 type W = {
   serif: boolean;
@@ -138,6 +145,7 @@ export default function LabPage() {
       <Room3D />
       <Radial />
       <Chain />
+      <TypeLab />
       <NervousType />
       <GravityWords />
       <Hum />
@@ -145,75 +153,61 @@ export default function LabPage() {
   );
 }
 
+/** Decision: pick a decision, move the slider, watch the room change. */
+function Decision() {
+  const [d, setD] = useState("scale");
+  const [v, setV] = useState(50);
+  const st = { scale: { fontSize: `${1.1 + v * 0.05}rem` }, weight: { fontWeight: 100 + v * 8 }, contrast: { color: `hsl(0 0% ${70 - v * 0.7}%)` }, space: {} } as Record<string, CSSProperties>;
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">01 · Change one decision — pick, slide, watch the room change</p>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 12 }} role="radiogroup" aria-label="Decision">
+        {[["scale", "Size"], ["weight", "Weight"], ["contrast", "Contrast"], ["space", "Space"]].map(([k, l]) => (
+          <button key={k} role="radio" aria-checked={d === k} onClick={() => setD(k)} style={{ border: "1px solid var(--fg)", background: d === k ? "var(--fg)" : "transparent", color: d === k ? "var(--bg)" : "var(--fg)", padding: "6px 12px", fontSize: 12 }}>
+            {l}
+          </button>
+        ))}
+      </div>
+      <label style={{ display: "flex", gap: 12, alignItems: "center", fontSize: 12, marginTop: 12 }}>
+        Decision {v}
+        <input type="range" min={0} max={100} step={1} value={v} onChange={(e) => setV(+e.target.value)} aria-label="Decision" style={{ flex: 1 }} />
+      </label>
+      <div style={{ marginTop: 12, background: "#efe9dc", color: "#1a1712", padding: 20, paddingBlock: d === "space" ? 8 + v * 0.5 : 20 }} aria-live="polite">
+        <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.2em" }}>House · Work · Index</p>
+        <p style={{ fontSize: "1.6rem", fontWeight: 700, lineHeight: "tight", margin: "12px 0 0", ...st[d] }}>The room after the decision.</p>
+        <p style={{ fontSize: "0.9rem", marginTop: d === "space" ? v * 0.3 : 8 }}>Hierarchy is not a style. It is what you chose to make large.</p>
+        <div style={{ marginTop: 12, display: "flex", gap: 8 }}>
+          <span style={{ background: "#1a1712", padding: 8, fontSize: 12, color: "#fff", marginRight: d === "space" ? v * 0.4 : 0 }}>Object 1</span>
+          <span style={{ border: "1px solid #1a1712", padding: 8, fontSize: 12 }}>Object 2</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /** Liquid type: the word rendered offscreen, redrawn as slices bent toward the pointer. */
 function LiquidType() {
-  const ref = useRef<HTMLCanvasElement | null>(null);
-  const [visc, setVisc] = useState(26);
-  useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const mouse = { x: 0.5, y: 0.5 };
-    let raf = 0;
-    let t = 0;
-    const off = document.createElement("canvas");
-    const paint = () => {
-      const W = (canvas.width = canvas.offsetWidth);
-      const H = (canvas.height = 240);
-      const o = off.getContext("2d");
-      if (!o) return;
-      off.width = W;
-      off.height = H;
-      const fg = getComputedStyle(document.body).getPropertyValue("--fg").trim() || "#fff";
-      const bg = getComputedStyle(document.body).getPropertyValue("--bg").trim() || "#000";
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, W, H);
-      o.fillStyle = fg;
-      o.font = `800 ${Math.min(W / 5.5, 96)}px sans-serif`;
-      o.textAlign = "center";
-      o.textBaseline = "middle";
-      o.fillText("LIQUID", W / 2, H / 2);
-      const slices = 48;
-      for (let i = 0; i < slices; i++) {
-        const sy = (i / slices) * H;
-        const sh = H / slices + 1;
-        const d = Math.abs(sy / H - mouse.y);
-        const amp = visc * Math.exp(-d * 6);
-        const dx = Math.sin(t * 2 + i * 0.25) * amp + (mouse.x - 0.5) * amp * 1.4;
-        ctx.drawImage(off, 0, sy, W, sh, dx, sy, W, sh);
-      }
-    };
-    const move = (e: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = (e.clientX - rect.left) / rect.width;
-      mouse.y = (e.clientY - rect.top) / rect.height;
-    };
-    canvas.addEventListener("pointermove", move);
-    if (reduced) {
-      paint();
-      return () => canvas.removeEventListener("pointermove", move);
-    }
-    const loop = () => {
-      t += 0.016;
-      paint();
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
-    return () => {
-      cancelAnimationFrame(raf);
-      canvas.removeEventListener("pointermove", move);
-    };
-  }, [visc]);
+  const [p, setP] = useState({ f: 0.012, s: 20 });
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)", marginTop: 24 }}>
-      <p className="kicker">01 · Liquid typography — move across it</p>
-      <canvas ref={ref} style={{ width: "100%", height: 240, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="The word LIQUID distorted toward your pointer" />
-      <label style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 12, fontSize: 12 }}>
-        VISCOSITY {visc}
-        <input type="range" min={4} max={60} value={visc} onChange={(e) => setVisc(Number(e.target.value))} aria-label="Viscosity" style={{ flex: 1 }} />
-      </label>
+      <p className="kicker">02 · Liquid typography — move the pointer across the word</p>
+      <div
+        onPointerMove={(e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          setP({ f: 0.004 + ((e.clientX - r.left) / r.width) * 0.03, s: 6 + ((e.clientY - r.top) / r.height) * 50 });
+        }}
+        style={{ display: "flex", height: 176, alignItems: "center", justifyContent: "center", overflow: "hidden", background: "#000", border: "1px solid var(--line)", marginTop: 12, touchAction: "none" }}
+      >
+        <svg viewBox="0 0 400 140" style={{ width: "100%" }} role="img" aria-label="Liquid typography: the word LIQUID distorted by pointer position">
+          <defs>
+            <filter id="liq">
+              <feTurbulence type="fractalNoise" baseFrequency={`${p.f} ${p.f * 2}`} numOctaves="2" seed="3" />
+              <feDisplacementMap in="SourceGraphic" scale={p.s} />
+            </filter>
+          </defs>
+          <text x="200" y="100" textAnchor="middle" fontSize="92" fontWeight="900" fill="#ffd23f" filter="url(#liq)" fontFamily="'Space Grotesk Variable', sans-serif">LIQUID</text>
+        </svg>
+      </div>
     </section>
   );
 }
@@ -285,7 +279,7 @@ function Boids() {
   }, []);
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">02 · Boids — sixty specks, three rules, no leader</p>
+      <p className="kicker">03 · Boids — sixty specks, three rules, no leader</p>
       <canvas ref={ref} style={{ width: "100%", height: 260, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="Flocking specks following separation, alignment and cohesion" />
       <p style={{ fontSize: "0.9rem", color: "var(--muted)" }}>Separation, alignment, cohesion. The flock is never computed — only the three rules are.</p>
     </section>
@@ -500,7 +494,7 @@ function PosterGen() {
   }, []);
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">03 · Generative poster — nine kinds, spacebar rerolls</p>
+      <p className="kicker">04 · Generative poster — nine kinds, spacebar rerolls</p>
       <canvas ref={ref} style={{ width: "100%", height: 240, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="Generated poster" />
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
         {PLATE_KINDS.map((k) => (
@@ -560,7 +554,7 @@ void main(){
 function ShaderPlay() {
   const ref = useRef<HTMLCanvasElement | null>(null);
   const uni = useRef({ f: 4, s: 1, h: 0.6, w: 0.5 });
-  const [v, setV] = useState(uni.current);
+  const [v, setV] = useState({ f: 4, s: 1, h: 0.6, w: 0.5 });
   const [ok, setOk] = useState(true);
   useEffect(() => {
     const canvas = ref.current;
@@ -633,7 +627,7 @@ function ShaderPlay() {
   }, []);
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">04 · Shader playground — a live fragment shader, four uniforms</p>
+      <p className="kicker">05 · Shader playground — a live fragment shader, four uniforms</p>
       {ok ? (
         <canvas ref={ref} style={{ width: "100%", height: 240, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="Live GLSL shader with adjustable uniforms" />
       ) : (
@@ -676,7 +670,7 @@ function RoomGen() {
   }
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">05 · Room generator — change one decision, the room changes</p>
+      <p className="kicker">06 · Room generator — change one decision, the room changes</p>
       <svg viewBox="-10 -10 460 300" style={{ width: "100%", border: "1px solid var(--line)", marginTop: 12, background: "var(--bg)" }} role="img" aria-label={`Generated plan with ${rooms} rooms`}>
         {cells.map((c, i) => (
           <g key={i}>
@@ -704,9 +698,9 @@ function RoomGen() {
 function Fountain() {
   const ref = useRef<HTMLCanvasElement | null>(null);
   const [g, setG] = useState(300);
-  const gRef = useRef(g);
+  const gr = useRef(g);
   useEffect(() => {
-    gRef.current = g;
+    gr.current = g;
   }, [g]);
   useEffect(() => {
     const canvas = ref.current;
@@ -717,46 +711,43 @@ function Fountain() {
     let raf = 0;
     let last = performance.now();
     let ps: { x: number; y: number; vx: number; vy: number; l: number }[] = [];
-    const fg = getComputedStyle(document.body).getPropertyValue("--fg").trim() || "#fff";
-    const bg = getComputedStyle(document.body).getPropertyValue("--bg").trim() || "#000";
-    const emit = (px: number, py: number) => {
-      for (let i = 0; i < 40; i++) {
-        ps.push({ x: px, y: py, vx: (Math.random() - 0.5) * 200, vy: -150 - Math.random() * 250, l: 2 });
-      }
+    let src = { x: 200, y: 160 };
+    const em = (px: number, py: number) => {
+      src = { x: px, y: py };
+      for (let i = 0; i < 40; i++) ps.push({ x: px, y: py, vx: (Math.random() - 0.5) * 200, vy: -150 - Math.random() * 250, l: 2 });
     };
     if (reduced) {
-      emit(canvas.width / 2, canvas.height - 20);
-      ctx.fillStyle = bg;
+      em(200, 150);
+      ctx.fillStyle = "#000";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = fg;
+      ctx.fillStyle = "#ffd23f";
       for (const p of ps) ctx.fillRect(p.x, p.y, 3, 3);
       return;
     }
     const dn = (e: PointerEvent) => {
       const r = canvas.getBoundingClientRect();
-      emit(((e.clientX - r.left) / r.width) * canvas.width, ((e.clientY - r.top) / r.height) * canvas.height);
+      em(((e.clientX - r.left) / r.width) * canvas.width, ((e.clientY - r.top) / r.height) * canvas.height);
     };
     canvas.addEventListener("pointerdown", dn);
-    const frame = (n: number) => {
+    const f = (n: number) => {
+      void src;
       const dt = Math.min(0.05, (n - last) / 1000);
       last = n;
-      ctx.fillStyle = "rgba(0,0,0,0.3)";
+      ctx.fillStyle = "rgba(0,0,0,.3)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       for (const p of ps) {
-        p.vy += gRef.current * dt;
+        p.vy += gr.current * dt;
         p.x += p.vx * dt;
         p.y += p.vy * dt;
         p.l -= dt;
         if (p.y > canvas.height) { p.y = canvas.height; p.vy *= -0.5; }
-        ctx.fillStyle = fg;
-        ctx.globalAlpha = Math.max(0, p.l / 2);
+        ctx.fillStyle = `rgba(255,210,63,${Math.max(0, p.l / 2)})`;
         ctx.fillRect(p.x, p.y, 3, 3);
       }
-      ctx.globalAlpha = 1;
       ps = ps.filter((p) => p.l > 0);
-      raf = requestAnimationFrame(frame);
+      raf = requestAnimationFrame(f);
     };
-    raf = requestAnimationFrame(frame);
+    raf = requestAnimationFrame(f);
     return () => {
       cancelAnimationFrame(raf);
       canvas.removeEventListener("pointerdown", dn);
@@ -764,12 +755,13 @@ function Fountain() {
   }, []);
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">06 · Particle fountain — click to emit, gravity goes negative</p>
-      <canvas ref={ref} width={400} height={176} style={{ width: "100%", height: 176, display: "block", border: "1px solid var(--line)", marginTop: 12, touchAction: "none", cursor: "crosshair" }} aria-label="Particle fountain: click or tap to emit" />
+      <p className="kicker">07 · Particle system — click to emit, gravity goes negative</p>
+      <canvas ref={ref} width={400} height={176} style={{ width: "100%", height: 176, display: "block", border: "1px solid var(--line)", marginTop: 12, touchAction: "none", cursor: "crosshair", background: "#000" }} aria-label="Particle fountain: click or tap to emit" />
       <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, marginTop: 12 }}>
         Gravity {g}
         <input type="range" min={-300} max={900} step={10} value={g} onChange={(e) => setG(Number(e.target.value))} aria-label="Gravity" style={{ flex: 1 }} />
       </label>
+      <p style={{ fontSize: 11, color: "var(--muted)" }}>Click or tap the canvas to emit.</p>
     </section>
   );
 }
@@ -843,7 +835,7 @@ function Drone() {
   }, []);
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">07 · Audio visualiser — three oscillators, no samples</p>
+      <p className="kicker">08 · Audio visualiser — three oscillators, no samples</p>
       <canvas ref={ref} width={400} height={120} style={{ width: "100%", height: 120, display: "block", border: "1px solid var(--line)", marginTop: 12 }} role="img" aria-label={on ? "Live audio spectrum" : "Audio visualiser, silent"} />
       <div style={{ display: "flex", gap: 12, marginTop: 12, alignItems: "center" }}>
         <button type="button" onClick={toggle} style={{ border: "1px solid var(--fg)", background: on ? "var(--fg)" : "transparent", color: on ? "var(--bg)" : "var(--fg)", padding: "10px 18px", fontSize: 12, fontWeight: 700 }}>
@@ -862,71 +854,57 @@ function Drone() {
 /** Terrain: ridge lines from summed sine octaves. Every seed a landscape; same seed, same land. */
 function Terrain() {
   const ref = useRef<HTMLCanvasElement | null>(null);
-  const [seed, setSeed] = useState(7);
-  const [ridges, setRidges] = useState(46);
-  const [fly, setFly] = useState(false);
+  const [s, setS] = useState({ seed: 7, amp: 40, oct: 3 });
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    const W = (canvas.width = canvas.offsetWidth);
-    const H = (canvas.height = 220);
-    const fg = getComputedStyle(document.body).getPropertyValue("--fg").trim() || "#fff";
-    const bg = getComputedStyle(document.body).getPropertyValue("--bg").trim() || "#000";
-    const h = (i: number, j: number, oct: number, t: number) => {
+    const W = (canvas.width = 400);
+    const H = (canvas.height = 176);
+    const h = (i: number, j: number) => {
       let v = 0;
-      for (let o = 0; o < oct; o++) {
+      for (let o = 0; o < s.oct; o++) {
         const f = 2 ** o;
-        v += (Math.sin(i * 0.11 * f + seed * 1.7 + o + t) * Math.cos(j * 0.17 * f + seed * 0.9)) / f;
+        v += (Math.sin(i * 0.11 * f + s.seed * 1.7 + o) * Math.cos(j * 0.17 * f + s.seed * 0.9)) / f;
       }
       return v;
     };
-    const paint = (t: number) => {
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, W, H);
-      for (let k = ridges; k >= 0; k--) {
-        const d = k / ridges;
-        ctx.beginPath();
-        ctx.moveTo(0, H);
-        for (let x = 0; x <= W; x += 8) {
-          const y = H * (0.35 + d * 0.6) - h(x / 8, k, 3, t) * 60 * (1 - d * 0.5) - Math.sin(x * 0.01 + k) * 8;
-          ctx.lineTo(x, y);
-        }
-        ctx.lineTo(W, H);
-        ctx.closePath();
-        ctx.fillStyle = bg;
-        ctx.fill();
-        ctx.strokeStyle = fg;
-        ctx.globalAlpha = 0.5 - d * 0.4;
-        ctx.stroke();
-        ctx.globalAlpha = 1;
+    ctx.fillStyle = "#0a0a0a";
+    ctx.fillRect(0, 0, W, H);
+    for (let j = 0; j < 40; j++) {
+      ctx.beginPath();
+      for (let i = 0; i <= 80; i++) {
+        const X = 20 + i * 4.75;
+        const Y = 40 + j * 3.5 - h(i, j) * s.amp * Math.sin((i / 80) * Math.PI);
+        if (i) ctx.lineTo(X, Y);
+        else ctx.moveTo(X, Y);
       }
-    };
-    if (!fly) {
-      paint(0);
-      return;
+      ctx.lineTo(400, 176);
+      ctx.lineTo(0, 176);
+      ctx.closePath();
+      ctx.fillStyle = "#0a0a0a";
+      ctx.fill();
+      ctx.strokeStyle = `rgba(255,210,63,${0.25 + j / 55})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
     }
-    let raf = 0;
-    const t0 = performance.now();
-    const loop = () => {
-      paint((performance.now() - t0) / 2000);
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
-  }, [seed, ridges, fly]);
+  }, [s]);
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">08 · Procedural terrain — ridge lines, seeded, flyable</p>
-      <canvas ref={ref} style={{ width: "100%", height: 220, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="Procedural terrain" />
+      <p className="kicker">09 · Procedural terrain — ridge lines from summed sine octaves</p>
+      <canvas ref={ref} style={{ width: "100%", height: 176, display: "block", border: "1px solid var(--line)", marginTop: 12, background: "#000" }} aria-label="Procedural terrain drawn as ridge lines" />
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
-        <button type="button" onClick={() => setFly((f) => !f)} aria-pressed={fly} style={{ border: "1px solid var(--fg)", background: fly ? "var(--fg)" : "transparent", color: fly ? "var(--bg)" : "var(--fg)", padding: "8px 16px", fontSize: 12 }}>
-          {fly ? "■ Land" : "▶ Fly"}
+        <button type="button" onClick={() => setS({ ...s, seed: s.seed + 1 })} style={{ border: "1px solid var(--fg)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12 }}>
+          New terrain ({s.seed})
         </button>
-        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 200 }}>
-          Ridges {ridges}
-          <input type="range" min={8} max={80} value={ridges} onChange={(e) => setRidges(Number(e.target.value))} aria-label="Ridges" style={{ flex: 1 }} />
+        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 160 }}>
+          Height {s.amp}
+          <input type="range" min={5} max={90} value={s.amp} onChange={(e) => setS({ ...s, amp: Number(e.target.value) })} aria-label="Height" style={{ flex: 1 }} />
+        </label>
+        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 160 }}>
+          Detail {s.oct}
+          <input type="range" min={1} max={5} value={s.oct} onChange={(e) => setS({ ...s, oct: Number(e.target.value) })} aria-label="Detail" style={{ flex: 1 }} />
         </label>
       </div>
     </section>
@@ -934,156 +912,27 @@ function Terrain() {
 }
 
 /** 3D room: seeded raw-three.js box room. Drag to orbit, scroll to zoom. */
+/** 3D room generator: dimensions rebuild a real WebGL room with contents. */
 function Room3D() {
-  const mount = useRef<HTMLDivElement | null>(null);
-  const [dims, setDims] = useState({ w: 8, d: 6, h: 3, items: 8, seed: 3 });
+  const [r, setR] = useState({ w: 8, d: 6, h: 3, items: 8, seed: 3 });
   const [wall, setWall] = useState("#c9b8a0");
-  const cfg = useRef(dims);
-  const wallRef = useRef(wall);
-  useEffect(() => {
-    cfg.current = dims;
-    wallRef.current = wall;
-  }, [dims, wall]);
-  useEffect(() => {
-    let raf = 0;
-    let dead = false;
-    let cleanup = () => {};
-    void import("three").then((m) => {
-      if (dead) return;
-      const T = m;
-      const el = mount.current;
-      if (!el) return;
-      const W = el.clientWidth || 1;
-      const H = 260;
-      const renderer = new T.WebGLRenderer({ antialias: true });
-      renderer.setSize(W, H);
-      renderer.domElement.style.width = "100%";
-      renderer.domElement.style.display = "block";
-      renderer.domElement.style.touchAction = "none";
-      el.appendChild(renderer.domElement);
-      const scene = new T.Scene();
-      scene.background = new T.Color(0x15151a);
-      const camera = new T.PerspectiveCamera(45, W / H, 0.1, 200);
-      scene.add(new T.AmbientLight(0xffffff, 0.6));
-      const sun = new T.DirectionalLight(0xffffff, 1.6);
-      sun.position.set(5, 8, 4);
-      scene.add(sun);
-      const group = new T.Group();
-      scene.add(group);
-      const build = () => {
-        const { w, d, h, items, seed } = cfg.current;
-        while (group.children.length) {
-          const o = group.children.pop()!;
-          group.remove(o);
-        }
-        const r = rng(seed * 991 + 3);
-        const floor = new T.Mesh(
-          new T.PlaneGeometry(w, d),
-          new T.MeshStandardMaterial({ color: 0x8a6a48, roughness: 0.7 }),
-        );
-        floor.rotation.x = -Math.PI / 2;
-        group.add(floor);
-        const wallMat = new T.MeshStandardMaterial({ color: new T.Color(wallRef.current), roughness: 0.9 });
-        const back = new T.Mesh(new T.BoxGeometry(w, h, 0.1), wallMat);
-        back.position.set(0, h / 2, -d / 2);
-        group.add(back);
-        const side = new T.Mesh(new T.BoxGeometry(0.1, h, d), wallMat);
-        side.position.set(-w / 2, h / 2, 0);
-        group.add(side);
-        for (let i = 0; i < items; i++) {
-          const s: [number, number, number] = [0.4 + r() * 0.9, 0.3 + r() * 1.1, 0.4 + r() * 0.9];
-          const mesh = new T.Mesh(
-            new T.BoxGeometry(s[0], s[1], s[2]),
-            new T.MeshStandardMaterial({ color: new T.Color(`hsl(${Math.floor(r() * 360)},35%,${45 + Math.floor(r() * 25)}%)`), roughness: 0.6 }),
-          );
-          mesh.position.set((r() - 0.5) * (w - 1.2), s[1] / 2, (r() - 0.5) * (d - 1.2));
-          group.add(mesh);
-        }
-        const { w: bw, d: bd, h: bh } = cfg.current;
-        camera.position.set(bw * 0.9, bh * 1.6, bd * 1.2);
-        camera.lookAt(0, bh / 3, 0);
-      };
-      build();
-      let theta = 0.6;
-      let dist = 14;
-      let dragging: { x: number; y: number } | null = null;
-      const dom = renderer.domElement;
-      const down = (e: PointerEvent) => {
-        dragging = { x: e.clientX, y: e.clientY };
-        dom.setPointerCapture(e.pointerId);
-      };
-      const mv = (e: PointerEvent) => {
-        if (!dragging) return;
-        theta += (e.clientX - dragging.x) * 0.008;
-        dragging = { x: e.clientX, y: e.clientY };
-      };
-      const up = () => { dragging = null; };
-      const wheel = (e: WheelEvent) => {
-        e.preventDefault();
-        dist = Math.max(6, Math.min(30, dist + e.deltaY * 0.02));
-      };
-      dom.addEventListener("pointerdown", down);
-      dom.addEventListener("pointermove", mv);
-      dom.addEventListener("pointerup", up);
-      dom.addEventListener("wheel", wheel, { passive: false });
-      const size = () => {
-        const w = el.clientWidth || 1;
-        renderer.setSize(w, 260, false);
-        camera.aspect = w / 260;
-        camera.updateProjectionMatrix();
-      };
-      window.addEventListener("resize", size);
-      let lastKey = "";
-      const loop = () => {
-        const key = JSON.stringify([cfg.current.w, cfg.current.d, cfg.current.h, cfg.current.items, cfg.current.seed]);
-        if (key !== lastKey) {
-          lastKey = key;
-          build();
-        }
-        const bh = cfg.current.h;
-        camera.position.set(
-          Math.sin(theta) * dist,
-          bh * 1.6,
-          Math.cos(theta) * dist,
-        );
-        camera.lookAt(0, bh / 3, 0);
-        renderer.render(scene, camera);
-        raf = requestAnimationFrame(loop);
-      };
-      raf = requestAnimationFrame(loop);
-      cleanup = () => {
-        cancelAnimationFrame(raf);
-        window.removeEventListener("resize", size);
-        dom.removeEventListener("pointerdown", down);
-        dom.removeEventListener("pointermove", mv);
-        dom.removeEventListener("pointerup", up);
-        dom.removeEventListener("wheel", wheel);
-        renderer.dispose();
-        if (dom.parentElement === el) el.removeChild(dom);
-      };
-    });
-    return () => {
-      dead = true;
-      cleanup();
-    };
-  }, []);
-  // Controls read the live dims below.
-  const geo = dims;
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">09 · 3D room generator — real WebGL, drag to orbit</p>
-      <div ref={mount} style={{ width: "100%", height: 260, border: "1px solid var(--line)", marginTop: 12 }} role="application" aria-label="Procedural 3D room. Drag to orbit, scroll to zoom." />
+      <p className="kicker">10 · 3D room generator — real WebGL, change the dimensions</p>
+      <div style={{ height: 260, border: "1px solid var(--line)", marginTop: 12 }}>
+        <Lab3D {...r} wall={wall} />
+      </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12, marginTop: 12 }}>
         {(["w", "d", "h", "items"] as const).map((k) => (
           <label key={k} style={{ fontSize: 12 }}>
-            {k.toUpperCase()} {geo[k]}
+            {k.toUpperCase()} {r[k]}
             <input
               type="range"
               min={k === "items" ? 0 : k === "h" ? 2 : 4}
               max={k === "items" ? 20 : k === "h" ? 5 : 14}
               step={k === "h" ? 0.5 : 1}
-              value={geo[k]}
-              onChange={(e) => setDims({ ...geo, [k]: Number(e.target.value) })}
+              value={r[k]}
+              onChange={(e) => setR({ ...r, [k]: Number(e.target.value) })}
               aria-label={k}
               style={{ width: "100%" }}
             />
@@ -1094,8 +943,8 @@ function Room3D() {
           <input type="color" value={wall} onChange={(e) => setWall(e.target.value)} aria-label="Wall color" style={{ display: "block", width: 60, height: 30 }} />
         </label>
       </div>
-      <button type="button" onClick={() => setDims({ ...geo, seed: geo.seed + 1 })} style={{ border: "1px solid var(--fg)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12, marginTop: 12 }}>
-        New layout ({geo.seed})
+      <button type="button" onClick={() => setR({ ...r, seed: r.seed + 1 })} style={{ border: "1px solid var(--fg)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12, marginTop: 12 }}>
+        New layout ({r.seed})
       </button>
     </section>
   );
@@ -1107,7 +956,7 @@ function Radial() {
   const items: [string, string][] = [["Worlds", "/matrix"], ["Lab", "/lab"], ["Tools", "/tools"], ["Studio", "/studio"], ["OS", "/os"], ["Start", "/start"]];
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">10 · Experimental navigation — click anywhere, choose a door</p>
+      <p className="kicker">11 · Experimental navigation — click anywhere, choose a door</p>
       <div
         style={{ position: "relative", height: 220, overflow: "hidden", border: "1px solid var(--line)", marginTop: 12, background: "var(--bg)" }}
         onPointerDown={(e) => {
@@ -1122,20 +971,21 @@ function Radial() {
         {o && items.map(([l, h], i) => {
           const a = (i / items.length) * Math.PI * 2 - Math.PI / 2;
           return (
-            <a
-              key={l}
-              href={h}
-              style={{
-                position: "absolute",
-                width: 64, height: 64, borderRadius: "50%",
-                display: "grid", placeItems: "center",
-                background: "var(--fg)", color: "var(--bg)",
-                fontSize: 10, fontWeight: 700,
-                left: Math.max(34, Math.min(366, o.x + Math.cos(a) * 62)),
-                top: Math.max(34, Math.min(186, o.y + Math.sin(a) * 52)),
-                transform: "translate(-50%,-50%)",
-              }}
-            >
+              <a
+                key={l}
+                href={h}
+                style={{
+                  position: "absolute",
+                  width: 64, height: 64, borderRadius: "50%",
+                  display: "grid", placeItems: "center",
+                  background: "var(--fg)", color: "var(--bg)",
+                  fontSize: 10, fontWeight: 700,
+                  left: Math.max(34, Math.min(366, o.x + Math.cos(a) * 62)),
+                  top: Math.max(34, Math.min(186, o.y + Math.sin(a) * 52)),
+                  transform: "translate(-50%,-50%)",
+                  animation: `wasp-in .3s ${i * 0.04}s both`,
+                }}
+              >
               {l}
             </a>
           );
@@ -1161,43 +1011,40 @@ function Chain() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const W = (canvas.width = canvas.offsetWidth);
+    const W = (canvas.width = 400);
     const H = (canvas.height = 176);
-    const fg = getComputedStyle(document.body).getPropertyValue("--fg").trim() || "#fff";
-    const bg = getComputedStyle(document.body).getPropertyValue("--bg").trim() || "#000";
-    const ptr = { x: W / 2, y: H / 2 };
-    let chain: { x: number; y: number }[] = [];
+    const ptr = { x: 150, y: 80 };
+    const seg: { x: number; y: number }[] = [];
     const paint = () => {
       const { stiff: k, links: n } = cfg.current;
-      if (chain.length !== n) chain = Array.from({ length: n }, () => ({ x: W / 2, y: H / 2 }));
-      ctx.fillStyle = bg;
+      while (seg.length < n) seg.push({ x: 150, y: 80 });
+      seg.length = n;
+      ctx.fillStyle = "rgba(0,0,0,.25)";
       ctx.fillRect(0, 0, W, H);
       let tx = ptr.x;
       let ty = ptr.y;
-      chain.forEach((s, i) => {
+      seg.forEach((s, i) => {
         s.x += (tx - s.x) * k;
         s.y += (ty - s.y) * k;
         tx = s.x;
         ty = s.y;
-        ctx.fillStyle = fg;
-        ctx.globalAlpha = 1 - (i / n) * 0.7;
+        ctx.fillStyle = `hsl(${48 - i * 3},100%,${62 - i * 2}%)`;
         ctx.beginPath();
-        ctx.arc(s.x, s.y, 14 - i * 0.8, 0, Math.PI * 2);
+        ctx.arc(s.x, s.y, 14 - i * 0.8, 0, 7);
         ctx.fill();
       });
-      ctx.globalAlpha = 1;
     };
-    const mv = (e: PointerEvent) => {
-      const r = canvas.getBoundingClientRect();
-      ptr.x = ((e.clientX - r.left) / r.width) * W;
-      ptr.y = ((e.clientY - r.top) / r.height) * H;
-    };
-    canvas.addEventListener("pointermove", mv);
     if (reduced) {
       paint();
-      return () => canvas.removeEventListener("pointermove", mv);
+      return;
     }
     let raf = 0;
+    const mv = (e: PointerEvent) => {
+      const r = canvas.getBoundingClientRect();
+      ptr.x = ((e.clientX - r.left) / r.width) * canvas.width;
+      ptr.y = ((e.clientY - r.top) / r.height) * canvas.height;
+    };
+    canvas.addEventListener("pointermove", mv);
     const loop = () => {
       paint();
       raf = requestAnimationFrame(loop);
@@ -1210,7 +1057,7 @@ function Chain() {
   }, []);
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">11 · Physics chain — each link chases the one before it</p>
+      <p className="kicker">12 · Physics chain — each link chases the one before it</p>
       <canvas ref={ref} style={{ width: "100%", height: 176, display: "block", border: "1px solid var(--line)", marginTop: 12, touchAction: "none" }} aria-label="A chain of circles following the pointer with lag" />
       <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginTop: 12 }}>
         <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 200 }}>
@@ -1226,13 +1073,54 @@ function Chain() {
   );
 }
 
+/** Variable type: weight follows the pointer, per letter. */
+function TypeLab() {
+  const [p, setP] = useState<{ x: number; y: number } | null>(null);
+  const text = "VARIABLE";
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">13 · Interactive type — a variable font, weight follows distance</p>
+      <div
+        onPointerMove={(e) => setP({ x: e.clientX, y: e.clientY })}
+        onPointerLeave={() => setP(null)}
+        style={{ display: "flex", minHeight: 176, alignItems: "center", justifyContent: "center", border: "1px solid var(--line)", marginTop: 12, background: "#000", color: "#ffd23f", touchAction: "none", fontFamily: "'Space Grotesk Variable', sans-serif" }}
+        role="img"
+        aria-label="Interactive type: letters grow heavier near the pointer"
+      >
+        {text.split("").map((ch, i) => (
+          <TypeLetter key={i} ch={ch} p={p} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function TypeLetter({ ch, p }: { ch: string; p: { x: number; y: number } | null }) {
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const [w, setW] = useState(300);
+  useEffect(() => {
+    if (!p || !ref.current) {
+      setW(300);
+      return;
+    }
+    const b = ref.current.getBoundingClientRect();
+    const d = Math.hypot(p.x - (b.left + b.width / 2), p.y - (b.top + b.height / 2));
+    setW(300 + Math.max(0, 1 - d / 160) * 400);
+  }, [p]);
+  return (
+    <span ref={ref} aria-hidden style={{ fontSize: "clamp(2rem, 7vw, 4rem)", lineHeight: 1, fontWeight: w, transition: "font-weight .12s" }}>
+      {ch}
+    </span>
+  );
+}
+
 /** Nervous type: letters grow heavier near the pointer, and settle back. */
 function NervousType() {
   const [p, setP] = useState<{ x: number; y: number } | null>(null);
   const word = "VARIABLE";
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">13 · Nervous type — weight follows your cursor</p>
+      <p className="kicker">14 · Nervous type — weight follows your cursor</p>
       <div
         style={{ display: "flex", minHeight: 176, alignItems: "center", justifyContent: "center", border: "1px solid var(--line)", marginTop: 12, touchAction: "none", overflow: "hidden" }}
         onPointerMove={(e) => {
@@ -1366,7 +1254,7 @@ function GravityWords() {
   }, [words]);
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">14 · Gravity words — they fall, pile up, and can be thrown</p>
+      <p className="kicker">15 · Gravity words — they fall, pile up, and can be thrown</p>
       <canvas ref={ref} style={{ width: "100%", height: 220, display: "block", border: "1px solid var(--line)", marginTop: 12, touchAction: "none", cursor: "grab" }} aria-label="Words falling under gravity; drag to throw them" />
     </section>
   );
@@ -1447,7 +1335,7 @@ function Hum() {
   }
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">15 · Hum — move across it to play, watch it draw itself</p>
+      <p className="kicker">16 · Hum — move across it to play, watch it draw itself</p>
       <canvas
         ref={ref}
         width={400}
