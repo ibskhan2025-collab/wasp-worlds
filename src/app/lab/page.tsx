@@ -134,6 +134,7 @@ export default function LabPage() {
       </div>
       <hr className="rule" style={{ marginTop: 40 }} />
       <p className="kicker" style={{ marginTop: 32 }}>Experiments — raw, playable, unfinished on purpose</p>
+      <Decision />
       <LiquidType />
       <Boids />
       <PosterGen />
@@ -159,7 +160,7 @@ function Decision() {
   const [v, setV] = useState(50);
   const st = { scale: { fontSize: `${1.1 + v * 0.05}rem` }, weight: { fontWeight: 100 + v * 8 }, contrast: { color: `hsl(0 0% ${70 - v * 0.7}%)` }, space: {} } as Record<string, CSSProperties>;
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
       <p className="kicker">01 · Change one decision — pick, slide, watch the room change</p>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 12 }} role="radiogroup" aria-label="Decision">
         {[["scale", "Size"], ["weight", "Weight"], ["contrast", "Contrast"], ["space", "Space"]].map(([k, l]) => (
@@ -189,7 +190,7 @@ function Decision() {
 function LiquidType() {
   const [p, setP] = useState({ f: 0.012, s: 20 });
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)", marginTop: 24 }}>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)", marginTop: 24 }}>
       <p className="kicker">02 · Liquid typography — move the pointer across the word</p>
       <div
         onPointerMove={(e) => {
@@ -278,7 +279,7 @@ function Boids() {
     return () => cancelAnimationFrame(raf);
   }, []);
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
       <p className="kicker">03 · Boids — sixty specks, three rules, no leader</p>
       <canvas ref={ref} style={{ width: "100%", height: 260, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="Flocking specks following separation, alignment and cohesion" />
       <p style={{ fontSize: "0.9rem", color: "var(--muted)" }}>Separation, alignment, cohesion. The flock is never computed — only the three rules are.</p>
@@ -297,191 +298,11 @@ function rng(seed: number) {
   };
 }
 
-/** Poster generator: seeded shapes + a word. Same seed, same poster — always. */
-type PlateKind = "dunes" | "peaks" | "sea" | "city" | "forest" | "ice" | "rings" | "grid" | "wave";
-const PLATE_KINDS: PlateKind[] = ["dunes", "peaks", "sea", "city", "forest", "ice", "rings", "grid", "wave"];
-
-/** Procedural imagery: every plate generated from a seed. */
-function drawPlate(ctx: CanvasRenderingContext2D, w: number, h: number, seed: number, kind: PlateKind, hue = 30) {
-  const R = rng(seed * 9973 + 11);
-  const hs = (hh: number, s: number, l: number, a = 1) => `hsla(${hh},${s}%,${l}%,${a})`;
-  const sky = (top: string, bot: string, to = h) => {
-    const g = ctx.createLinearGradient(0, 0, 0, to);
-    g.addColorStop(0, top);
-    g.addColorStop(1, bot);
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, w, h);
-  };
-  const ridge = (base: number, amp: number, freq: number, col: string, jag = 0) => {
-    const ph = R() * 10;
-    ctx.beginPath();
-    ctx.moveTo(0, h);
-    for (let x = 0; x <= w; x += jag ? 6 : 4) {
-      const y = base + Math.sin(x * freq + ph) * amp + Math.sin(x * freq * 2.3 + ph * 2) * amp * 0.4 + (jag ? (R() - 0.5) * jag : 0);
-      ctx.lineTo(x, y);
-    }
-    ctx.lineTo(w, h);
-    ctx.closePath();
-    ctx.fillStyle = col;
-    ctx.fill();
-  };
-  if (kind === "dunes") {
-    sky(hs(hue, 55, 72), hs(hue + 15, 70, 88));
-    ctx.fillStyle = hs(hue, 90, 92, 0.9);
-    ctx.beginPath();
-    ctx.arc(w * (0.2 + R() * 0.6), h * 0.28, w * 0.07, 0, 7);
-    ctx.fill();
-    for (let i = 0; i < 6; i++) ridge(h * (0.45 + i * 0.1), 18 + i * 6, 0.006 + i * 0.002, hs(hue - i * 3, 50, 62 - i * 9));
-  } else if (kind === "peaks") {
-    sky(hs(hue, 30, 60), hs(hue, 30, 90));
-    for (let i = 0; i < 5; i++) {
-      ridge(h * (0.4 + i * 0.12), 40 - i * 4, 0.004 + i * 0.001, hs(hue + 190, 25, 70 - i * 13), 30 - i * 4);
-      const g = ctx.createLinearGradient(0, h * (0.45 + i * 0.12), 0, h * (0.6 + i * 0.12));
-      g.addColorStop(0, hs(hue, 20, 92, 0));
-      g.addColorStop(1, hs(hue, 20, 92, 0.55));
-      ctx.fillStyle = g;
-      ctx.fillRect(0, h * (0.45 + i * 0.12), w, h * 0.2);
-    }
-  } else if (kind === "sea") {
-    const hz = h * (0.5 + R() * 0.12);
-    sky(hs(hue + 200, 40, 30), hs(hue, 80, 78), hz);
-    ctx.fillStyle = hs(hue + 200, 40, 30);
-    ctx.fillRect(0, 0, w, hz * 0.02);
-    const g = ctx.createLinearGradient(0, hz, 0, h);
-    g.addColorStop(0, hs(hue + 10, 60, 60));
-    g.addColorStop(1, hs(hue + 210, 50, 12));
-    ctx.fillStyle = g;
-    ctx.fillRect(0, hz, w, h - hz);
-    ctx.fillStyle = hs(hue, 95, 90, 0.9);
-    ctx.beginPath();
-    ctx.arc(w * 0.5, hz - 4, w * 0.06, Math.PI, 0);
-    ctx.fill();
-    for (let y = hz + 4; y < h; y += 5 + (y - hz) * 0.06) {
-      ctx.fillStyle = hs(hue, 90, 85, Math.max(0, 0.5 - (y - hz) / h));
-      const ww = w * 0.12 * R() + 10;
-      ctx.fillRect(w * 0.5 - ww / 2 + (R() - 0.5) * 30, y, ww, 1.5);
-    }
-  } else if (kind === "city") {
-    sky(hs(hue + 220, 50, 8), hs(hue + 280, 50, 24));
-    for (let l = 0; l < 3; l++) {
-      let x = -10;
-      while (x < w) {
-        const bw = 20 + R() * 50;
-        const bh = h * (0.15 + R() * 0.4) * (1 - l * 0.2);
-        ctx.fillStyle = hs(hue + 230, 30, 6 + l * 6);
-        ctx.fillRect(x, h - bh - l * 30, bw, bh + l * 30);
-        if (l < 2)
-          for (let wy = h - bh - l * 30 + 8; wy < h - 8; wy += 10)
-            for (let wx = x + 4; wx < x + bw - 4; wx += 8) if (R() > 0.72) { ctx.fillStyle = hs(hue + 10, 90, 70, 0.85); ctx.fillRect(wx, wy, 3, 4); }
-        x += bw + R() * 4;
-      }
-    }
-  } else if (kind === "forest") {
-    sky(hs(hue + 100, 20, 70), hs(hue + 90, 20, 92));
-    for (let l = 0; l < 4; l++) {
-      ctx.fillStyle = hs(hue + 110, 30 - l * 4, 62 - l * 15);
-      for (let x = -20; x < w + 20; x += 14 + R() * 12) {
-        const th = h * (0.3 + R() * 0.25) * (1 + l * 0.12);
-        const by = h * (0.62 + l * 0.11);
-        ctx.beginPath();
-        ctx.moveTo(x, by - th);
-        ctx.lineTo(x - 14 - l * 3, by);
-        ctx.lineTo(x + 14 - l * 3, by);
-        ctx.fill();
-      }
-      const g = ctx.createLinearGradient(0, h * (0.5 + l * 0.1), 0, h * (0.75 + l * 0.1));
-      g.addColorStop(0, hs(hue + 90, 20, 92, 0));
-      g.addColorStop(1, hs(hue + 90, 20, 92, 0.5));
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, w, h);
-    }
-  } else if (kind === "ice") {
-    sky(hs(hue + 190, 40, 88), hs(hue + 200, 50, 62));
-    for (let i = 0; i < 14; i++) {
-      const x = R() * w, y = h * (0.35 + R() * 0.6), s = 30 + R() * 130;
-      ctx.fillStyle = hs(hue + 190 + R() * 20, 40, 50 + R() * 45, 0.9);
-      ctx.beginPath();
-      ctx.moveTo(x, y - s);
-      ctx.lineTo(x + s * 0.5, y);
-      ctx.lineTo(x - s * 0.4, y + s * 0.2);
-      ctx.fill();
-    }
-  } else if (kind === "rings") {
-    sky(hs(hue, 60, 8), hs(hue + 30, 60, 18));
-    const cx = w * (0.35 + R() * 0.3), cy = h * (0.35 + R() * 0.3);
-    for (let i = 26; i > 0; i--) {
-      ctx.strokeStyle = hs(hue + i * 6, 90, 35 + i * 2);
-      ctx.lineWidth = 1 + i * 0.25;
-      ctx.beginPath();
-      ctx.arc(cx + i * R() * 1.5, cy + i * R() * 1.5, i * (w / 36), 0, 7);
-      ctx.stroke();
-    }
-  } else if (kind === "grid") {
-    ctx.fillStyle = hs(hue, 10, 94);
-    ctx.fillRect(0, 0, w, h);
-    const n = 14;
-    for (let i = 0; i <= n; i++) {
-      ctx.strokeStyle = hs(hue, 80, 20);
-      ctx.lineWidth = 1 + R() * 2;
-      ctx.beginPath();
-      for (let j = 0; j <= 60; j++) {
-        const t = j / 60;
-        const x = (i / n) * w + Math.sin(t * 6 + seed) * 30 * Math.sin(i + seed);
-        if (j) ctx.lineTo(x, t * h);
-        else ctx.moveTo(x, 0);
-      }
-      ctx.stroke();
-    }
-    ctx.fillStyle = hs(hue + 160, 90, 50);
-    ctx.fillRect(w * 0.1, h * 0.72, w * 0.8, h * 0.08);
-  } else {
-    sky(hs(hue, 70, 12), hs(hue + 60, 80, 30));
-    for (let i = 0; i < 40; i++) {
-      ctx.strokeStyle = hs(hue + i * 4, 90, 60, 0.8);
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      for (let x = 0; x <= w; x += 6) {
-        const y = h * 0.5 + (i - 20) * 9 + Math.sin(x * 0.02 + i * 0.3 + seed) * (30 + i) * Math.sin(x * 0.004 + seed);
-        if (x) ctx.lineTo(x, y);
-        else ctx.moveTo(x, y);
-      }
-      ctx.stroke();
-    }
-  }
-  const n = Math.floor((w * h) / 30);
-  for (let i = 0; i < n; i++) {
-    ctx.fillStyle = R() > 0.5 ? "rgba(255,255,255,.05)" : "rgba(0,0,0,.06)";
-    ctx.fillRect(R() * w, R() * h, 1.5, 1.5);
-  }
-}
-
+/** Generative poster: seeded gig posters. Hover + spacebar rerolls. */
 function PosterGen() {
-  const ref = useRef<HTMLCanvasElement | null>(null);
-  const [seed, setSeed] = useState(3);
-  const [word, setWord] = useState("WASP");
-  const [kind, setKind] = useState<PlateKind>("rings");
-  const [hue, setHue] = useState(30);
+  const [seed, setSeed] = useState(1234);
   useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    const W = (canvas.width = canvas.offsetWidth);
-    const H = (canvas.height = 240);
-    drawPlate(ctx, W, H, seed, kind, hue);
-    const w = (word || "WASP").toUpperCase().slice(0, 12);
-    const size = Math.min(W / (w.length * 0.62), H * 0.5);
-    ctx.font = `900 ${size}px sans-serif`;
-    ctx.fillStyle = "rgba(255,255,255,0.92)";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(w, W / 2, H / 2);
-    ctx.font = "600 10px monospace";
-    ctx.textAlign = "left";
-    ctx.fillText(`SEED ${seed} · ${kind.toUpperCase()}`, 12, H - 14);
-  }, [seed, word, kind, hue]);
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
+    const k = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null;
       if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT")) return;
       if (e.code === "Space") {
@@ -489,56 +310,35 @@ function PosterGen() {
         setSeed((s) => s + 1);
       }
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("keydown", k);
+    return () => window.removeEventListener("keydown", k);
   }, []);
+  const r = rng(seed);
+  const pal = [["#ff3b1f", "#141412", "#efece4"], ["#1f3bff", "#ffd400", "#f5f5f5"], ["#0f7b5f", "#ffb3c7", "#fff8e8"], ["#141412", "#ffd400", "#efece4"]][Math.floor(r() * 4)];
+  const shapes = Array.from({ length: 5 + Math.floor(r() * 6) }, () => ({ t: Math.floor(r() * 3), x: r() * 300, y: r() * 420, s: 30 + r() * 160, c: pal[Math.floor(r() * 2)], rot: Math.floor(r() * 4) * 45 }));
+  const bands = ["HARBOUR STATIC", "MIRA KENT", "DELTA DELTA", "PAPER SUNS"];
+  const cities = ["LISBON", "BERLIN", "ISTANBUL", "LONDON"];
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">04 · Generative poster — nine kinds, spacebar rerolls</p>
-      <canvas ref={ref} style={{ width: "100%", height: 240, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="Generated poster" />
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
-        {PLATE_KINDS.map((k) => (
-          <button key={k} type="button" onClick={() => setKind(k)} aria-pressed={kind === k} style={{ border: "1px solid var(--line)", background: kind === k ? "var(--fg)" : "transparent", color: kind === k ? "var(--bg)" : "var(--fg)", padding: "6px 12px", fontSize: 11 }}>
-            {k}
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">04 · Generative poster — seeded gig posters, spacebar rerolls</p>
+      <div style={{ display: "flex", gap: 24, alignItems: "center", marginTop: 12, flexWrap: "wrap" }}>
+        <svg viewBox="0 0 300 420" style={{ height: 320, background: pal[2], border: "1px solid var(--line)" }} role="img" aria-label={`Generative poster, seed ${seed}`}>
+          {shapes.map((s, i) => s.t === 0 ? <circle key={i} cx={s.x} cy={s.y} r={s.s / 2} fill={s.c} style={{ mixBlendMode: "multiply" }} /> : s.t === 1 ? <rect key={i} x={s.x - s.s / 2} y={s.y - s.s / 2} width={s.s} height={s.s / 3} fill={s.c} transform={`rotate(${s.rot} ${s.x} ${s.y})`} /> : <path key={i} d={`M${s.x},${s.y} l${s.s / 2},${s.s} l${-s.s},0 z`} fill={s.c} style={{ mixBlendMode: "multiply" }} />)}
+          <text x="16" y="370" fontFamily="'Archivo Black', sans-serif" fontSize="26" fill={pal[1]}>{bands[seed % 4]}</text>
+          <text x="16" y="398" fontFamily="monospace" fontSize="10" fill={pal[1]}>{cities[(seed >> 1) % 4]} · LIVE · SEED {seed}</text>
+        </svg>
+        <div style={{ fontSize: 12, color: "var(--muted)", maxWidth: 220 }}>
+          <p>Seeded PRNG → palette, 5–10 shapes, blend modes. Same seed, same poster, forever.</p>
+          <button type="button" onClick={() => setSeed((s) => s + 1)} style={{ border: "1px solid var(--fg)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12 }}>
+            Another (or press space)
           </button>
-        ))}
-      </div>
-      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
-        <button type="button" onClick={() => setSeed((s) => s + 1)} style={{ border: "1px solid var(--fg)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12 }}>
-          New poster ({seed})
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            const c = ref.current;
-            if (!c) return;
-            c.toBlob((b) => {
-              if (!b) return;
-              const u = URL.createObjectURL(b);
-              const a = document.createElement("a");
-              a.href = u;
-              a.download = `wasp-poster-${seed}.png`;
-              a.click();
-              URL.revokeObjectURL(u);
-            });
-          }}
-          style={{ border: "1px solid var(--line)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12 }}
-        >
-          Download PNG
-        </button>
-        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12 }}>
-          Word
-          <input value={word} maxLength={12} onChange={(e) => setWord(e.target.value)} aria-label="Poster word" style={{ border: "1px solid var(--line)", background: "transparent", color: "var(--fg)", padding: "8px 12px" }} />
-        </label>
-        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12 }}>
-          Hue {hue}
-          <input type="range" min={0} max={360} value={hue} onChange={(e) => setHue(Number(e.target.value))} aria-label="Hue" />
-        </label>
-        <span style={{ fontSize: 11, color: "var(--muted)" }}>Spacebar rerolls (outside inputs).</span>
+          <p>Seed: <input type="number" value={seed} onChange={(e) => setSeed(Math.max(1, Number(e.target.value) || 1))} aria-label="Seed" style={{ width: 90, background: "transparent", color: "var(--fg)", border: "1px solid var(--line)", padding: "4px 8px" }} /></p>
+        </div>
       </div>
     </section>
   );
 }
+
 
 const FRAG = `precision mediump float;
 uniform vec2 u_res; uniform float u_time; uniform float u_freq; uniform float u_speed; uniform float u_hue; uniform float u_warp;
@@ -626,7 +426,7 @@ function ShaderPlay() {
     return () => cancelAnimationFrame(raf);
   }, []);
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
       <p className="kicker">05 · Shader playground — a live fragment shader, four uniforms</p>
       {ok ? (
         <canvas ref={ref} style={{ width: "100%", height: 240, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="Live GLSL shader with adjustable uniforms" />
@@ -669,7 +469,7 @@ function RoomGen() {
     x += w;
   }
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
       <p className="kicker">06 · Room generator — change one decision, the room changes</p>
       <svg viewBox="-10 -10 460 300" style={{ width: "100%", border: "1px solid var(--line)", marginTop: 12, background: "var(--bg)" }} role="img" aria-label={`Generated plan with ${rooms} rooms`}>
         {cells.map((c, i) => (
@@ -754,7 +554,7 @@ function Fountain() {
     };
   }, []);
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
       <p className="kicker">07 · Particle system — click to emit, gravity goes negative</p>
       <canvas ref={ref} width={400} height={176} style={{ width: "100%", height: 176, display: "block", border: "1px solid var(--line)", marginTop: 12, touchAction: "none", cursor: "crosshair", background: "#000" }} aria-label="Particle fountain: click or tap to emit" />
       <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, marginTop: 12 }}>
@@ -834,7 +634,7 @@ function Drone() {
     ac.current?.ctx.close().catch(() => {});
   }, []);
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
       <p className="kicker">08 · Audio visualiser — three oscillators, no samples</p>
       <canvas ref={ref} width={400} height={120} style={{ width: "100%", height: 120, display: "block", border: "1px solid var(--line)", marginTop: 12 }} role="img" aria-label={on ? "Live audio spectrum" : "Audio visualiser, silent"} />
       <div style={{ display: "flex", gap: 12, marginTop: 12, alignItems: "center" }}>
@@ -891,7 +691,7 @@ function Terrain() {
     }
   }, [s]);
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
       <p className="kicker">09 · Procedural terrain — ridge lines from summed sine octaves</p>
       <canvas ref={ref} style={{ width: "100%", height: 176, display: "block", border: "1px solid var(--line)", marginTop: 12, background: "#000" }} aria-label="Procedural terrain drawn as ridge lines" />
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
@@ -917,7 +717,7 @@ function Room3D() {
   const [r, setR] = useState({ w: 8, d: 6, h: 3, items: 8, seed: 3 });
   const [wall, setWall] = useState("#c9b8a0");
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
       <p className="kicker">10 · 3D room generator — real WebGL, change the dimensions</p>
       <div style={{ height: 260, border: "1px solid var(--line)", marginTop: 12 }}>
         <Lab3D {...r} wall={wall} />
@@ -955,7 +755,7 @@ function Radial() {
   const [o, setO] = useState<{ x: number; y: number } | null>(null);
   const items: [string, string][] = [["Worlds", "/matrix"], ["Lab", "/lab"], ["Tools", "/tools"], ["Studio", "/studio"], ["OS", "/os"], ["Start", "/start"]];
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
       <p className="kicker">11 · Experimental navigation — click anywhere, choose a door</p>
       <div
         style={{ position: "relative", height: 220, overflow: "hidden", border: "1px solid var(--line)", marginTop: 12, background: "var(--bg)" }}
@@ -1056,7 +856,7 @@ function Chain() {
     };
   }, []);
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
       <p className="kicker">12 · Physics chain — each link chases the one before it</p>
       <canvas ref={ref} style={{ width: "100%", height: 176, display: "block", border: "1px solid var(--line)", marginTop: 12, touchAction: "none" }} aria-label="A chain of circles following the pointer with lag" />
       <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginTop: 12 }}>
@@ -1078,7 +878,7 @@ function TypeLab() {
   const [p, setP] = useState<{ x: number; y: number } | null>(null);
   const text = "VARIABLE";
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
       <p className="kicker">13 · Interactive type — a variable font, weight follows distance</p>
       <div
         onPointerMove={(e) => setP({ x: e.clientX, y: e.clientY })}
@@ -1114,243 +914,266 @@ function TypeLetter({ ch, p }: { ch: string; p: { x: number; y: number } | null 
   );
 }
 
-/** Nervous type: letters grow heavier near the pointer, and settle back. */
+/** Nervous type: letters flee the pointer, bruise yellow, and forget slowly. */
 function NervousType() {
-  const [p, setP] = useState<{ x: number; y: number } | null>(null);
-  const word = "VARIABLE";
+  const text = "HOLD STILL";
+  const refs = useRef<(HTMLSpanElement | null)[]>([]);
+  const st = useRef(text.split("").map(() => ({ x: 0, y: 0, vx: 0, vy: 0, bruise: 0 })));
+  const m = useRef({ x: -999, y: -999 });
+  const [still] = useState(() => typeof window === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  useEffect(() => {
+    if (still) return;
+    let raf = 0;
+    const loop = () => {
+      refs.current.forEach((el, i) => {
+        if (!el) return;
+        const s = st.current[i];
+        const r = el.getBoundingClientRect();
+        const cx = r.left + r.width / 2 - s.x;
+        const cy = r.top + r.height / 2 - s.y;
+        const dx = cx + s.x - m.current.x;
+        const dy = cy + s.y - m.current.y;
+        const d = Math.hypot(dx, dy);
+        if (d < 160) {
+          const f = (1 - d / 160) * 6;
+          s.vx += (dx / d) * f;
+          s.vy += (dy / d) * f;
+          s.bruise = Math.min(1, s.bruise + 0.04);
+        }
+        s.vx += -s.x * 0.04;
+        s.vy += -s.y * 0.04;
+        s.vx *= 0.86;
+        s.vy *= 0.86;
+        s.x += s.vx;
+        s.y += s.vy;
+        s.bruise *= 0.996;
+        el.style.transform = `translate(${s.x}px, ${s.y}px) rotate(${s.x * 0.4}deg)`;
+        el.style.color = `color-mix(in srgb, #ffd400 ${s.bruise * 100}%, #f0f0f0)`;
+        el.style.fontVariationSettings = "";
+      });
+      raf = requestAnimationFrame(loop);
+    };
+    loop();
+    return () => cancelAnimationFrame(raf);
+  }, [still]);
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">14 · Nervous type — weight follows your cursor</p>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">14 · Nervous type — letters flee, bruise, and forget</p>
       <div
-        style={{ display: "flex", minHeight: 176, alignItems: "center", justifyContent: "center", border: "1px solid var(--line)", marginTop: 12, touchAction: "none", overflow: "hidden" }}
-        onPointerMove={(e) => {
-          const r = e.currentTarget.getBoundingClientRect();
-          setP({ x: e.clientX - r.left, y: e.clientY - r.top });
-        }}
-        onPointerLeave={() => setP(null)}
-        role="img"
-        aria-label="The word VARIABLE growing heavier near the pointer"
+        style={{ display: "flex", minHeight: 176, alignItems: "center", justifyContent: "center", overflow: "hidden", border: "1px solid var(--line)", marginTop: 12, background: "#000", position: "relative", touchAction: "none" }}
+        onPointerMove={(e) => { m.current = { x: e.clientX, y: e.clientY }; }}
+        onPointerLeave={() => { m.current = { x: -999, y: -999 }; }}
       >
-        {word.split("").map((ch, i) => (
-          <NervousLetter key={i} ch={ch} p={p} />
-        ))}
+        <p style={{ fontSize: "clamp(2.5rem, 9vw, 6rem)", fontWeight: 900, lineHeight: 1, letterSpacing: "-0.04em", color: "#f0f0f0", margin: 0, userSelect: "none" }} aria-label={text}>
+          {text.split("").map((ch, i) => (
+            <span key={i} ref={(el) => { refs.current[i] = el; }} aria-hidden style={{ display: "inline-block", willChange: "transform" }}>
+              {ch === " " ? " " : ch}
+            </span>
+          ))}
+        </p>
+        <p style={{ position: "absolute", bottom: 8, left: 12, fontSize: 11, color: "rgba(255,255,255,0.5)", margin: 0 }}>
+          Letters turn yellow where they&apos;ve been pushed, and forget slowly.
+        </p>
       </div>
-      <p style={{ fontSize: 11, color: "var(--muted)" }}>Same word, no font files — weight is interpolated per letter from pointer distance.</p>
     </section>
   );
 }
 
-function NervousLetter({ ch, p }: { ch: string; p: { x: number; y: number } | null }) {
-  const ref = useRef<HTMLSpanElement | null>(null);
-  const [w, setW] = useState(400);
+
+/** Gravity words: design, code, data fall, pile, and throw. Towers wobble. */
+function GravityWords() {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [still] = useState(() => typeof window === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   useEffect(() => {
-    if (!p || !ref.current) {
-      setW(400);
-      return;
+    const host = ref.current;
+    if (!host) return;
+    const words = ["design", "code", "data", "3D", "motion", "AI", "SEO", "brand", "commerce", "systems", "games", "strategy"];
+    const els = words.map((w) => {
+      const e = document.createElement("span");
+      e.textContent = w;
+      e.style.cssText = "position:absolute;left:0;top:0;user-select:none;white-space:nowrap;border:1px solid rgba(255,255,255,0.4);background:#0b0b0b;padding:4px 12px;font-family:monospace;font-size:18px;color:#fff;";
+      host.appendChild(e);
+      return e;
+    });
+    const W = () => host.clientWidth;
+    const H = () => host.clientHeight;
+    const b = els.map((e, i) => ({ e, x: 40 + ((i * 97) % Math.max(1, W() - 120)), y: -60 * i, vx: 0, vy: 0, w: e.offsetWidth, h: e.offsetHeight }));
+    if (still) {
+      let yy = H() - 40;
+      for (const o of b) {
+        o.y = yy - o.h;
+        yy -= o.h + 4;
+        o.e.style.transform = `translate(${o.x}px, ${o.y}px)`;
+      }
+      return () => els.forEach((e) => e.remove());
     }
-    const b = ref.current.getBoundingClientRect();
-    const d = Math.hypot(p.x - (b.left + b.width / 2 - ref.current.offsetParent!.getBoundingClientRect().left), p.y - (b.top + b.height / 2 - (ref.current.offsetParent as HTMLElement).getBoundingClientRect().top));
-    const f = Math.max(0, 1 - d / 220);
-    setW(Math.round(400 + f * 500));
-  }, [p]);
+    let drag: (typeof b)[number] | null = null;
+    let ox = 0;
+    let oy = 0;
+    let lx = 0;
+    let ly = 0;
+    let raf = 0;
+    const down = (ev: PointerEvent) => {
+      const r = host.getBoundingClientRect();
+      const x = ev.clientX - r.left;
+      const y = ev.clientY - r.top;
+      drag = [...b].reverse().find((o) => x > o.x && x < o.x + o.w && y > o.y && y < o.y + o.h) ?? null;
+      if (drag) {
+        ox = x - drag.x;
+        oy = y - drag.y;
+        lx = x;
+        ly = y;
+        host.setPointerCapture(ev.pointerId);
+      }
+    };
+    const move = (ev: PointerEvent) => {
+      if (!drag) return;
+      const r = host.getBoundingClientRect();
+      const x = ev.clientX - r.left;
+      const y = ev.clientY - r.top;
+      drag.vx = x - lx;
+      drag.vy = y - ly;
+      lx = x;
+      ly = y;
+      drag.x = x - ox;
+      drag.y = y - oy;
+    };
+    const up = () => { drag = null; };
+    host.addEventListener("pointerdown", down);
+    host.addEventListener("pointermove", move);
+    host.addEventListener("pointerup", up);
+    const loop = () => {
+      for (const o of b) {
+        if (o !== drag) {
+          o.vy += 0.5;
+          o.x += o.vx;
+          o.y += o.vy;
+          o.vx *= 0.99;
+        }
+        if (o.y + o.h > H()) { o.y = H() - o.h; o.vy *= -0.35; o.vx *= 0.85; }
+        if (o.x < 0) { o.x = 0; o.vx *= -0.6; }
+        if (o.x + o.w > W()) { o.x = W() - o.w; o.vx *= -0.6; }
+        for (const p of b) {
+          if (p === o) continue;
+          if (o.x < p.x + p.w && o.x + o.w > p.x && o.y < p.y + p.h && o.y + o.h > p.y && o.y < p.y && o.vy > 0) {
+            o.y = p.y - o.h;
+            o.vy *= -0.2;
+            o.vx *= 0.9;
+          }
+        }
+        o.e.style.transform = `translate(${o.x}px, ${o.y}px) rotate(${o.vx * 1.5}deg)`;
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    loop();
+    return () => {
+      cancelAnimationFrame(raf);
+      els.forEach((e) => e.remove());
+      host.removeEventListener("pointerdown", down);
+      host.removeEventListener("pointermove", move);
+      host.removeEventListener("pointerup", up);
+    };
+  }, [still]);
   return (
-    <span ref={ref} aria-hidden style={{ fontSize: "clamp(2rem, 7vw, 4rem)", fontWeight: w, transition: "font-weight 0.12s", lineHeight: 1 }}>
-      {ch}
-    </span>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">15 · Gravity words — fall, pile, throw. Towers wobble.</p>
+      <div ref={ref} style={{ position: "relative", height: 260, overflow: "hidden", border: "1px solid var(--line)", marginTop: 12, background: "#000", touchAction: "none" }} role="img" aria-label="Words that fall and can be dragged and thrown" />
+      <p style={{ fontSize: 11, color: "var(--muted)" }}>Stacking is naive, towers wobble. Drag and throw.</p>
+    </section>
   );
 }
 
-/** Gravity words: words fall, pile up, and can be thrown. */
-function GravityWords() {
+
+/** Hum: a sawtooth you play with the cursor, drawn as it sounds. */
+function Hum() {
   const ref = useRef<HTMLCanvasElement | null>(null);
-  const words = useMemo(() => ["HEAVY", "LIGHT", "FALL", "THROW", "PILE", "HELD"], []);
+  const a = useRef<{ ctx: AudioContext; o: OscillatorNode; f: BiquadFilterNode; g: GainNode; an: AnalyserNode } | null>(null);
+  const [on, setOn] = useState(false);
+  function start() {
+    const ctx = new AudioContext();
+    const o = ctx.createOscillator();
+    const f = ctx.createBiquadFilter();
+    const g = ctx.createGain();
+    const an = ctx.createAnalyser();
+    o.type = "sawtooth";
+    o.frequency.value = 110;
+    f.type = "lowpass";
+    f.frequency.value = 800;
+    f.Q.value = 8;
+    g.gain.value = 0.06;
+    o.connect(f);
+    f.connect(g);
+    g.connect(an);
+    an.connect(ctx.destination);
+    o.start();
+    a.current = { ctx, o, f, g, an };
+    setOn(true);
+  }
+  function stop() {
+    void a.current?.ctx.close();
+    a.current = null;
+    setOn(false);
+  }
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const W = (canvas.width = canvas.offsetWidth);
-    const H = (canvas.height = 220);
-    type O = { w: string; x: number; y: number; vx: number; vy: number };
-    const r = rng(99);
-    const objs: O[] = words.map((w) => ({ w, x: r() * W, y: r() * -H * 0.5, vx: 0, vy: 0 }));
-    const fg = getComputedStyle(document.body).getPropertyValue("--fg").trim() || "#fff";
-    const bg = getComputedStyle(document.body).getPropertyValue("--bg").trim() || "#000";
-    ctx.font = "800 28px sans-serif";
-    const widthOf = (w: string) => ctx.measureText(w).width;
+    const H = (canvas.height = 120);
+    const buf = new Uint8Array(1024);
     let raf = 0;
-    let grab: { o: O; dx: number; dy: number } | null = null;
-    const pos = (e: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      return { x: ((e.clientX - rect.left) / rect.width) * W, y: ((e.clientY - rect.top) / rect.height) * H };
-    };
-    const down = (e: PointerEvent) => {
-      const p = pos(e);
-      const hit = [...objs].reverse().find((o) => p.x >= o.x && p.x <= o.x + widthOf(o.w) && p.y - 24 <= o.y && p.y >= o.y);
-      if (hit) grab = { o: hit, dx: p.x - hit.x, dy: p.y - hit.y };
-    };
-    const mv = (e: PointerEvent) => {
-      if (!grab) return;
-      const p = pos(e);
-      grab.o.vx = (p.x - grab.dx - grab.o.x) * 0.4;
-      grab.o.vy = (p.y - grab.dy - grab.o.y) * 0.4;
-      grab.o.x = p.x - grab.dx;
-      grab.o.y = p.y - grab.dy;
-    };
-    const up = () => { grab = null; };
-    const step = () => {
-      for (const o of objs) {
-        if (grab?.o !== o) {
-          o.vy += 0.5;
-          o.vx *= 0.99;
-          o.vy *= 0.99;
-          o.x += o.vx;
-          o.y += o.vy;
-          if (o.y > H - 8) { o.y = H - 8; o.vy *= -0.3; o.vx *= 0.8; }
-          if (o.x < 0) { o.x = 0; o.vx *= -0.5; }
-          if (o.x + widthOf(o.w) > W) { o.x = W - widthOf(o.w); o.vx *= -0.5; }
-        }
-      }
-      // pile: later words rest on earlier ones
-      for (let i = 0; i < objs.length; i++) {
-        for (let j = 0; j < i; j++) {
-          const a = objs[i];
-          const b = objs[j];
-          if (a.x < b.x + widthOf(b.w) && a.x + widthOf(a.w) > b.x && Math.abs(a.y - b.y) < 24 && a.vy > 0) {
-            a.y = b.y - 24;
-            a.vy = 0;
-          }
-        }
-      }
-    };
-    const paint = () => {
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, W, H);
-      ctx.fillStyle = fg;
-      ctx.font = "800 28px sans-serif";
-      for (const o of objs) ctx.fillText(o.w, o.x, o.y);
-    };
-    if (reduced) {
-      for (let i = 0; i < 300; i++) step();
-      paint();
-      return;
-    }
-    canvas.addEventListener("pointerdown", down);
-    canvas.addEventListener("pointermove", mv);
-    window.addEventListener("pointerup", up);
     const loop = () => {
-      step();
-      paint();
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, W, H);
+      ctx.strokeStyle = "#7cf5d0";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      if (a.current) {
+        a.current.an.getByteTimeDomainData(buf);
+        for (let i = 0; i < buf.length; i++) {
+          const x = (i / buf.length) * W;
+          const y = (buf[i] / 255) * H;
+          if (i) ctx.lineTo(x, y);
+          else ctx.moveTo(x, y);
+        }
+      } else {
+        ctx.moveTo(0, H / 2);
+        ctx.lineTo(W, H / 2);
+      }
+      ctx.stroke();
       raf = requestAnimationFrame(loop);
     };
-    raf = requestAnimationFrame(loop);
+    loop();
     return () => {
       cancelAnimationFrame(raf);
-      canvas.removeEventListener("pointerdown", down);
-      canvas.removeEventListener("pointermove", mv);
-      window.removeEventListener("pointerup", up);
+      void a.current?.ctx.close();
     };
-  }, [words]);
-  return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">15 · Gravity words — they fall, pile up, and can be thrown</p>
-      <canvas ref={ref} style={{ width: "100%", height: 220, display: "block", border: "1px solid var(--line)", marginTop: 12, touchAction: "none", cursor: "grab" }} aria-label="Words falling under gravity; drag to throw them" />
-    </section>
-  );
-}
-
-/** Hum: an oscillator you play with your cursor, drawn as it sounds. */
-function Hum() {
-  const ref = useRef<HTMLCanvasElement | null>(null);
-  const ac = useRef<{ ctx: AudioContext; o: OscillatorNode; g: GainNode; an: AnalyserNode } | null>(null);
-  const [on, setOn] = useState(false);
-  const [freq, setFreq] = useState(220);
-  const freqRef = useRef(freq);
-  useEffect(() => {
-    freqRef.current = freq;
-  }, [freq]);
-  useEffect(() => {
-    if (!on) return;
-    const canvas = ref.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx || !ac.current) return;
-    const an = ac.current.an;
-    const b = new Uint8Array(an.frequencyBinCount);
-    let raf = 0;
-    const fg = getComputedStyle(document.body).getPropertyValue("--fg").trim() || "#fff";
-    const draw = () => {
-      an.getByteFrequencyData(b);
-      ctx.fillStyle = "#000";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = fg;
-      const n = 48;
-      for (let i = 0; i < n; i++) {
-        const v = b[Math.floor((i / n) * b.length)] / 255;
-        const h = v * canvas.height;
-        ctx.fillRect(i * (canvas.width / n), canvas.height - h, canvas.width / n - 2, h);
-      }
-      raf = requestAnimationFrame(draw);
-    };
-    draw();
-    return () => cancelAnimationFrame(raf);
-  }, [on]);
-  useEffect(() => () => {
-    ac.current?.o.stop();
-    ac.current?.ctx.close().catch(() => {});
   }, []);
-  async function toggle() {
-    if (on) {
-      ac.current?.o.stop();
-      try { await ac.current?.ctx.close(); } catch { /* already closed */ }
-      ac.current = null;
-      setOn(false);
-      setFreq(220);
-      return;
-    }
-    const Ctx = window.AudioContext;
-    if (!Ctx) return;
-    const ctx = new Ctx();
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    const an = ctx.createAnalyser();
-    o.type = "sine";
-    o.frequency.value = freqRef.current;
-    g.gain.value = 0.15;
-    an.fftSize = 256;
-    o.connect(g);
-    g.connect(an);
-    an.connect(ctx.destination);
-    o.start();
-    ac.current = { ctx, o, g, an };
-    setOn(true);
-  }
-  function play(e: React.PointerEvent) {
-    if (!on || !ac.current || !ref.current) return;
-    const r = ref.current.getBoundingClientRect();
-    const f = 80 + ((e.clientX - r.left) / r.width) * 600;
-    ac.current.o.frequency.value = f;
-    setFreq(Math.round(f));
-  }
   return (
-    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">16 · Hum — move across it to play, watch it draw itself</p>
+    <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">16 · Hum — an oscillator you play with the cursor</p>
       <canvas
         ref={ref}
-        width={400}
-        height={120}
-        style={{ width: "100%", height: 120, display: "block", border: "1px solid var(--line)", marginTop: 12, touchAction: "none" }}
+        style={{ width: "100%", height: 120, display: "block", border: "1px solid var(--line)", marginTop: 12, background: "#000", touchAction: "none" }}
         role="img"
-        aria-label={on ? "Live spectrum of the hummed note" : "Silent spectrum. Start humming to play."}
-        onPointerMove={play}
+        aria-label={on ? "Live waveform of the hummed note" : "Silent waveform. Start sound to play."}
+        onPointerMove={(e) => {
+          if (!a.current) return;
+          const r = e.currentTarget.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width;
+          const y = (e.clientY - r.top) / r.height;
+          a.current.o.frequency.setTargetAtTime(55 * Math.pow(2, x * 4), a.current.ctx.currentTime, 0.03);
+          a.current.f.frequency.setTargetAtTime(200 + (1 - y) * 4000, a.current.ctx.currentTime, 0.03);
+        }}
       />
-      <div style={{ display: "flex", gap: 12, marginTop: 12, alignItems: "center" }}>
-        <button type="button" onClick={toggle} style={{ border: "1px solid var(--fg)", background: on ? "var(--fg)" : "transparent", color: on ? "var(--bg)" : "var(--fg)", padding: "10px 18px", fontSize: 12, fontWeight: 700 }}>
-          {on ? "■ Stop humming" : "▶ Start humming"}
+      <div style={{ display: "flex", gap: 12, marginTop: 12, alignItems: "center", flexWrap: "wrap" }}>
+        <button type="button" onClick={on ? stop : start} style={{ border: "1px solid var(--fg)", background: on ? "var(--fg)" : "transparent", color: on ? "var(--bg)" : "var(--fg)", padding: "10px 18px", fontSize: 12, fontWeight: 700 }}>
+          {on ? "■ Stop sound" : "▶ Start sound (quiet)"}
         </button>
-        <span style={{ fontSize: 12, color: "var(--muted)" }}>{on ? `${freq}Hz — move horizontally to bend it` : "Sound starts only on press."}</span>
+        <span style={{ fontSize: 11, color: "var(--muted)" }}>x = pitch (4 octaves) · y = filter cutoff · resonance clips on cheap speakers</span>
       </div>
     </section>
   );
 }
+
