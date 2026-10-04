@@ -88,6 +88,11 @@ export function SpaceField() {
   }, []);
 
   const hw = hov ? WORLDS.find((w) => w.id === hov) ?? null : null;
+  const kin = (id: string) => {
+    const w = WORLDS.find((x) => x.id === id)!;
+    return WORLDS.filter((o) => o.id !== id && o.tags.filter((t) => w.tags.includes(t)).length >= 2);
+  };
+  const hwKin = hw ? kin(hw.id) : [];
   const lit = (id: string) => {
     if (!hw) return true;
     if (id === hw.id) return true;
@@ -117,8 +122,8 @@ export function SpaceField() {
                 x2={P[j].x}
                 y2={P[j].y}
                 stroke={hl ? "#f4f1ea" : "#ffffff"}
-                strokeOpacity={hl ? 0.8 : act ? 0.13 : 0.03}
-                strokeWidth={0.15}
+                strokeOpacity={hl ? 1 : act ? 0.35 : 0.08}
+                strokeWidth={hl ? 0.3 : 0.15}
                 vectorEffect="non-scaling-stroke"
               />
             );
@@ -169,9 +174,25 @@ export function SpaceField() {
           {hw ? (
             <div style={{ display: "flex", gap: 24, flexWrap: "wrap", alignItems: "baseline" }}>
               <p style={{ fontSize: "1.9rem", fontWeight: 900, margin: 0, color: ACCENT[hw.id] }}>{hw.name}</p>
-              <p style={{ maxWidth: 480, margin: 0, color: "var(--fg)" }}>{hw.line}</p>
+              <p style={{ maxWidth: 420, margin: 0, color: "var(--fg)" }}>{hw.line}</p>
               <p className="kicker" style={{ margin: 0 }}>
                 {(REALITIES[hw.id] ?? []).length} realities · {hw.kind} · <Link href={hw.href} style={{ textDecoration: "underline" }}>Enter →</Link>
+              </p>
+              <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--muted)" }}>
+                Connected to{" "}
+                {hwKin.map((k, i) => (
+                  <span key={k.id}>
+                    <Link
+                      href={k.href}
+                      onPointerEnter={() => setHov(k.id)}
+                      style={{ textDecoration: "underline", color: "var(--fg)" }}
+                    >
+                      {k.name}
+                    </Link>
+                    <span style={{ fontSize: 11 }}> ({k.tags.filter((t) => hw.tags.includes(t)).slice(0, 2).join(" · ")})</span>
+                    {i < hwKin.length - 1 ? " · " : ""}
+                  </span>
+                ))}
               </p>
             </div>
           ) : (
