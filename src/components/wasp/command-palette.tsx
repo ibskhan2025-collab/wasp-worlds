@@ -203,3 +203,19 @@ export function CommandPalette() {
     </>
   );
 }
+
+/** Answer a question with a sentence plus links. Retrieval only — picks must exist in the index. */
+export function answerPalette(q: string): { say: string; picks: Entry[] } {
+  const needle = q.trim().toLowerCase();
+  const index = buildIndex();
+  if (needle.length >= 3) {
+    const hit = INTENTS.find((i) => i.match.test(needle));
+    if (hit) {
+      const picks = hit.picks
+        .map((h) => index.find((e) => e.href === h))
+        .filter((e): e is Entry => Boolean(e));
+      return { say: hit.say, picks };
+    }
+  }
+  return { say: "Try the full palette — every world and reality is in there.", picks: [] };
+}

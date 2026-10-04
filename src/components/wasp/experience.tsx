@@ -8,6 +8,7 @@ import { FEELS, INTENTS, MOTIONS } from "@/lib/types";
 import { INTENT_COPY, WORLDS, recommendWorlds } from "@/lib/worlds";
 import { REALITIES } from "@/lib/realities";
 import { pexels } from "@/lib/media";
+import { ProofPoke } from "@/components/wasp/proof-poke";
 
 const ROOM_SPAN = ["span8", "span4", "span4", "span5", "span3", "span4", "span4", "span5", "span3", "span7", "span5", "span4", "span4", "span5", "span7"];
 
@@ -231,6 +232,8 @@ export function Experience() {
       ) : null}
 
       <WorldsRail />
+
+      <ProofPoke />
 
       <section id="selected" aria-label="Selected work" style={{ borderBottom: "1px solid var(--line)" }}>
         <div style={{ padding: "16px var(--pad) 8px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }} className="grid-2">
