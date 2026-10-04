@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldProof } from "@/components/worlds/world-proof";
+import { OrbitNav } from "@/components/worlds/orbit-realities";
 import { orbitSeries, type OrbitCustomer, type OrbitProject } from "@/data/orbit";
 import { isCustomerEmailTaken, loadOrbit, saveOrbit, touch } from "@/lib/orbit-store";
 
@@ -177,6 +178,7 @@ export default function OrbitPage() {
   return (
     <div className="orbit-root">
       <WorldExit id="orbit" label="Room 03 · ORBIT" />
+      <OrbitNav current="classic" />
       <div className="orbit-shell">
         <aside className="orbit-side">
           <div style={{ fontWeight: 600, letterSpacing: "0.18em", fontSize: 12, padding: "8px 10px 18px" }}>ORBIT</div>

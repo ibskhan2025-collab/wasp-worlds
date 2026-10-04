@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { SHOWROOM_CATS, SHOWROOM_PRODUCTS } from "@/data/noir-showroom";
 import { noirProducts } from "@/data/noir";

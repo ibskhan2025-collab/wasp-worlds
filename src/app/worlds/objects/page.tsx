@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { media } from "@/lib/media";
 import { WorldProof } from "@/components/worlds/world-proof";
+import { ObjectsNav } from "@/components/worlds/objects-workshop";
 
 export default function ObjectsHome() {
   return (
     <div>
+      <ObjectsNav current="classic" />
       <section style={{ padding: "8vh 20px 40px" }}>
         <p className="kicker">A shop for things that take time</p>
         <h1 style={{ fontSize: "clamp(3.4rem, 10vw, 7.5rem)", lineHeight: 0.88, letterSpacing: "-0.05em", margin: 0, fontWeight: 500 }}>

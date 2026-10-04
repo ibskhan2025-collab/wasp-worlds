@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { loadOrbit } from "@/lib/orbit-store";
 
@@ -19,7 +18,7 @@ export function OrbitConsole() {
   return (
     <div style={{ background: "#101311", color: "#e6efe8", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="orbit" label="Room 03 · ORBIT/CONSOLE" />
-      <RealityShell world="orbit" current="console" basePath="/worlds/orbit" />
+      <OrbitNav current="console" />
       <header style={{ padding: "20px", borderBottom: "1px solid #2a332c" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.25em", color: "#3ddc84", margin: 0 }}>ORBIT://CONSOLE · LIVE READOUT</p>
         <div style={{ display: "flex", gap: 24, flexWrap: "wrap", marginTop: 12, fontSize: "0.95rem" }}>
@@ -81,7 +80,7 @@ export function OrbitCompact() {
   return (
     <div style={{ background: "#e4e6e0", color: "#161615", minHeight: "100dvh", fontFamily: "var(--font-code)", fontSize: "0.8rem" }}>
       <WorldExit id="orbit" label="Room 03 · ORBIT/COMPACT" />
-      <RealityShell world="orbit" current="compact" basePath="/worlds/orbit" />
+      <OrbitNav current="compact" />
       <div style={{ padding: "12px 16px", borderBottom: "2px solid #161615", display: "flex", justifyContent: "space-between" }}>
         <strong>ORBIT/COMPACT — {all.length} ROWS, ZERO AIR</strong>
         <Link href="/worlds/orbit" style={{ textDecoration: "underline" }}>full →</Link>
@@ -109,7 +108,7 @@ export function OrbitStandup() {
   return (
     <div style={{ background: "#f6f1e6", color: "#23201a", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
       <WorldExit id="orbit" label="Room 03 · ORBIT/STANDUP" />
-      <RealityShell world="orbit" current="standup" basePath="/worlds/orbit" />
+      <OrbitNav current="standup" />
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "40px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>09:15 · FIFTEEN MINUTES · NO CHAIRS</p>
         <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", fontWeight: 400, margin: "8px 0" }}>Standup.</h1>
@@ -151,7 +150,7 @@ export function OrbitForecast() {
   return (
     <div style={{ background: "#0d1420", color: "#dfe8f2", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="orbit" label="Room 03 · ORBIT/FORECAST" />
-      <RealityShell world="orbit" current="forecast" basePath="/worlds/orbit" />
+      <OrbitNav current="forecast" />
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#6fc3ff" }}>PIPELINE · REVENUE · NEXT 90 DAYS</p>
         <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0" }}>${revenue.toLocaleString()} <span style={{ fontSize: "1.2rem", color: "#7f8fb0" }}>under management</span></h1>
@@ -198,12 +197,110 @@ export function OrbitRaw() {
   return (
     <div style={{ background: "#f4f4f0", color: "#111", minHeight: "100dvh", fontFamily: "monospace", fontSize: "0.8rem" }}>
       <WorldExit id="orbit" label="Room 03 · ORBIT/RAW" />
-      <RealityShell world="orbit" current="brutalist" basePath="/worlds/orbit" />
+      <OrbitNav current="brutalist" />
       <div style={{ padding: "16px" }}>
         <p style={{ margin: 0 }}>ORBIT DATABASE DUMP — {rows.length} ROWS — READ ONLY</p>
         <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-all", border: "3px solid #111", padding: 16, marginTop: 12 }}>{rows.join("\n")}</pre>
         <p>Writes happen in the <Link href="/worlds/orbit" style={{ textDecoration: "underline", fontWeight: 700 }}>full console →</Link></p>
       </div>
     </div>
+  );
+}
+
+export function OrbitPaper() {
+  const [s] = useState(loadOrbit);
+  const revenue = s.customers.reduce((n, c) => n + c.spend, 0);
+  const stages = ["Discovery", "Design", "Build", "QA", "Live"];
+  return (
+    <div style={{ background: "#f6f3ec", color: "#1c1b19", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
+      <WorldExit id="orbit" label="Room 03 · ORBIT/PAPER" />
+      <OrbitNav current="paper" />
+      <div style={{ maxWidth: 860, margin: "0 auto", padding: "48px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>ORBIT QUARTERLY · PRINTED FOR THE BOARD · FIGURES IN USD</p>
+        <h1 style={{ fontSize: "clamp(2.6rem, 7vw, 4.6rem)", fontWeight: 400, margin: "8px 0" }}>The quarter on paper.</h1>
+        <p style={{ fontStyle: "italic", color: "#6b6254", maxWidth: "52ch" }}>
+          The same console you operate, set for reading. Revenue, accounts, pipeline and events — signed off, printed, filed.
+        </p>
+        <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 32 }}>
+          <tbody>
+            {[
+              ["Revenue under management", `$${revenue.toLocaleString()}`],
+              ["Accounts", String(s.customers.length)],
+              ["At risk", String(s.customers.filter((c) => c.health === "Risk").length)],
+              ["Projects in flight", String(s.projects.filter((p) => p.stage !== "Live").length)],
+              ["Events logged", String(s.activity.length)],
+            ].map(([k, v]) => (
+              <tr key={k} style={{ borderBottom: "1px solid #1c1b19" }}>
+                <td style={{ padding: "12px 0" }}>{k}</td>
+                <td style={{ padding: "12px 0", textAlign: "right", fontSize: "1.4rem" }}>{v}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <h2 style={{ fontSize: "1.6rem", fontWeight: 400, marginTop: 40 }}>Accounts</h2>
+        {s.customers.map((c) => (
+          <p key={c.id} style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px dotted rgba(28,27,25,0.4)", padding: "8px 0", margin: 0 }}>
+            <span>{c.company} <span style={{ color: "#6b6254" }}>· {c.plan} · {c.health}</span></span>
+            <span>${c.spend.toLocaleString()}</span>
+          </p>
+        ))}
+        <h2 style={{ fontSize: "1.6rem", fontWeight: 400, marginTop: 40 }}>Pipeline by stage</h2>
+        {stages.map((st) => (
+          <p key={st} style={{ borderBottom: "1px dotted rgba(28,27,25,0.4)", padding: "8px 0", margin: 0 }}>
+            <strong>{st}</strong>
+            <span style={{ color: "#6b6254" }}> — {s.projects.filter((p) => p.stage === st).map((p) => p.name).join("; ") || "nothing"}</span>
+          </p>
+        ))}
+        <h2 style={{ fontSize: "1.6rem", fontWeight: 400, marginTop: 40 }}>Minutes</h2>
+        {s.activity.slice(0, 6).map((a) => (
+          <p key={a.id} style={{ fontSize: "0.95rem", margin: "6px 0" }}>
+            <strong>{a.who}</strong> {a.what} <span style={{ color: "#6b6254" }}>· {a.when} ago</span>
+          </p>
+        ))}
+        <p style={{ marginTop: 32, fontStyle: "italic" }}>
+          Signed, the console. <Link href="/worlds/orbit" style={{ textDecoration: "underline" }}>Operate it live →</Link>
+        </p>
+      </div>
+      <WorldProof
+        proves="The board pack writes itself: same data as the console, set for reading aloud."
+        relatedHref="/worlds/vector"
+        relatedName="VECTOR"
+      />
+    </div>
+  );
+}
+
+export function OrbitNav({ current }: { current: string }) {
+  return (
+    <nav aria-label="ORBIT realities" style={{ display: "flex", gap: 2, alignItems: "stretch", background: "#0d1420", color: "#dfe8f2", borderBottom: "2px solid #6fc3ff", padding: "0 12px", overflowX: "auto", fontFamily: "var(--font-code)" }}>
+      <Link href="/worlds/orbit" style={{ padding: "12px 8px", fontWeight: 800, letterSpacing: "0.15em", fontSize: 12 }}>
+        ORBIT://
+      </Link>
+      {[
+        ["classic", "Product", "/worlds/orbit"],
+        ["console", "Console", "/worlds/orbit/console"],
+        ["compact", "Compact", "/worlds/orbit/compact"],
+        ["brutalist", "Raw", "/worlds/orbit/brutalist"],
+        ["standup", "Standup", "/worlds/orbit/standup"],
+        ["forecast", "Forecast", "/worlds/orbit/forecast"],
+        ["paper", "Paper", "/worlds/orbit/paper"],
+      ].map(([id, label, href]) => (
+        <Link
+          key={id}
+          href={href}
+          aria-current={current === id ? "page" : undefined}
+          style={{
+            padding: "12px 12px",
+            fontSize: 12,
+            letterSpacing: "0.1em",
+            color: current === id ? "#0d1420" : "#dfe8f2",
+            background: current === id ? "#6fc3ff" : "transparent",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {label}
+        </Link>
+      ))}
+    </nav>
   );
 }

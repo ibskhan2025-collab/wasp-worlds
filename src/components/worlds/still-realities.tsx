@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
+import { StillNav } from "@/components/worlds/still-hall";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { Lightbox } from "@/components/worlds/lightbox";
 import { stillCollections } from "@/data/still";
@@ -18,7 +18,7 @@ export function StillNegative() {
   return (
     <div style={{ background: "#0c0c0c", color: "#ececec", minHeight: "100dvh", fontFamily: "var(--font-serif)" }}>
       <WorldExit id="still" label="Room 04 · STILL/NEGATIVE" />
-      <RealityShell world="still" current="negative" basePath="/worlds/still" />
+      <StillNav current="negative" />
       <header style={{ padding: "28px 20px 8px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.25em", color: "#ff5a5a" }}>SAFELIGHT ON · NIGHT EDITING</p>
         <h1 style={{ fontSize: "clamp(3rem, 8vw, 6rem)", margin: 0, fontWeight: 400 }}>STILL/DARK</h1>
@@ -53,7 +53,7 @@ export function StillContact() {
   return (
     <div style={{ background: "#e2d5b8", color: "#241f16", minHeight: "100dvh", fontFamily: "monospace" }}>
       <WorldExit id="still" label="Room 04 · STILL/CONTACT" />
-      <RealityShell world="still" current="contact" basePath="/worlds/still" />
+      <StillNav current="contact" />
       <header style={{ padding: "24px 20px 8px", borderBottom: "2px solid #241f16" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.2em", margin: 0 }}>ROLL 04 · 12 EXP · EDGE № 8A43</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 5rem)", margin: "4px 0" }}>CONTACT SHEET</h1>
@@ -84,7 +84,7 @@ export function StillGallery() {
   return (
     <div style={{ background: "#e6ddc8", color: "#201a12", minHeight: "100dvh", fontFamily: "var(--font-serif)" }}>
       <WorldExit id="still" label="Room 04 · STILL/GALLERY" />
-      <RealityShell world="still" current="gallery" basePath="/worlds/still" />
+      <StillNav current="gallery" />
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "56px 20px 80px", textAlign: "center" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.35em" }}>HUNG STRAIGHT · ONE WALL</p>
         {images.map((img, i) => (
@@ -109,7 +109,7 @@ export function StillDarkroom() {
   return (
     <div style={{ background: "#120d0d", color: "#e8d8c8", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="still" label="Room 04 · STILL/DARKROOM" />
-      <RealityShell world="still" current="darkroom" basePath="/worlds/still" />
+      <StillNav current="darkroom" />
       <div style={{ maxWidth: 820, margin: "0 auto", padding: "40px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#ff5a5a" }}>SAFELIGHT · THREE TRAYS · DON&apos;T OPEN THE DOOR</p>
         <h1 style={{ fontSize: "clamp(2.8rem, 9vw, 6rem)", margin: "8px 0" }}>Darkroom.</h1>
@@ -149,7 +149,7 @@ export function StillFolio() {
   return (
     <div style={{ background: "#f4f1ea", color: "#111", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
       <WorldExit id="still" label="Room 04 · STILL/FOLIO" />
-      <RealityShell world="still" current="folio" basePath="/worlds/still" />
+      <StillNav current="folio" />
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 20px 80px", textAlign: "center" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.35em" }}>FOLIO · ONE PLATE AT A TIME · {i + 1} / {plates.length}</p>
         <figure style={{ margin: "32px auto", maxWidth: 720 }}>

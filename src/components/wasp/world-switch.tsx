@@ -6,7 +6,7 @@ import { REALITIES } from "@/lib/realities";
 import { WORLDS } from "@/lib/worlds";
 
 // Worlds with their own bespoke navigation opt out of the shared strip.
-const BESPOKE = new Set(["noir"]);
+const BESPOKE = new Set(["noir", "orbit", "still", "objects", "signal"]);
 
 /**
  * Reality switch above every classic world page. Reality pages already

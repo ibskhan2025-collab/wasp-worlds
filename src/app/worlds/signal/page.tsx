@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldProof } from "@/components/worlds/world-proof";
+import { SignalNav } from "@/components/worlds/signal-realities";
 import { loadJson, saveJson } from "@/lib/storage";
 
 type Blip = { id: number; x: number; y: number; r: number; vx: number; vy: number; band: number; life: number };
@@ -207,6 +208,7 @@ export default function SignalPage({ bare = false }: { bare?: boolean }) {
   return (
     <div className="signal-root">
       {bare ? null : <WorldExit id="signal" label="Room 05 · SIGNAL" />}
+      {bare ? null : <SignalNav current="classic" />}
       <div className="signal-stage">
         <p className="kicker">Intercept</p>
         <h1 style={{ fontSize: "clamp(3rem, 8vw, 6rem)", margin: "6px 0 8px" }}>SIGNAL</h1>

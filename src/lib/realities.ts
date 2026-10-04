@@ -76,6 +76,8 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#f6f1e6", "--fg": "#23201a", "--muted": "#6b6254", "--line": "rgba(35,32,26,0.2)", "--accent": "#8a3b1f" }),
     ALT("forecast", "Forecast", "Pipeline and revenue bars", "forecast",
       { "--bg": "#0d1420", "--fg": "#dfe8f2", "--muted": "#7f8fb0", "--line": "rgba(223,232,242,0.25)", "--accent": "#6fc3ff" }),
+    ALT("paper", "Paper", "The quarter, printed", "paper",
+      { "--bg": "#f6f3ec", "--fg": "#1c1b19", "--muted": "#6b6254", "--line": "#1c1b19", "--accent": "#b4492a" }),
   ],
   still: [
     CLASSIC("Paper", "Warm paper, black serif"),
@@ -89,6 +91,8 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#120d0d", "--fg": "#e8d8c8", "--muted": "#a89880", "--line": "rgba(232,216,200,0.3)", "--accent": "#ff5a5a" }),
     ALT("folio", "Folio", "One plate at a time", "folio",
       { "--bg": "#f4f1ea", "--fg": "#111111", "--muted": "#6a655e", "--line": "#111111", "--accent": "#111111" }),
+    ALT("hall", "Hall", "Walk the hang", "hall",
+      { "--bg": "#e9e6df", "--fg": "#201a12", "--muted": "#6b6254", "--line": "rgba(32,26,18,0.2)", "--accent": "#8a3b1f" }),
   ],
   signal: [
     CLASSIC("Amber CRT", "Monochrome phosphor"),
@@ -102,6 +106,8 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#0b0d12", "--fg": "#ffd23f", "--muted": "#8a93a5", "--line": "#2a2f3a", "--accent": "#ff5a5a" }),
     ALT("pocket", "Pocket", "The game, handheld", "pocket",
       { "--bg": "#9aa27e", "--fg": "#23281c", "--muted": "#5a6e3f", "--line": "#3a4034", "--accent": "#23281c" }),
+    ALT("ink", "Ink", "Ground on a stone", "ink",
+      { "--bg": "#efe9dc", "--fg": "#2b2520", "--muted": "#6b6254", "--line": "#2b2520", "--accent": "#a1302a" }),
   ],
   objects: [
     CLASSIC("Bone", "Editorial neutral"),
@@ -117,6 +123,10 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#1a1a1a", "--fg": "#e8e4da", "--muted": "#a89a80", "--line": "rgba(232,228,218,0.3)", "--accent": "#e2c08d" }),
     ALT("gift", "Gift", "The stock, ready to give", "gift",
       { "--bg": "#fbf3e4", "--fg": "#3a2a1a", "--muted": "#8a6f52", "--line": "#3a2a1a", "--accent": "#8a3b1f" }),
+    ALT("workshop", "Workshop", "Start with the maker", "workshop",
+      { "--bg": "#f0e9dc", "--fg": "#2a2118", "--muted": "#6b5a44", "--line": "rgba(42,33,24,0.3)", "--accent": "#8a3b1f" }),
+    ALT("inspect", "Inspect", "Turn it on a lathe", "inspect",
+      { "--bg": "#e8e0d2", "--fg": "#2a2118", "--muted": "#6b5a44", "--line": "rgba(42,33,24,0.3)", "--accent": "#2a2118" }),
   ],
   archive: [
     CLASSIC("Parchment", "Newsprint, dense columns"),

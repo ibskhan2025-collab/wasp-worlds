@@ -42,6 +42,7 @@ const R: Record<string, Record<string, ComponentType>> = {
     brutalist: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitRaw), { loading: loading("RAW") }),
     standup: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitStandup), { loading: loading("STANDUP") }),
     forecast: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitForecast), { loading: loading("FORECAST") }),
+    paper: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitPaper), { loading: loading("PAPER") }),
   },
   still: {
     negative: dynamic(() => import("@/components/worlds/still-realities").then((m) => m.StillNegative), { loading: loading("NEGATIVE") }),
@@ -49,6 +50,7 @@ const R: Record<string, Record<string, ComponentType>> = {
     gallery: dynamic(() => import("@/components/worlds/still-realities").then((m) => m.StillGallery), { loading: loading("GALLERY") }),
     darkroom: dynamic(() => import("@/components/worlds/still-realities").then((m) => m.StillDarkroom), { loading: loading("DARKROOM") }),
     folio: dynamic(() => import("@/components/worlds/still-realities").then((m) => m.StillFolio), { loading: loading("FOLIO") }),
+    hall: dynamic(() => import("@/components/worlds/still-hall").then((m) => m.StillHall), { loading: loading("HALL") }),
   },
   signal: {
     mono: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalMono), { loading: loading("MONO") }),
@@ -56,6 +58,7 @@ const R: Record<string, Record<string, ComponentType>> = {
     future: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalFuture), { loading: loading("QUANTUM") }),
     arcade: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalArcade), { loading: loading("ARCADE") }),
     pocket: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalPocket), { loading: loading("POCKET") }),
+    ink: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalInk), { loading: loading("INK") }),
   },
   objects: {
     tidal: dynamic(() => import("@/components/worlds/objects-realities").then((m) => m.ObjectsTidal), { loading: loading("TIDAL") }),
@@ -64,6 +67,8 @@ const R: Record<string, Record<string, ComponentType>> = {
     turntable: dynamic(() => import("@/components/worlds/objects-turntable").then((m) => m.ObjectsTurntable), { loading: loading("TURNTABLE") }),
     storeroom: dynamic(() => import("@/components/worlds/objects-realities").then((m) => m.ObjectsStoreroom), { loading: loading("STOREROOM") }),
     gift: dynamic(() => import("@/components/worlds/objects-realities").then((m) => m.ObjectsGift), { loading: loading("GIFT") }),
+    workshop: dynamic(() => import("@/components/worlds/objects-workshop").then((m) => m.ObjectsWorkshop), { loading: loading("WORKSHOP") }),
+    inspect: dynamic(() => import("@/components/worlds/objects-workshop").then((m) => m.ObjectsInspect), { loading: loading("INSPECT") }),
   },
   archive: {
     typer: dynamic(() => import("@/components/worlds/archive-realities").then((m) => m.ArchiveTyper), { loading: loading("TYPER") }),

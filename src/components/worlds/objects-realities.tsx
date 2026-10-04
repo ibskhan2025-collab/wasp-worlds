@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
+import { ObjectsNav } from "@/components/worlds/objects-workshop";
 import { objectProducts } from "@/data/objects";
 import { money } from "@/lib/use-cart";
 
@@ -11,7 +11,7 @@ export function ObjectsTidal() {
   return (
     <div style={{ background: "#dfe9e4", color: "#14302a", minHeight: "100dvh", fontFamily: "var(--font-shop)" }}>
       <WorldExit id="objects" label="Room 06 · OBJECTS/TIDAL" />
-      <RealityShell world="objects" current="tidal" basePath="/worlds/objects" />
+      <ObjectsNav current="tidal" />
       <header style={{ padding: "36px 20px 8px", textAlign: "center" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#0f6f5c" }}>FIRED NEAR WATER · ROOM 06B</p>
         <h1 style={{ fontSize: "clamp(3rem, 11vw, 8rem)", margin: "8px 0", fontWeight: 500, letterSpacing: "-0.04em" }}>Tidal Objects</h1>
@@ -44,7 +44,7 @@ export function ObjectsCatalogue() {
   return (
     <div style={{ background: "#e8ddc4", color: "#2a2118", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
       <WorldExit id="objects" label="Room 06 · OBJECTS/CATALOGUE" />
-      <RealityShell world="objects" current="catalogue" basePath="/worlds/objects" />
+      <ObjectsNav current="catalogue" />
       <div style={{ maxWidth: 640, margin: "0 auto", padding: "40px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", textAlign: "center" }}>OBJECTS & CO. · MAIL ORDER · EST. 1974</p>
         <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 4.6rem)", textAlign: "center", fontWeight: 400, margin: "8px 0" }}>The Catalogue</h1>
@@ -74,7 +74,7 @@ export function ObjectsPlayful() {
   return (
     <div style={{ background: "#fff3d6", color: "#241a12", minHeight: "100dvh", fontFamily: "var(--font-shop)" }}>
       <WorldExit id="objects" label="Room 06 · OBJECTS/PLAY" />
-      <RealityShell world="objects" current="playful" basePath="/worlds/objects" />
+      <ObjectsNav current="playful" />
       <header style={{ padding: "36px 20px 8px", textAlign: "center", transform: "rotate(-1deg)" }}>
         <p style={{ fontWeight: 800, letterSpacing: "0.2em", fontSize: 12, color: "#e2542e" }}>★ BOING ★ POTS WITH PERSONALITY ★</p>
         <h1 style={{ fontSize: "clamp(3rem, 12vw, 7rem)", margin: "8px 0", fontWeight: 900 }}>WOBBLY & PROUD</h1>
@@ -114,7 +114,7 @@ export function ObjectsStoreroom() {
   return (
     <div style={{ background: "#1a1a1a", color: "#e8e4da", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="objects" label="Room 06 · OBJECTS/STOREROOM" />
-      <RealityShell world="objects" current="storeroom" basePath="/worlds/objects" />
+      <ObjectsNav current="storeroom" />
       <div style={{ maxWidth: 860, margin: "0 auto", padding: "32px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#e2c08d" }}>STAFF ONLY · MANIFEST 06 · {objectProducts.length} PIECES ON HAND</p>
         <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0" }}>Storeroom.</h1>
@@ -151,7 +151,7 @@ export function ObjectsGift() {
   return (
     <div style={{ background: "#fbf3e4", color: "#3a2a1a", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
       <WorldExit id="objects" label="Room 06 · OBJECTS/GIFT" />
-      <RealityShell world="objects" current="gift" basePath="/worlds/objects" />
+      <ObjectsNav current="gift" />
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "48px 20px 80px", textAlign: "center" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.35em" }}>WRAPPED · TAGGED · NEVER A RECEIPT IN THE BOX</p>
         <h1 style={{ fontSize: "clamp(2.8rem, 9vw, 5.5rem)", fontWeight: 400, margin: "12px 0" }}>Give it.</h1>

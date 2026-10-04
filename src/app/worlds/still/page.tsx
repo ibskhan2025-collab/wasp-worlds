@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldProof } from "@/components/worlds/world-proof";
+import { StillNav } from "@/components/worlds/still-hall";
 import { stillCollections, stillPhotographer } from "@/data/still";
 import { loadJson, saveJson } from "@/lib/storage";
 
@@ -50,6 +51,7 @@ export default function StillPage() {
   return (
     <div className="still-root">
       <WorldExit id="still" label="Room 04 · STILL" />
+      <StillNav current="classic" />
       <header style={{ padding: "28px 20px 8px", display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
         <div>
           <p className="kicker">{stillPhotographer.name}</p>
