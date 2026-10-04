@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { loadJson, saveJson, WORKSHOP_KEY } from "@/lib/storage";
 
 type W = {
@@ -138,6 +138,9 @@ export default function LabPage() {
       <Room3D />
       <Radial />
       <Chain />
+      <NervousType />
+      <GravityWords />
+      <Hum />
     </div>
   );
 }
@@ -1038,6 +1041,247 @@ function Chain() {
           Links {links}
           <input type="range" min={3} max={30} value={links} onChange={(e) => setLinks(Number(e.target.value))} aria-label="Links" style={{ flex: 1 }} />
         </label>
+      </div>
+    </section>
+  );
+}
+
+/** Nervous type: letters grow heavier near the pointer, and settle back. */
+function NervousType() {
+  const [p, setP] = useState<{ x: number; y: number } | null>(null);
+  const word = "VARIABLE";
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">13 · Nervous type — weight follows your cursor</p>
+      <div
+        style={{ display: "flex", minHeight: 176, alignItems: "center", justifyContent: "center", border: "1px solid var(--line)", marginTop: 12, touchAction: "none", overflow: "hidden" }}
+        onPointerMove={(e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          setP({ x: e.clientX - r.left, y: e.clientY - r.top });
+        }}
+        onPointerLeave={() => setP(null)}
+        role="img"
+        aria-label="The word VARIABLE growing heavier near the pointer"
+      >
+        {word.split("").map((ch, i) => (
+          <NervousLetter key={i} ch={ch} p={p} />
+        ))}
+      </div>
+      <p style={{ fontSize: 11, color: "var(--muted)" }}>Same word, no font files — weight is interpolated per letter from pointer distance.</p>
+    </section>
+  );
+}
+
+function NervousLetter({ ch, p }: { ch: string; p: { x: number; y: number } | null }) {
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const [w, setW] = useState(400);
+  useEffect(() => {
+    if (!p || !ref.current) {
+      setW(400);
+      return;
+    }
+    const b = ref.current.getBoundingClientRect();
+    const d = Math.hypot(p.x - (b.left + b.width / 2 - ref.current.offsetParent!.getBoundingClientRect().left), p.y - (b.top + b.height / 2 - (ref.current.offsetParent as HTMLElement).getBoundingClientRect().top));
+    const f = Math.max(0, 1 - d / 220);
+    setW(Math.round(400 + f * 500));
+  }, [p]);
+  return (
+    <span ref={ref} aria-hidden style={{ fontSize: "clamp(2rem, 7vw, 4rem)", fontWeight: w, transition: "font-weight 0.12s", lineHeight: 1 }}>
+      {ch}
+    </span>
+  );
+}
+
+/** Gravity words: words fall, pile up, and can be thrown. */
+function GravityWords() {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  const words = useMemo(() => ["HEAVY", "LIGHT", "FALL", "THROW", "PILE", "HELD"], []);
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const W = (canvas.width = canvas.offsetWidth);
+    const H = (canvas.height = 220);
+    type O = { w: string; x: number; y: number; vx: number; vy: number };
+    const r = rng(99);
+    const objs: O[] = words.map((w) => ({ w, x: r() * W, y: r() * -H * 0.5, vx: 0, vy: 0 }));
+    const fg = getComputedStyle(document.body).getPropertyValue("--fg").trim() || "#fff";
+    const bg = getComputedStyle(document.body).getPropertyValue("--bg").trim() || "#000";
+    ctx.font = "800 28px sans-serif";
+    const widthOf = (w: string) => ctx.measureText(w).width;
+    let raf = 0;
+    let grab: { o: O; dx: number; dy: number } | null = null;
+    const pos = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      return { x: ((e.clientX - rect.left) / rect.width) * W, y: ((e.clientY - rect.top) / rect.height) * H };
+    };
+    const down = (e: PointerEvent) => {
+      const p = pos(e);
+      const hit = [...objs].reverse().find((o) => p.x >= o.x && p.x <= o.x + widthOf(o.w) && p.y - 24 <= o.y && p.y >= o.y);
+      if (hit) grab = { o: hit, dx: p.x - hit.x, dy: p.y - hit.y };
+    };
+    const mv = (e: PointerEvent) => {
+      if (!grab) return;
+      const p = pos(e);
+      grab.o.vx = (p.x - grab.dx - grab.o.x) * 0.4;
+      grab.o.vy = (p.y - grab.dy - grab.o.y) * 0.4;
+      grab.o.x = p.x - grab.dx;
+      grab.o.y = p.y - grab.dy;
+    };
+    const up = () => { grab = null; };
+    const step = () => {
+      for (const o of objs) {
+        if (grab?.o !== o) {
+          o.vy += 0.5;
+          o.vx *= 0.99;
+          o.vy *= 0.99;
+          o.x += o.vx;
+          o.y += o.vy;
+          if (o.y > H - 8) { o.y = H - 8; o.vy *= -0.3; o.vx *= 0.8; }
+          if (o.x < 0) { o.x = 0; o.vx *= -0.5; }
+          if (o.x + widthOf(o.w) > W) { o.x = W - widthOf(o.w); o.vx *= -0.5; }
+        }
+      }
+      // pile: later words rest on earlier ones
+      for (let i = 0; i < objs.length; i++) {
+        for (let j = 0; j < i; j++) {
+          const a = objs[i];
+          const b = objs[j];
+          if (a.x < b.x + widthOf(b.w) && a.x + widthOf(a.w) > b.x && Math.abs(a.y - b.y) < 24 && a.vy > 0) {
+            a.y = b.y - 24;
+            a.vy = 0;
+          }
+        }
+      }
+    };
+    const paint = () => {
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = fg;
+      ctx.font = "800 28px sans-serif";
+      for (const o of objs) ctx.fillText(o.w, o.x, o.y);
+    };
+    if (reduced) {
+      for (let i = 0; i < 300; i++) step();
+      paint();
+      return;
+    }
+    canvas.addEventListener("pointerdown", down);
+    canvas.addEventListener("pointermove", mv);
+    window.addEventListener("pointerup", up);
+    const loop = () => {
+      step();
+      paint();
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      canvas.removeEventListener("pointerdown", down);
+      canvas.removeEventListener("pointermove", mv);
+      window.removeEventListener("pointerup", up);
+    };
+  }, [words]);
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">14 · Gravity words — they fall, pile up, and can be thrown</p>
+      <canvas ref={ref} style={{ width: "100%", height: 220, display: "block", border: "1px solid var(--line)", marginTop: 12, touchAction: "none", cursor: "grab" }} aria-label="Words falling under gravity; drag to throw them" />
+    </section>
+  );
+}
+
+/** Hum: an oscillator you play with your cursor, drawn as it sounds. */
+function Hum() {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  const ac = useRef<{ ctx: AudioContext; o: OscillatorNode; g: GainNode; an: AnalyserNode } | null>(null);
+  const [on, setOn] = useState(false);
+  const [freq, setFreq] = useState(220);
+  const freqRef = useRef(freq);
+  useEffect(() => {
+    freqRef.current = freq;
+  }, [freq]);
+  useEffect(() => {
+    if (!on) return;
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx || !ac.current) return;
+    const an = ac.current.an;
+    const b = new Uint8Array(an.frequencyBinCount);
+    let raf = 0;
+    const fg = getComputedStyle(document.body).getPropertyValue("--fg").trim() || "#fff";
+    const draw = () => {
+      an.getByteFrequencyData(b);
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = fg;
+      const n = 48;
+      for (let i = 0; i < n; i++) {
+        const v = b[Math.floor((i / n) * b.length)] / 255;
+        const h = v * canvas.height;
+        ctx.fillRect(i * (canvas.width / n), canvas.height - h, canvas.width / n - 2, h);
+      }
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => cancelAnimationFrame(raf);
+  }, [on]);
+  useEffect(() => () => {
+    ac.current?.o.stop();
+    ac.current?.ctx.close().catch(() => {});
+  }, []);
+  async function toggle() {
+    if (on) {
+      ac.current?.o.stop();
+      try { await ac.current?.ctx.close(); } catch { /* already closed */ }
+      ac.current = null;
+      setOn(false);
+      setFreq(220);
+      return;
+    }
+    const Ctx = window.AudioContext;
+    if (!Ctx) return;
+    const ctx = new Ctx();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    const an = ctx.createAnalyser();
+    o.type = "sine";
+    o.frequency.value = freqRef.current;
+    g.gain.value = 0.15;
+    an.fftSize = 256;
+    o.connect(g);
+    g.connect(an);
+    an.connect(ctx.destination);
+    o.start();
+    ac.current = { ctx, o, g, an };
+    setOn(true);
+  }
+  function play(e: React.PointerEvent) {
+    if (!on || !ac.current || !ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    const f = 80 + ((e.clientX - r.left) / r.width) * 600;
+    ac.current.o.frequency.value = f;
+    setFreq(Math.round(f));
+  }
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">15 · Hum — move across it to play, watch it draw itself</p>
+      <canvas
+        ref={ref}
+        width={400}
+        height={120}
+        style={{ width: "100%", height: 120, display: "block", border: "1px solid var(--line)", marginTop: 12, touchAction: "none" }}
+        role="img"
+        aria-label={on ? "Live spectrum of the hummed note" : "Silent spectrum. Start humming to play."}
+        onPointerMove={play}
+      />
+      <div style={{ display: "flex", gap: 12, marginTop: 12, alignItems: "center" }}>
+        <button type="button" onClick={toggle} style={{ border: "1px solid var(--fg)", background: on ? "var(--fg)" : "transparent", color: on ? "var(--bg)" : "var(--fg)", padding: "10px 18px", fontSize: 12, fontWeight: 700 }}>
+          {on ? "■ Stop humming" : "▶ Start humming"}
+        </button>
+        <span style={{ fontSize: 12, color: "var(--muted)" }}>{on ? `${freq}Hz — move horizontally to bend it` : "Sound starts only on press."}</span>
       </div>
     </section>
   );
