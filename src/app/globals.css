@@ -1187,6 +1187,47 @@ input, textarea, select { max-width: 100%; }
   .resume-contact { text-align: left; }
 }
 
+/* ---- Worlds rail ---- */
+.rail {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  padding: 6px;
+  scroll-snap-type: x mandatory;
+}
+.rail-item {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 110px;
+  height: clamp(240px, 42vh, 380px);
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  transition: flex-grow 0.5s ease;
+  scroll-snap-align: start;
+}
+.rail-item.on { flex-grow: 7; }
+.rail-label {
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.78));
+  color: #fff;
+  padding: 48px 14px 14px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.rail-label strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: -0.02em;
+}
+.rail-kind { font-size: 0.8rem; opacity: 0.85; }
+@media (prefers-reduced-motion: reduce) {
+  .rail-item { transition: none; }
+}
 /* ---- Command palette ---- */
 .palette-trigger {
   background: transparent;

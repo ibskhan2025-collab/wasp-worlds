@@ -232,6 +232,8 @@ export function Experience() {
 
       <Identity />
 
+      <WorldsRail />
+
       <section id="selected" aria-label="Selected work" style={{ borderBottom: "1px solid var(--line)" }}>
         <div style={{ padding: "16px var(--pad) 8px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }} className="grid-2">
           <div>
@@ -447,6 +449,45 @@ function Identity() {
             <Link className="btn ghost" href="/studio">The studio</Link>
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Worlds rail: all 15 worlds in one strip. The world under the cursor
+ * grows; the rest make room. Keyboard focus does the same as hover;
+ * touch gets a swipe strip. Choosing is the interaction.
+ */
+function WorldsRail() {
+  const [active, setActive] = useState<number | null>(null);
+  return (
+    <section aria-label="The fifteen worlds">
+      <div
+        className="rail"
+        role="list"
+        aria-label="The fifteen worlds"
+        onPointerLeave={() => setActive(null)}
+      >
+        {WORLDS.map((w, i) => (
+          <Link
+            key={w.id}
+            href={w.href}
+            role="listitem"
+            aria-label={`Enter ${w.name}: ${w.kind}`}
+            className={active === i ? "rail-item on" : "rail-item"}
+            style={{ backgroundImage: `url(${ROOM_IMAGE[w.id]})` }}
+            onPointerEnter={() => setActive(i)}
+            onFocus={() => setActive(i)}
+            onBlur={() => setActive(null)}
+          >
+            <span className="rail-label">
+              <span className="kicker" style={{ color: "#fff", opacity: 0.8 }}>ROOM {w.room} · {(REALITIES[w.id] ?? []).length} REALITIES</span>
+              <strong>{w.name}</strong>
+              <span className="rail-kind">{w.kind}</span>
+            </span>
+          </Link>
+        ))}
       </div>
     </section>
   );
