@@ -455,10 +455,28 @@ function Identity() {
 }
 
 /**
- * Worlds rail: all 15 worlds in one strip. The world under the cursor
- * grows; the rest make room. Keyboard focus does the same as hover;
- * touch gets a swipe strip. Choosing is the interaction.
+ * Worlds rail, matching the reference build: 15 worlds assemble with a
+ * staggered rise, then open under the cursor — the hovered world grows,
+ * turns full color, and speaks in its own typeface. Mobile: swipe strip.
  */
+const RAIL_FONT: Record<string, string> = {
+  casa: "var(--font-cormorant)",
+  noir: "var(--font-bebas)",
+  orbit: "var(--font-plex)",
+  still: "var(--font-news)",
+  signal: "var(--font-mono)",
+  objects: "var(--font-outfit)",
+  archive: "var(--font-news)",
+  motion: "var(--font-syne)",
+  void: "var(--font-mono)",
+  atlas: "var(--font-cormorant)",
+  forge: "var(--font-mono)",
+  pulse: "var(--font-bebas)",
+  civic: "var(--font-plex)",
+  nest: "var(--font-news)",
+  vector: "var(--font-mono)",
+};
+
 function WorldsRail() {
   const [active, setActive] = useState<number | null>(null);
   return (
@@ -475,16 +493,28 @@ function WorldsRail() {
             href={w.href}
             role="listitem"
             aria-label={`Enter ${w.name}: ${w.kind}`}
-            className={active === i ? "rail-item on" : "rail-item"}
-            style={{ backgroundImage: `url(${ROOM_IMAGE[w.id]})` }}
+            className="rail-item"
+            style={{
+              flexGrow: active === i ? 7 : 1,
+              flexBasis: 0,
+              animation: `rail-rise 0.9s ease-out ${0.3 + i * 0.045}s both`,
+            }}
             onPointerEnter={() => setActive(i)}
             onFocus={() => setActive(i)}
             onBlur={() => setActive(null)}
           >
+            <img
+              src={ROOM_IMAGE[w.id]}
+              alt=""
+              aria-hidden
+              loading={i < 6 ? "eager" : "lazy"}
+              className={active === i ? "rail-img on" : "rail-img"}
+            />
+            <span className="rail-shade" aria-hidden />
             <span className="rail-label">
-              <span className="kicker" style={{ color: "#fff", opacity: 0.8 }}>ROOM {w.room} · {(REALITIES[w.id] ?? []).length} REALITIES</span>
-              <strong>{w.name}</strong>
-              <span className="rail-kind">{w.kind}</span>
+              <span className="rail-n">{w.room}</span>
+              <span className="rail-name" style={{ fontFamily: active === i ? RAIL_FONT[w.id] : undefined }}>{w.name}</span>
+              <span className={active === i ? "rail-kind on" : "rail-kind"}>{w.kind}</span>
             </span>
           </Link>
         ))}
