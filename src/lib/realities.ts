@@ -59,6 +59,10 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#0a0a0a", "--fg": "#f4f1ea", "--muted": "#8a8580", "--line": "rgba(244,241,234,0.15)", "--accent": "#f4f1ea" }),
     ALT("atelier", "Atelier", "Toiles, cloth, cutting notes", "atelier",
       { "--bg": "#efe9dc", "--fg": "#1a1712", "--muted": "#6b6254", "--line": "#1a1712", "--accent": "#8a3b1f" }),
+    ALT("showroom", "Showroom", "Nine pieces as real geometry", "showroom",
+      { "--bg": "#0a0a0a", "--fg": "#eee9e0", "--muted": "#8a8580", "--line": "rgba(255,255,255,0.15)", "--accent": "#b89b6a" }),
+    ALT("archive", "Archive", "Catalogue raisonné, lot order", "noir-archive",
+      { "--bg": "#f1efe8", "--fg": "#111111", "--muted": "#555555", "--line": "#111111", "--accent": "#111111" }),
   ],
   orbit: [
     CLASSIC("Product", "Light, dense, boring on purpose"),

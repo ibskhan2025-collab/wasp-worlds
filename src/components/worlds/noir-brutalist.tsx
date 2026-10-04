@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
+import { NoirNav } from "@/components/worlds/noir-showroom";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { noirProducts } from "@/data/noir";
 import { money, useCart } from "@/lib/use-cart";
@@ -17,8 +17,7 @@ export function NoirBrutalist() {
   return (
     <div style={{ background: "#f4f1ea", color: "#111", minHeight: "100dvh", fontFamily: "var(--font-sans)" }}>
       <WorldExit id="noir" label="Room 02 · NOIR/BRUTALIST" />
-      <RealityShell world="noir" current="brutalist" basePath="/worlds/noir" />
-      <RealityShell world="noir" current="brutalist" basePath="/worlds/noir" />
+      <NoirNav current="brutalist" />
 
       <header style={{ borderBottom: "3px solid #111" }}>
         <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 20px", borderBottom: "2px solid #111", fontSize: 12, letterSpacing: "0.2em" }}>

@@ -33,6 +33,8 @@ const R: Record<string, Record<string, ComponentType>> = {
     future: dynamic(() => import("@/components/worlds/noir-realities").then((m) => m.NoirFuture), { loading: loading("FUTURE") }),
     runway: dynamic(() => import("@/components/worlds/noir-realities").then((m) => m.NoirRunway), { loading: loading("RUNWAY") }),
     atelier: dynamic(() => import("@/components/worlds/noir-realities").then((m) => m.NoirAtelier), { loading: loading("ATELIER") }),
+    showroom: dynamic(() => import("@/components/worlds/noir-showroom").then((m) => m.NoirShowroom), { loading: loading("SHOWROOM") }),
+    archive: dynamic(() => import("@/components/worlds/noir-realities").then((m) => m.NoirArchive), { loading: loading("ARCHIVE") }),
   },
   orbit: {
     console: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitConsole), { loading: loading("CONSOLE") }),

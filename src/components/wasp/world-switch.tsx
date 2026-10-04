@@ -5,6 +5,9 @@ import { usePathname } from "next/navigation";
 import { REALITIES } from "@/lib/realities";
 import { WORLDS } from "@/lib/worlds";
 
+// Worlds with their own bespoke navigation opt out of the shared strip.
+const BESPOKE = new Set(["noir"]);
+
 /**
  * Reality switch above every classic world page. Reality pages already
  * carry their own shell; sub-pages manage their own options — so this
@@ -16,6 +19,8 @@ export function WorldSwitch() {
   if (seg.length !== 3 || seg[1] !== "worlds") return null;
   const world = WORLDS.find((w) => w.id === seg[2]);
   if (!world) return null;
+  // Worlds with their own bespoke navigation opt out of the shared strip.
+  if (BESPOKE.has(world.id)) return null;
   const list = REALITIES[world.id] ?? [];
   if (list.length <= 1) return null;
   return (

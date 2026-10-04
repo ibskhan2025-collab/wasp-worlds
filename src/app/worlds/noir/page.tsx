@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { media } from "@/lib/media";
 import { WorldProof } from "@/components/worlds/world-proof";
-import { RealityShell } from "@/components/worlds/reality-shell";
+import { NoirNav } from "@/components/worlds/noir-showroom";
 
 export default function NoirHome() {
   return (
     <div>
-      <RealityShell world="noir" current="classic" basePath="/worlds/noir" />
+      <NoirNav current="classic" />
       <section className="noir-hero">
         <div>
           <h1>NOIR ATELIER</h1>

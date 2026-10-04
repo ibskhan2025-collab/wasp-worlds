@@ -1,11 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { Fragment, useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
+import { SHOWROOM_CATS, SHOWROOM_PRODUCTS } from "@/data/noir-showroom";
 import { noirProducts } from "@/data/noir";
 import { money } from "@/lib/use-cart";
+import { NoirBuyBox, NoirNav } from "@/components/worlds/noir-showroom";
 
 /**
  * NOIR/ANALOG — the collection as a photocopied zine: cut type,
@@ -15,7 +18,7 @@ export function NoirAnalog() {
   return (
     <div style={{ background: "#cfcfcf", color: "#111", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="noir" label="Room 02 · NOIR/XEROX" />
-      <RealityShell world="noir" current="analog" basePath="/worlds/noir" />
+      <NoirNav current="analog" />
       <header style={{ padding: "32px 20px", borderBottom: "4px solid #111" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>ISSUE 03 · COPIED, NOT PRINTED · 50 MADE</p>
         <h1 style={{ fontSize: "clamp(3rem, 14vw, 10rem)", lineHeight: 0.85, margin: "8px 0", fontWeight: 900 }}>NOIR<br />XEROX</h1>
@@ -64,7 +67,7 @@ export function NoirRunway() {
   return (
     <div style={{ background: "#0a0a0a", color: "#f4f1ea", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="noir" label="Room 02 · NOIR/RUNWAY" />
-      <RealityShell world="noir" current="runway" basePath="/worlds/noir" />
+      <NoirNav current="runway" />
       <header style={{ padding: "40px 20px 8px", textAlign: "center" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.35em", color: "#8a8580" }}>AUTUMN · LOOKS 01–{String(noirProducts.length).padStart(2, "0")} · ONE PASS, NO ENCORE</p>
         <h1 style={{ fontSize: "clamp(3rem, 12vw, 8rem)", margin: "8px 0", fontWeight: 900, letterSpacing: "-0.02em" }}>RUNWAY</h1>
@@ -98,7 +101,7 @@ export function NoirAtelier() {
   return (
     <div style={{ background: "#efe9dc", color: "#1a1712", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
       <WorldExit id="noir" label="Room 02 · NOIR/ATELIER" />
-      <RealityShell world="noir" current="atelier" basePath="/worlds/noir" />
+      <NoirNav current="atelier" />
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>CUTTING TABLE · TOILES, NOT SAMPLES</p>
         <h1 style={{ fontSize: "clamp(2.8rem, 9vw, 6rem)", fontWeight: 400, margin: "8px 0" }}>The Atelier</h1>
@@ -135,7 +138,7 @@ export function NoirFuture() {
   return (
     <div style={{ background: "#05070d", color: "#dfe8ff", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="noir" label="Room 02 · NOIR/2049" />
-      <RealityShell world="noir" current="future" basePath="/worlds/noir" />
+      <NoirNav current="future" />
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#6fc3ff" }}>ATELIER 2049 · DROP 07 · FABRICATION ON DEMAND</p>
         <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5.5rem)", margin: "8px 0", fontWeight: 400 }}>NOIR<span style={{ color: "#6fc3ff" }}>_FUTURE</span></h1>
@@ -153,6 +156,88 @@ export function NoirFuture() {
         </div>
         <p style={{ marginTop: 16, fontSize: "0.85rem", color: "#7f8fb0" }}>Rendered on demand. Shipped from the future. <Link href="/worlds/noir/collection" style={{ textDecoration: "underline", color: "#6fc3ff" }}>Classic index →</Link></p>
       </div>
+    </div>
+  );
+}
+
+export function NoirArchive() {
+  const [cat, setCat] = useState<"All" | string>("All");
+  const [ex, setEx] = useState<string | null>(null);
+  const items = SHOWROOM_PRODUCTS.filter((p) => cat === "All" || p.cat === cat);
+  return (
+    <div style={{ background: "#f1efe8", color: "#111", minHeight: "100dvh", fontFamily: "var(--font-mono)", padding: "0 0 80px" }}>
+      <WorldExit id="noir" label="Room 02 · NOIR/ARCHIVE" />
+      <NoirNav current="archive" />
+      <div style={{ padding: "32px 16px 0" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "baseline", borderBottom: "2px solid #111", paddingBottom: 12 }}>
+          <h1 style={{ fontSize: "1.2rem", letterSpacing: "0.3em", margin: 0 }}>NOIR — CATALOGUE RAISONNÉ, AW26</h1>
+          <Link href="/worlds/noir/bag" style={{ border: "1px solid #111", padding: "6px 12px", fontSize: 12 }}>BAG →</Link>
+        </div>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 16, fontSize: 12 }} role="group" aria-label="Filter">
+          {["All", ...SHOWROOM_CATS.slice(1)].map((c) => (
+            <button key={c} type="button" aria-pressed={cat === c} onClick={() => setCat(c)} style={{ border: "1px solid #111", background: cat === c ? "#111" : "transparent", color: cat === c ? "#f1efe8" : "#111", padding: "4px 10px", textTransform: "uppercase" }}>
+              {c}
+            </button>
+          ))}
+        </div>
+        <table style={{ width: "100%", textAlign: "left", fontSize: "0.9rem", marginTop: 20 }}>
+          <thead>
+            <tr style={{ borderBottom: "1px solid #111", fontSize: 11, textTransform: "uppercase" }}>
+              <th style={{ padding: "8px 0" }}>Lot</th>
+              <th>Piece</th>
+              <th>Category</th>
+              <th>Fabric</th>
+              <th style={{ textAlign: "right" }}>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((p) => (
+              <Fragment key={p.id}>
+                <tr style={{ borderBottom: "1px solid rgba(17,17,17,0.3)" }}>
+                  <td style={{ padding: "12px 0" }}>{String(SHOWROOM_PRODUCTS.indexOf(p) + 1).padStart(3, "0")}</td>
+                  <td>
+                    <button type="button" aria-expanded={ex === p.id} onClick={() => setEx(ex === p.id ? null : p.id)} style={{ background: "none", border: 0, padding: 0, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 4, color: "inherit", textAlign: "left" }}>
+                      {p.name}
+                    </button>
+                  </td>
+                  <td>{p.cat}</td>
+                  <td>{p.fabric}</td>
+                  <td style={{ textAlign: "right" }}>{money(p.price)}</td>
+                </tr>
+                {ex === p.id && (
+                  <tr style={{ borderBottom: "1px solid #111" }}>
+                    <td colSpan={5} style={{ background: "#e7e4da", padding: 16 }}>
+                      <p style={{ margin: "0 0 8px" }}>{p.desc}</p>
+                      <p style={{ margin: "0 0 16px", fontSize: 12 }}>Care: {p.care}</p>
+                      <div style={{ maxWidth: 420, color: "#111" }}>
+                        <NoirBuyBox key={p.id} p={p} />
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </Fragment>
+            ))}
+          </tbody>
+        </table>
+        {items.length === 0 && <p style={{ marginTop: 24, fontSize: "0.9rem" }}>No lots match.</p>}
+        <div style={{ display: "grid", gap: 40, gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", borderTop: "2px solid #111", marginTop: 56, paddingTop: 24 }}>
+          <div>
+            <h2 style={{ fontSize: 12, letterSpacing: "0.2em", margin: "0 0 12px" }}>Appointments</h2>
+            <p style={{ fontSize: "0.9rem" }}>Fittings and private viewings, Wednesday to Saturday. <Link href="/worlds/noir/appointments" style={{ textDecoration: "underline" }}>Book →</Link></p>
+          </div>
+          <div>
+            <h2 style={{ fontSize: 12, letterSpacing: "0.2em", margin: "0 0 12px" }}>Journal</h2>
+            <p style={{ fontSize: "0.9rem" }}><strong>On black.</strong> There is no single black; we keep a shelf of swatches and argue about which one is right.</p>
+            <p style={{ fontSize: "0.9rem" }}><strong>The half-second.</strong> A bias-cut dress arrives half a second after the body. That delay is the whole point.</p>
+            <p style={{ fontSize: "0.9rem" }}><strong>Fewer, then better.</strong> Nine pieces. Every one replaced two others that were almost as good.</p>
+          </div>
+        </div>
+      </div>
+      <WorldProof
+        proves="The catalogue as record: lot order, fabrics, care — provenance before purchase."
+        relatedHref="/worlds/archive"
+        relatedName="ARCHIVE"
+      />
     </div>
   );
 }
