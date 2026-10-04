@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useWasp } from "@/context/wasp-context";
 import { FEELS, INTENTS, MOTIONS } from "@/lib/types";
 import { INTENT_COPY, WORLDS, recommendWorlds } from "@/lib/worlds";
 import { REALITIES } from "@/lib/realities";
 import { pexels } from "@/lib/media";
 import { ProofPoke } from "@/components/wasp/proof-poke";
+import { SpaceField } from "@/components/wasp/space-field";
 
 const ROOM_SPAN = ["span8", "span4", "span4", "span5", "span3", "span4", "span4", "span5", "span3", "span7", "span5", "span4", "span4", "span5", "span7"];
 
@@ -32,29 +33,6 @@ const ROOM_IMAGE: Record<string, string> = {
   nest: pexels(30761844, 800),
   vector: pexels(37436278, 800),
 };
-
-const SELECTED = [
-  {
-    id: "casa",
-    editorial: "Booking a table feels like the evening starting early. Atmosphere and utility, same gesture.",
-    capabilities: ["Reservations", "Editorial menu", "Gallery"],
-  },
-  {
-    id: "noir",
-    editorial: "The object desirable before the price appears. Then it still closes: sizes, bag, checkout.",
-    capabilities: ["Ecommerce", "Lookbook", "Appointments"],
-  },
-  {
-    id: "orbit",
-    editorial: "Software you operate, demonstrated live. Customers, pipeline, reports, exports.",
-    capabilities: ["Dashboards", "CRUD", "Reports + CSV"],
-  },
-  {
-    id: "forge",
-    editorial: "Parts with numbers you can trust and a quote flow a busy buyer finishes. B2B without the beige.",
-    capabilities: ["Catalogues", "Diagrams", "Quote builder"],
-  },
-] as const;
 
 export function Experience() {
   const wasp = useWasp();
@@ -170,7 +148,7 @@ export function Experience() {
             </p>
           ) : null}
           <div className="world-actions" style={{ marginTop: 22 }}>
-            <Link className="btn" href="#selected">View selected work</Link>
+            <Link className="btn" href="#space">Enter the space</Link>
             <Link className="btn ghost" href="/start">Start a project</Link>
           </div>
           <div className="intent-row" role="list">
@@ -235,56 +213,7 @@ export function Experience() {
 
       <ProofPoke />
 
-      <section id="selected" aria-label="Selected work" style={{ borderBottom: "1px solid var(--line)" }}>
-        <div style={{ padding: "16px var(--pad) 8px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }} className="grid-2">
-          <div>
-            <p className="ex-kicker">Selected work · 4 rooms that carry the argument</p>
-          </div>
-          <div>
-            <p className="kicker">What&apos;s actually here</p>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
-              <Link className="ghost" href="#selected">15 worlds ↓</Link>
-              <Link className="ghost" href="/tools">10 tools</Link>
-              <Link className="ghost" href="/process">16 stages</Link>
-              <Link className="ghost" href="/os">The OS</Link>
-              <Link className="ghost" href="/lab">Lab</Link>
-              <Link className="ghost" href="/start">Builder →</Link>
-            </div>
-            <p className="kicker" style={{ marginTop: 14, border: "1px solid var(--line)", padding: "10px 12px" }}>
-              A note on proof: nothing here invents clients, quotes, or numbers. Where measurement doesn&apos;t exist yet, it says so.
-            </p>
-          </div>
-        </div>
-        {SELECTED.map((s) => {
-          const world = WORLDS.find((w) => w.id === s.id)!;
-          return (
-            <SelReveal key={s.id}>
-            <article className="selected-row">
-              <Link
-                href={world.href}
-                className="selected-img"
-                style={{ ["--room-image" as string]: `url(${ROOM_IMAGE[world.id]})` }}
-                aria-label={`Enter ${world.name}`}
-              />
-              <div className="selected-body">
-                <p className="kicker">ROOM {world.room} · {world.kind} · WASP STUDY</p>
-                <h2>{world.name}</h2>
-                <p className="kicker" style={{ marginTop: 6 }}>Palette — {world.palette}</p>
-                <p className="selected-line">{world.line}</p>
-                <p>{s.editorial}</p>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", margin: "14px 0 20px" }}>
-                  {s.capabilities.map((c) => <span key={c} className="chip">{c}</span>)}
-                </div>
-                <div className="world-actions">
-                  <Link className="btn" href={world.href}>Enter world</Link>
-                  <Link className="btn ghost" href={`/studio/case/${world.id}`}>View case study</Link>
-                </div>
-              </div>
-            </article>
-            </SelReveal>
-          );
-        })}
-      </section>
+      <SpaceField />
 
       <div style={{ padding: "16px var(--pad) 8px", borderBottom: "1px solid var(--line)", display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "baseline" }}>
         <p className="ex-kicker" style={{ margin: 0 }}>The exhibition · all 15 rooms</p>
@@ -461,35 +390,5 @@ function WorldsRail() {
         ))}
       </div>
     </section>
-  );
-}
-
-function SelReveal({ children }: { children: ReactNode }) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (typeof IntersectionObserver === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      el.classList.add("in");
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            e.target.classList.add("in");
-            io.disconnect();
-          }
-        }
-      },
-      { threshold: 0.08 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return (
-    <div ref={ref} className="sel-reveal">
-      {children}
-    </div>
   );
 }
