@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { media } from "@/lib/media";
 
@@ -19,7 +19,7 @@ export function MotionTiming() {
   return (
     <div style={{ background: "#f4f1ea", color: "#111", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="motion" label="Room 08 · MOTION/TIMING" />
-      <RealityShell world="motion" current="timing" basePath="/worlds/motion" />
+      <MotionNav current="timing" />
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "32px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.25em" }}>TIMING SHEET · REV C · 24FPS</p>
         <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.6rem, 8vw, 5.5rem)", margin: "8px 0", letterSpacing: "-0.04em" }}>Every frame, accounted for.</h1>
@@ -60,7 +60,7 @@ export function MotionCinema() {
   return (
     <div style={{ background: "#000", color: "#f4f1ea", minHeight: "100dvh" }}>
       <WorldExit id="motion" label="Room 08 · MOTION/CINEMA" />
-      <RealityShell world="motion" current="cinema" basePath="/worlds/motion" />
+      <MotionNav current="cinema" />
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 20px" }}>
         <p style={{ fontFamily: "var(--font-code)", fontSize: 11, letterSpacing: "0.25em", textAlign: "center" }}>2.39:1 · DCP · NO TRAILERS</p>
         {CHAPTERS.map((c, i) => (
@@ -88,7 +88,7 @@ export function MotionOceanic() {
   return (
     <div style={{ background: "#06222b", color: "#e8f4f0", minHeight: "100dvh" }}>
       <WorldExit id="motion" label="Room 08 · MOTION/FLUID" />
-      <RealityShell world="motion" current="oceanic" basePath="/worlds/motion" />
+      <MotionNav current="oceanic" />
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "48px 20px 80px" }}>
         <p style={{ fontFamily: "var(--font-code)", fontSize: 11, letterSpacing: "0.3em", color: "#2ea8a0" }}>FLUID TIMING · EVERYTHING DRIFTS</p>
         <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.6rem, 8vw, 5.5rem)", margin: "8px 0 8px" }}>Motion, underwater.</h1>
@@ -121,7 +121,7 @@ export function MotionStoryboard() {
   return (
     <div style={{ background: "#efe9dc", color: "#1a1712", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="motion" label="Room 08 · MOTION/BOARDS" />
-      <RealityShell world="motion" current="storyboard" basePath="/worlds/motion" />
+      <MotionNav current="storyboard" />
       <div style={{ maxWidth: 960, margin: "0 auto", padding: "32px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.25em" }}>BOARDS · REV C · PINNED, NOT RENDERED</p>
         <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.6rem, 8vw, 5.5rem)", margin: "8px 0", letterSpacing: "-0.04em" }}>Before it moves.</h1>
@@ -163,7 +163,7 @@ export function MotionCredits() {
   return (
     <div style={{ background: "#000", color: "#f4f1ea", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="motion" label="Room 08 · MOTION/CREDITS" />
-      <RealityShell world="motion" current="credits" basePath="/worlds/motion" />
+      <MotionNav current="credits" />
       <div style={{ maxWidth: 560, margin: "0 auto", padding: "64px 20px 80px", textAlign: "center" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.4em", color: "#8a8580" }}>AFTER THE LOOP · STAY SEATED</p>
         <div style={{ marginTop: 48 }}>
@@ -188,5 +188,102 @@ export function MotionCredits() {
         relatedName="ARCHIVE"
       />
     </div>
+  );
+}
+
+const CURVES: [string, string][] = [
+  ["expo-out", "cubic-bezier(0.16, 1, 0.3, 1)"],
+  ["ease", "ease"],
+  ["snap", "cubic-bezier(0.8, 0, 0.2, 1)"],
+  ["linear", "linear"],
+];
+
+export function MotionStage() {
+  const [curve, setCurve] = useState(CURVES[0][1]);
+  const [run, setRun] = useState(0);
+  const title = "MOVE WITH INTENT";
+  return (
+    <div style={{ background: "#0c0c0c", color: "#f2f2ee", minHeight: "100dvh" }}>
+      <WorldExit id="motion" label="Room 08 · MOTION/STAGE" />
+      <MotionNav current="stage" />
+      <section style={{ display: "flex", minHeight: "80vh", flexDirection: "column", justifyContent: "flex-end", padding: "0 20px 64px" }}>
+        <h1 key={run} aria-label={title} style={{ fontSize: "clamp(3.2rem, 12vw, 11rem)", fontWeight: 800, lineHeight: 0.88, letterSpacing: "-0.02em", margin: 0 }}>
+          {title.split(" ").map((w, wi) => (
+            <span key={wi} style={{ marginRight: "0.25em", display: "inline-block", overflow: "hidden", verticalAlign: "top" }} aria-hidden>
+              {w.split("").map((ch, i) => (
+                <span
+                  key={i}
+                  style={{ display: "inline-block", animation: `motion-rise 900ms ${curve} both`, animationDelay: `${(wi * 5 + i) * 45}ms` }}
+                >
+                  {ch}
+                </span>
+              ))}
+            </span>
+          ))}
+        </h1>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center", marginTop: 24 }}>
+          <button type="button" onClick={() => setRun(run + 1)} style={{ border: "1px solid rgba(242,242,238,0.4)", background: "transparent", color: "#f2f2ee", padding: "10px 18px", fontSize: 12 }}>
+            Replay headline
+          </button>
+          <div style={{ display: "flex", gap: 6 }} role="group" aria-label="Easing curve">
+            {CURVES.map(([name, fn]) => (
+              <button
+                key={name}
+                type="button"
+                aria-pressed={curve === fn}
+                onClick={() => { setCurve(fn); setRun(run + 1); }}
+                style={{ border: "1px solid rgba(242,242,238,0.4)", background: curve === fn ? "#f2f2ee" : "transparent", color: curve === fn ? "#0c0c0c" : "#f2f2ee", padding: "10px 14px", fontSize: 12 }}
+              >
+                {name}
+              </button>
+            ))}
+          </div>
+          <code style={{ fontSize: 12, color: "rgba(242,242,238,0.5)" }}>{curve}</code>
+        </div>
+        <p style={{ marginTop: 16, fontSize: "0.9rem", color: "rgba(242,242,238,0.6)" }}>
+          The headline performs on your cue. Full timing lab lives <Link href="/worlds/motion/timing" style={{ textDecoration: "underline" }}>in the timing sheet →</Link>
+        </p>
+      </section>
+      <WorldProof
+        proves="Kinetic type as an instrument: pick a curve, run the headline, feel the milliseconds."
+        relatedHref="/worlds/pulse"
+        relatedName="PULSE"
+      />
+    </div>
+  );
+}
+
+export function MotionNav({ current }: { current: string }) {
+  return (
+    <nav aria-label="MOTION realities" style={{ display: "flex", gap: 2, alignItems: "center", background: "#000", color: "#f4f1ea", borderBottom: "1px solid rgba(244,241,234,0.25)", padding: "0 12px", overflowX: "auto" }}>
+      <Link href="/worlds/motion" style={{ padding: "12px 8px", letterSpacing: "0.25em", fontSize: 12, fontWeight: 800 }}>
+        MOTION◌
+      </Link>
+      {[
+        ["classic", "Campaign", "/worlds/motion"],
+        ["timing", "Timing", "/worlds/motion/timing"],
+        ["cinema", "Cinema", "/worlds/motion/cinema"],
+        ["oceanic", "Fluid", "/worlds/motion/oceanic"],
+        ["storyboard", "Boards", "/worlds/motion/storyboard"],
+        ["credits", "Credits", "/worlds/motion/credits"],
+        ["stage", "Stage", "/worlds/motion/stage"],
+      ].map(([id, label, href]) => (
+        <Link
+          key={id}
+          href={href}
+          aria-current={current === id ? "page" : undefined}
+          style={{
+            padding: "12px 12px",
+            fontSize: 12,
+            letterSpacing: "0.1em",
+            color: current === id ? "#000" : "#f4f1ea",
+            background: current === id ? "#e8b86d" : "transparent",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {label}
+        </Link>
+      ))}
+    </nav>
   );
 }

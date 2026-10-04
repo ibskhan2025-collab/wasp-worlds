@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { MotionNav } from "@/components/worlds/motion-realities";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { media } from "@/lib/media";
 
@@ -63,6 +64,7 @@ export default function MotionPage() {
   return (
     <div className="mot-root">
       <WorldExit id="motion" label="Room 08 · MOTION" />
+      <MotionNav current="classic" />
       <div className="progress-bar" style={{ transform: `scaleX(${p})`, background: "#fff" }} />
       <nav aria-label="Chapters" style={{ position: "fixed", right: 14, top: "50%", translate: "0 -50%", display: "grid", gap: 8, zIndex: 5 }}>
         {panels.map((s, i) => (

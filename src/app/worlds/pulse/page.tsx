@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { PulseNav } from "@/components/worlds/pulse-realities";
 import { fmtSecs, releases } from "@/data/pulse";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { TourList } from "./tour-list";
@@ -14,6 +15,7 @@ export default function PulsePage() {
   return (
     <div className="mot-root" style={{ fontFamily: "var(--font-sans)" }}>
       <WorldExit id="pulse" label="Room 12 · PULSE" />
+      <PulseNav current="classic" />
       <header style={{ padding: "48px 20px 12px", textAlign: "center" }}>
         <p className="kicker" style={{ color: "#e23a3a" }}>Room 12 · Music / Culture</p>
         <h1 style={{ fontFamily: "var(--font-poster)", fontSize: "clamp(4rem, 16vw, 11rem)", lineHeight: 0.85, margin: "8px 0" }}>PULSE</h1>

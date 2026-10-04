@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldProof } from "@/components/worlds/world-proof";
+import { NestNav } from "@/components/worlds/nest-realities";
 import { nestRooms } from "@/data/nest";
 
 export const metadata: Metadata = {
@@ -13,6 +14,7 @@ export default function NestPage() {
   return (
     <div className="obj-root">
       <WorldExit id="nest" label="Room 14 · NEST" />
+      <NestNav current="classic" />
       <header style={{ padding: "32px 20px 12px" }}>
         <p className="kicker">Room 14 · Architecture / Space</p>
         <h1 style={{ fontSize: "clamp(3rem, 9vw, 7rem)", margin: "4px 0", letterSpacing: "-0.05em" }}>NEST</h1>

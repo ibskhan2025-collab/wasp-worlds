@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { VectorNav } from "@/components/worlds/vector-realities";
 import { vectorInsights, vectorPractices } from "@/data/vector";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { media } from "@/lib/media";
@@ -16,6 +17,7 @@ export default function VectorPage() {
   return (
     <div style={{ background: "#0b0e0c", color: "#e8e4dc", minHeight: "100dvh" }}>
       <WorldExit id="vector" label="Room 15 · VECTOR" />
+      <VectorNav current="classic" />
       <header style={{ padding: "32px 20px 12px", borderBottom: "1px solid #ffffff1c" }}>
         <p className="kicker" style={{ color: "#3ddc84" }}>Room 15 · Finance / Professional</p>
         <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(3rem, 10vw, 7.5rem)", margin: "4px 0", letterSpacing: "-0.06em" }}>VECTOR</h1>

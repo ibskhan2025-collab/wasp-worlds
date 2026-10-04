@@ -2,15 +2,49 @@
 
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { nestMaterials, nestRooms } from "@/data/nest";
+
+export function NestNav({ current }: { current: string }) {
+  return (
+    <nav aria-label="NEST realities" style={{ display: "flex", gap: 2, alignItems: "center", background: "#101210", color: "#e8e0d2", borderBottom: "1px solid rgba(232,224,210,0.2)", padding: "0 12px", overflowX: "auto" }}>
+      <Link href="/worlds/nest" style={{ padding: "12px 8px", letterSpacing: "0.25em", fontSize: 12, fontWeight: 800, fontFamily: "var(--font-code)" }}>
+        NEST◌
+      </Link>
+      {[
+        ["classic", "Plaster", "/worlds/nest"],
+        ["drawing", "Drawing", "/worlds/nest/drawing"],
+        ["simulated", "Simulated", "/worlds/nest/simulated"],
+        ["walk", "Walk", "/worlds/nest/walk"],
+        ["mockup", "Mockup", "/worlds/nest/mockup"],
+        ["volume", "Volume", "/worlds/nest/volume"],
+      ].map(([id, label, href]) => (
+        <Link
+          key={id}
+          href={href}
+          aria-current={current === id ? "page" : undefined}
+          style={{
+            padding: "12px 12px",
+            fontSize: 12,
+            letterSpacing: "0.1em",
+            fontFamily: "var(--font-code)",
+            color: current === id ? "#101210" : "#e8e0d2",
+            background: current === id ? "#c98a3d" : "transparent",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {label}
+        </Link>
+      ))}
+    </nav>
+  );
+}
 
 export function NestDrawing() {
   return (
     <div style={{ background: "#e8e4da", color: "#1c1a16", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="nest" label="Room 14 · NEST/DRAWING" />
-      <RealityShell world="nest" current="drawing" basePath="/worlds/nest" />
+      <NestNav current="drawing" />
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "32px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.25em" }}>TRACING PAPER · REV B · SCALE 1:50</p>
         <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0", fontWeight: 400 }}>THE PLAN, INKED.</h1>
@@ -57,7 +91,7 @@ export function NestSimulated() {
   return (
     <div style={{ background: "#0e1418", color: "#cfe0da", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="nest" label="Room 14 · NEST/SIM" />
-      <RealityShell world="nest" current="simulated" basePath="/worlds/nest" />
+      <NestNav current="simulated" />
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "32px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.25em", color: "#3ddc84" }}>LIVE SIM · SENSORS: 4/4 NOMINAL</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.6rem)", margin: "8px 0" }}>HOUSE TELEMETRY</h1>
@@ -88,7 +122,7 @@ export function NestMockup() {
   return (
     <div style={{ background: "#d9c39a", color: "#3a2f22", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="nest" label="Room 14 · NEST/MOCKUP" />
-      <RealityShell world="nest" current="mockup" basePath="/worlds/nest" />
+      <NestNav current="mockup" />
       <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>CARDBOARD STUDY 1:4 · TAPE, NOT GLUE</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.4rem)", margin: "8px 0" }}>The house, mocked up.</h1>

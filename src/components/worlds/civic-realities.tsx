@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { civicServices } from "@/data/civic";
 
@@ -10,7 +9,7 @@ export function CivicNoticeboard() {
   return (
     <div style={{ background: "#faf7f0", color: "#141210", minHeight: "100dvh", fontFamily: "var(--font-sans)" }}>
       <WorldExit id="civic" label="Room 13 · CIVIC/NOTICE" />
-      <RealityShell world="civic" current="noticeboard" basePath="/worlds/civic" />
+      <CivicNav current="noticeboard" />
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 20px 80px" }}>
         <div style={{ border: "4px solid #141210", padding: "24px" }}>
           <p style={{ fontSize: 11, letterSpacing: "0.3em", margin: 0 }}>BOROUGH OF NORTHGATE · BY ORDER · FICTIONAL</p>
@@ -41,7 +40,7 @@ export function CivicPaperform() {
   return (
     <div style={{ background: "#e9e2d0", color: "#2a241c", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
       <WorldExit id="civic" label="Room 13 · CIVIC/COUNTER" />
-      <RealityShell world="civic" current="paperform" basePath="/worlds/civic" />
+      <CivicNav current="paperform" />
       <div style={{ maxWidth: 600, margin: "0 auto", padding: "40px 20px 80px" }}>
         <div style={{ background: "#f4efe0", border: "1px solid #2a241c", boxShadow: "6px 6px 0 #2a241c33", padding: "32px 28px" }}>
           <p style={{ fontSize: 11, letterSpacing: "0.3em", margin: 0 }}>FORM CVC-1 · PLEASE USE BLOCK CAPITALS</p>
@@ -68,7 +67,7 @@ export function CivicKiosk() {
   return (
     <div style={{ background: "#0d1117", color: "#e8eef2", minHeight: "100dvh", fontFamily: "var(--font-sans)" }}>
       <WorldExit id="civic" label="Room 13 · CIVIC/KIOSK" />
-      <RealityShell world="civic" current="kiosk" basePath="/worlds/civic" />
+      <CivicNav current="kiosk" />
       <div style={{ maxWidth: 640, margin: "0 auto", padding: "48px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#2e6bd8" }}>PUBLIC TERMINAL · TOUCH TO BEGIN · FICTIONAL</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 8vw, 4.6rem)", margin: "8px 0 24px" }}>What do you need?</h1>
@@ -93,7 +92,7 @@ export function CivicChamber() {
   return (
     <div style={{ background: "#1c1611", color: "#ece4d2", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
       <WorldExit id="civic" label="Room 13 · CIVIC/CHAMBER" />
-      <RealityShell world="civic" current="chamber" basePath="/worlds/civic" />
+      <CivicNav current="chamber" />
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "40px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#c9a86d" }}>ORDER OF BUSINESS · {civicServices.length} MOTIONS · PUBLIC GALLERY OPEN</p>
         <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", fontWeight: 400, margin: "8px 0" }}>Chamber.</h1>
@@ -124,7 +123,7 @@ export function CivicDesk() {
   return (
     <div style={{ background: "#e9e2d0", color: "#2a241c", minHeight: "100dvh", fontFamily: "var(--font-sans)" }}>
       <WorldExit id="civic" label="Room 13 · CIVIC/DESK" />
-      <RealityShell world="civic" current="desk" basePath="/worlds/civic" />
+      <CivicNav current="desk" />
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "40px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>FRONT DESK · TAKE A NUMBER · NOW SERVING 14</p>
         <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0" }}>What brings you in?</h1>
@@ -152,5 +151,110 @@ export function CivicDesk() {
         relatedName="ORBIT"
       />
     </div>
+  );
+}
+
+export function CivicContrast() {
+  return (
+    <div style={{ background: "#000", color: "#ffeb3b", minHeight: "100dvh", fontFamily: "var(--font-sans)" }}>
+      <WorldExit id="civic" label="Room 13 · CIVIC/CONTRAST" />
+      <CivicNav current="contrast" />
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "40px 20px 80px" }}>
+        <p style={{ fontSize: 12, letterSpacing: "0.25em", fontWeight: 800 }}>MAXIMUM CONTRAST · EVERY EDGE DECLARED</p>
+        <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0" }}>No mistaking anything.</h1>
+        {civicServices.map((s, i) => (
+          <article key={s.slug} style={{ border: "4px solid #ffeb3b", marginTop: 20, padding: 20 }}>
+            <p style={{ fontSize: 12, letterSpacing: "0.2em", margin: 0, fontWeight: 800 }}>
+              {i + 1}. {s.dept.toUpperCase()}
+            </p>
+            <h2 style={{ fontSize: "1.8rem", margin: "8px 0" }}>
+              <Link href={`/worlds/civic/${s.slug}`} style={{ textDecoration: "underline", textDecorationThickness: 3 }}>
+                {s.title}
+              </Link>
+            </h2>
+            <p style={{ fontSize: "1.05rem" }}>{s.intro}</p>
+            <p style={{ fontSize: "0.9rem" }}>{s.steps.length} steps · {s.source}</p>
+          </article>
+        ))}
+        <p style={{ marginTop: 24 }}>Fiction, labelled. <Link href="/worlds/civic" style={{ textDecoration: "underline", textDecorationThickness: 3 }}>Back to the counter →</Link></p>
+      </div>
+      <WorldProof
+        proves="Contrast as care: the same services, impossible to misread."
+        relatedHref="/worlds/archive"
+        relatedName="ARCHIVE"
+      />
+    </div>
+  );
+}
+
+export function CivicPlain() {
+  return (
+    <div style={{ background: "#fff", color: "#000", minHeight: "100dvh", fontFamily: "monospace", paddingBottom: 80 }}>
+      <WorldExit id="civic" label="Room 13 · CIVIC/PLAIN" />
+      <CivicNav current="plain" />
+      <div style={{ maxWidth: 640, margin: "0 auto", padding: "40px 20px 0" }}>
+        <h1 style={{ fontSize: "1.4rem", margin: 0 }}>civic services, plain text edition</h1>
+        <p>No stylesheets were harmed. Or loaded.</p>
+        {civicServices.map((s, i) => (
+          <div key={s.slug} style={{ borderTop: "1px solid #000", padding: "16px 0" }}>
+            <p style={{ margin: 0 }}>{i + 1}. [{s.dept}]</p>
+            <p style={{ margin: "4px 0" }}>
+              <Link href={`/worlds/civic/${s.slug}`} style={{ textDecoration: "underline" }}>{s.title}</Link>
+            </p>
+            <p style={{ margin: "4px 0" }}>{s.intro}</p>
+            {s.steps.map((st, j) => (
+              <p key={j} style={{ margin: "4px 0" }}>
+                Step {j + 1}: {st.t}. {st.b}
+              </p>
+            ))}
+            <p style={{ fontSize: "0.85rem" }}>Source: {s.source}</p>
+          </div>
+        ))}
+        <p style={{ marginTop: 24 }}>
+          <Link href="/worlds/civic" style={{ textDecoration: "underline" }}>Back to the designed version →</Link>
+        </p>
+      </div>
+      <WorldProof
+        proves="Content survives anything: strip every style and the services still work."
+        relatedHref="/worlds/archive"
+        relatedName="ARCHIVE"
+      />
+    </div>
+  );
+}
+
+export function CivicNav({ current }: { current: string }) {
+  return (
+    <nav aria-label="CIVIC realities" style={{ display: "flex", gap: 2, alignItems: "center", background: "#0b0c0c", color: "#fff", borderBottom: "2px solid #1d70b8", padding: "0 12px", overflowX: "auto" }}>
+      <Link href="/worlds/civic" style={{ padding: "12px 8px", letterSpacing: "0.2em", fontSize: 12, fontWeight: 800 }}>
+        CIVIC◌ <span style={{ fontWeight: 400, fontSize: 10 }}>(fictional)</span>
+      </Link>
+      {[
+        ["classic", "Service", "/worlds/civic"],
+        ["noticeboard", "Notice", "/worlds/civic/noticeboard"],
+        ["paperform", "Counter", "/worlds/civic/paperform"],
+        ["kiosk", "Kiosk", "/worlds/civic/kiosk"],
+        ["chamber", "Chamber", "/worlds/civic/chamber"],
+        ["desk", "Desk", "/worlds/civic/desk"],
+        ["contrast", "Contrast", "/worlds/civic/contrast"],
+        ["plain", "Plain", "/worlds/civic/plain"],
+      ].map(([id, label, href]) => (
+        <Link
+          key={id}
+          href={href}
+          aria-current={current === id ? "page" : undefined}
+          style={{
+            padding: "12px 12px",
+            fontSize: 12,
+            letterSpacing: "0.1em",
+            color: current === id ? "#0b0c0c" : "#fff",
+            background: current === id ? "#fff" : "transparent",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {label}
+        </Link>
+      ))}
+    </nav>
   );
 }

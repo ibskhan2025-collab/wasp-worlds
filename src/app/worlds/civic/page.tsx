@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { CivicNav } from "@/components/worlds/civic-realities";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { media } from "@/lib/media";
 import { Finder } from "./finder";
@@ -14,6 +15,7 @@ export default function CivicPage() {
   return (
     <div className="still-root">
       <WorldExit id="civic" label="Room 13 · CIVIC" />
+      <CivicNav current="classic" />
       <header style={{ padding: "32px 20px 12px", borderBottom: "1px solid var(--line)" }}>
         <p className="kicker">Room 13 · Institutions / Public</p>
         <h1 style={{ fontSize: "clamp(2.8rem, 8vw, 6rem)", margin: "4px 0", letterSpacing: "-0.05em" }}>CIVIC</h1>

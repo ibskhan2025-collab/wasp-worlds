@@ -2,15 +2,14 @@
 
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
-import { vectorInsights, vectorQuarters } from "@/data/vector";
+import { vectorInsights, vectorPractices, vectorQuarters } from "@/data/vector";
 
 export function VectorLedger() {
   return (
     <div style={{ background: "#f3efe8", color: "#1a1712", minHeight: "100dvh", fontFamily: "Georgia, serif", backgroundImage: "repeating-linear-gradient(transparent 0 27px, rgba(26,23,18,0.08) 27px 28px)" }}>
       <WorldExit id="vector" label="Room 15 · VECTOR/LEDGER" />
-      <RealityShell world="vector" current="ledger" basePath="/worlds/vector" />
+      <VectorNav current="ledger" />
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "32px 20px 80px" }}>
         <p style={{ fontSize: 12 }}>LEDGER · Q1 23 – Q2 26 · KEPT IN PENCIL</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.4rem)", fontWeight: 400, margin: "8px 0" }}>The book, kept by hand.</h1>
@@ -52,7 +51,7 @@ export function VectorFiling() {
   return (
     <div style={{ background: "#e8e8e4", color: "#141414", minHeight: "100dvh", fontFamily: "var(--font-sans)" }}>
       <WorldExit id="vector" label="Room 15 · VECTOR/FILING" />
-      <RealityShell world="vector" current="filing" basePath="/worlds/vector" />
+      <VectorNav current="filing" />
       <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 20px 80px" }}>
         <div style={{ border: "3px solid #141414", padding: "24px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
@@ -88,7 +87,7 @@ export function VectorSurface() {
   return (
     <div style={{ background: "#e8eef2", color: "#101418", minHeight: "100dvh", fontFamily: "var(--font-sans)" }}>
       <WorldExit id="vector" label="Room 15 · VECTOR/SURFACE" />
-      <RealityShell world="vector" current="surface" basePath="/worlds/vector" />
+      <VectorNav current="surface" />
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#0f6fbf" }}>QUIET BRIEFING · COFFEE PROVIDED</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.4rem)", fontWeight: 400, letterSpacing: "-0.02em", margin: "8px 0" }}>Money, explained calmly.</h1>
@@ -128,7 +127,7 @@ export function VectorChart() {
   return (
     <div style={{ background: "#0b0e13", color: "#dfe8f2", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="vector" label="Room 15 · VECTOR/CHART" />
-      <RealityShell world="vector" current="chart" basePath="/worlds/vector" />
+      <VectorNav current="chart" />
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#6fc3ff" }}>INDEX · Q1 23 – Q2 26 · DRAWDOWNS LABELLED, NOT SMOOTHED</p>
         <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0" }}>Chart.</h1>
@@ -169,7 +168,7 @@ export function VectorLetter() {
   return (
     <div style={{ background: "#faf8f2", color: "#141414", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
       <WorldExit id="vector" label="Room 15 · VECTOR/LETTER" />
-      <RealityShell world="vector" current="letter" basePath="/worlds/vector" />
+      <VectorNav current="letter" />
       <div style={{ maxWidth: 640, margin: "0 auto", padding: "56px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.35em", textAlign: "center" }}>QUARTERLY LETTER · {latest.q} · INDEX {latest.v}</p>
         <h1 style={{ fontSize: "clamp(2.2rem, 6vw, 3.6rem)", fontWeight: 400, textAlign: "center", margin: "16px 0 8px" }}>{lead.title}</h1>
@@ -195,5 +194,116 @@ export function VectorLetter() {
         relatedName="ARCHIVE"
       />
     </div>
+  );
+}
+
+export function VectorReport() {
+  const first = vectorQuarters[0];
+  const last = vectorQuarters[vectorQuarters.length - 1];
+  const gain = Math.round(((last.v - first.v) / first.v) * 100);
+  const falls = vectorQuarters.filter((q) => q.event && (q.event.includes("Drawdown") || q.event.includes("shock")));
+  return (
+    <div style={{ background: "#f6f1e7", color: "#1b1b1b", minHeight: "100dvh", fontFamily: "Georgia, serif", paddingBottom: 80 }}>
+      <WorldExit id="vector" label="Room 15 · VECTOR/REPORT" />
+      <VectorNav current="report" />
+      <div style={{ maxWidth: 880, margin: "0 auto", padding: "48px 20px 0" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>VECTOR CAPITAL · FICTIONAL · HALF-YEAR REPORT</p>
+        <h1 style={{ fontSize: "clamp(2.8rem, 9vw, 7rem)", fontWeight: 500, lineHeight: 0.95, letterSpacing: "-0.02em", margin: "12px 0" }}>
+          Three and a half years, honestly.
+        </h1>
+        <p style={{ fontSize: "1.25rem", fontStyle: "italic", opacity: 0.75, maxWidth: "56ch" }}>
+          What the index returned, what it cost in sleepless quarters, and why we show both.
+        </p>
+        <p style={{ display: "inline-block", background: "#1b1b1b", color: "#fff", fontSize: 12, fontWeight: 700, padding: "6px 12px", marginTop: 12 }}>
+          ILLUSTRATIVE FIGURES — NOT FINANCIAL ADVICE
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 1, background: "rgba(27,27,27,0.25)", border: "1px solid rgba(27,27,27,0.25)", marginTop: 32 }}>
+          {[
+            [`${first.q} → ${last.q}`, `${first.v} → ${last.v}`],
+            ["Total return", `+${gain}%`],
+            ["Drawdowns suffered", String(falls.length)],
+            ["Practices", vectorPractices.join(" · ")],
+          ].map(([k, v]) => (
+            <div key={k} style={{ background: "#f6f1e7", padding: 20 }}>
+              <p style={{ fontSize: 11, letterSpacing: "0.2em", opacity: 0.6, margin: 0 }}>{k.toUpperCase()}</p>
+              <p style={{ fontSize: "1.6rem", margin: "6px 0 0" }}>{v}</p>
+            </div>
+          ))}
+        </div>
+        <h2 style={{ fontSize: "1.8rem", marginTop: 48 }}>The quarters</h2>
+        <table style={{ width: "100%", fontSize: "0.95rem", marginTop: 8 }}>
+          <thead>
+            <tr style={{ borderBottom: "2px solid #1b1b1b", fontSize: 11, textTransform: "uppercase", textAlign: "left" }}>
+              <th style={{ padding: "8px 0" }}>Quarter</th><th>Index</th><th>Event</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vectorQuarters.map((q) => (
+              <tr key={q.q} style={{ borderBottom: "1px solid rgba(27,27,27,0.2)" }}>
+                <td style={{ padding: "8px 0" }}>{q.q}</td>
+                <td style={{ fontWeight: q.event ? 700 : 400 }}>{q.v}</td>
+                <td style={{ color: "#8a1f2d" }}>{q.event ?? "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <h2 style={{ fontSize: "1.8rem", marginTop: 48 }}>What we think</h2>
+        <div style={{ display: "grid", gap: 32, gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
+          {vectorInsights.map((a) => (
+            <article key={a.slug}>
+              <h3 style={{ fontSize: "1.4rem", margin: "0 0 8px" }}>
+                <Link href={`/worlds/vector/${a.slug}`} style={{ textDecoration: "underline" }}>{a.title}</Link>
+              </h3>
+              <p style={{ color: "#555" }}>{a.dek}</p>
+              <p style={{ fontSize: "0.85rem", color: "#777" }}>{a.date}</p>
+            </article>
+          ))}
+        </div>
+        <p style={{ marginTop: 40 }}>
+          Convinced by candor? <Link href="/worlds/vector" style={{ textDecoration: "underline", fontWeight: 700 }}>Talk to the terminal →</Link>
+        </p>
+      </div>
+      <WorldProof
+        proves="Reporting as a reality: the numbers, the narrative, and the disclaimer on one page."
+        relatedHref="/worlds/orbit"
+        relatedName="ORBIT"
+      />
+    </div>
+  );
+}
+
+export function VectorNav({ current }: { current: string }) {
+  return (
+    <nav aria-label="VECTOR realities" style={{ display: "flex", gap: 2, alignItems: "center", background: "#0b0e13", color: "#dfe8f2", borderBottom: "1px solid rgba(223,232,242,0.2)", padding: "0 12px", overflowX: "auto" }}>
+      <Link href="/worlds/vector" style={{ padding: "12px 8px", letterSpacing: "0.25em", fontSize: 12, fontWeight: 800, fontFamily: "var(--font-code)" }}>
+        VECTOR◌
+      </Link>
+      {[
+        ["classic", "Terminal", "/worlds/vector"],
+        ["ledger", "Ledger", "/worlds/vector/ledger"],
+        ["filing", "Filing", "/worlds/vector/filing"],
+        ["surface", "Surface", "/worlds/vector/surface"],
+        ["chart", "Chart", "/worlds/vector/chart"],
+        ["letter", "Letter", "/worlds/vector/letter"],
+        ["report", "Report", "/worlds/vector/report"],
+      ].map(([id, label, href]) => (
+        <Link
+          key={id}
+          href={href}
+          aria-current={current === id ? "page" : undefined}
+          style={{
+            padding: "12px 12px",
+            fontSize: 12,
+            letterSpacing: "0.1em",
+            fontFamily: "var(--font-code)",
+            color: current === id ? "#0b0e13" : "#dfe8f2",
+            background: current === id ? "#0f6fbf" : "transparent",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {label}
+        </Link>
+      ))}
+    </nav>
   );
 }

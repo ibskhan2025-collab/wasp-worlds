@@ -1,6 +1,6 @@
 "use client";
 /* eslint-disable react-hooks/immutability -- three.js scene graphs are inherently mutable; the rule cannot model canvas/WebGL code. */
-import { Component, useEffect, useRef, type ReactNode } from "react";
+import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
@@ -152,4 +152,58 @@ export function useKeySet() {
     return () => { window.removeEventListener("keydown", d); window.removeEventListener("keyup", u); window.removeEventListener("blur", b); };
   }, []);
   return keys;
+}
+
+/** Instanced particle field that pushes or pulls around the pointer. */
+type Particle = { p: THREE.Vector3; v: THREE.Vector3; s: number };
+export function Field({ n, mode }: { n: number; mode: "repel" | "attract" }) {
+  const mesh = useRef<THREE.InstancedMesh | null>(null);
+  const [d, setD] = useState<Particle[]>([]);
+  useEffect(() => {
+    queueMicrotask(() => {
+      setD(
+        Array.from({ length: n }, () => ({
+          p: new THREE.Vector3((Math.random() - 0.5) * 12, (Math.random() - 0.5) * 7, (Math.random() - 0.5) * 6),
+          v: new THREE.Vector3(),
+          s: 0.05 + Math.random() * 0.08,
+        })),
+      );
+    });
+  }, [n]);
+  const tmp = useMemo(() => new THREE.Object3D(), []);
+  const color = useMemo(() => new THREE.Color(), []);
+  const { camera, pointer } = useThree();
+  useFrame((_, dt) => {
+    const m = mesh.current;
+    if (!m) return;
+    const ray = new THREE.Vector3(pointer.x, pointer.y, 0.5).unproject(camera).sub(camera.position).normalize();
+    const tt = -camera.position.z / ray.z;
+    const target = camera.position.clone().add(ray.multiplyScalar(tt));
+    const k = mode === "repel" ? -1 : 1;
+    d.forEach((q, i) => {
+      const df = target.clone().sub(q.p);
+      const dist = Math.max(0.3, df.length());
+      q.v.addScaledVector(df.normalize(), ((k * 6) / (dist * dist)) * dt);
+      q.v.addScaledVector(q.p.clone().multiplyScalar(-1), 0.12 * dt);
+      q.v.multiplyScalar(1 - 1.2 * dt);
+      q.p.addScaledVector(q.v, dt * 2);
+      tmp.position.copy(q.p);
+      tmp.scale.setScalar(q.s * (1 + Math.min(2, q.v.length())));
+      tmp.updateMatrix();
+      m.setMatrixAt(i, tmp.matrix);
+      color.setHSL(0.68 + Math.min(0.2, q.v.length() * 0.3), 0.9, 0.6);
+      m.setColorAt(i, color);
+    });
+    m.instanceMatrix.needsUpdate = true;
+    if (m.instanceColor) m.instanceColor.needsUpdate = true;
+    camera.position.x += (pointer.x * 1.2 - camera.position.x) * 0.03;
+    camera.position.y += (pointer.y * 0.8 - camera.position.y) * 0.03;
+    camera.lookAt(0, 0, 0);
+  });
+  return (
+    <instancedMesh ref={mesh} args={[undefined, undefined, n]}>
+      <sphereGeometry args={[1, 12, 12]} />
+      <meshStandardMaterial emissive="#7a5cff" emissiveIntensity={0.7} roughness={0.3} />
+    </instancedMesh>
+  );
 }

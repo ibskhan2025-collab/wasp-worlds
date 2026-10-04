@@ -3,15 +3,55 @@
 import Link from "next/link";
 import { useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { forgeProducts } from "@/data/forge";
+
+export function ForgeNav({ current }: { current: string }) {
+  return (
+    <nav aria-label="FORGE realities" style={{ display: "flex", gap: 2, alignItems: "center", background: "#14161a", color: "#e8eaee", borderBottom: "1px solid rgba(232,234,238,0.3)", padding: "0 12px", overflowX: "auto" }}>
+      <Link href="/worlds/forge" style={{ padding: "12px 8px", letterSpacing: "0.25em", fontSize: 12, fontWeight: 800, fontFamily: "var(--font-code)" }}>
+        FORGE◌
+      </Link>
+      {[
+        ["classic", "Ops", "/worlds/forge"],
+        ["blueprint", "Blueprint", "/worlds/forge/blueprint"],
+        ["datasheet", "Datasheet", "/worlds/forge/datasheet"],
+        ["viewer", "Viewer", "/worlds/forge/viewer"],
+        ["analog", "Microfiche", "/worlds/forge/analog"],
+        ["floor", "Floor", "/worlds/forge/floor"],
+        ["compare", "Compare", "/worlds/forge/compare"],
+        ["catalogue", "Catalogue", "/worlds/forge/catalogue"],
+        ["inspect", "Inspect", "/worlds/forge/inspect"],
+      ].map(([id, label, href]) => (
+        <Link
+          key={id}
+          href={href}
+          aria-current={current === id ? "page" : undefined}
+          style={{
+            padding: "12px 12px",
+            fontSize: 12,
+            letterSpacing: "0.1em",
+            fontFamily: "var(--font-code)",
+            color: current === id ? "#14161a" : "#e8eaee",
+            background: current === id ? "#ffb020" : "transparent",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {label}
+        </Link>
+      ))}
+      <Link href="/worlds/forge/quote" style={{ marginLeft: "auto", padding: "12px 8px", fontSize: 12, whiteSpace: "nowrap" }}>
+        Quote →
+      </Link>
+    </nav>
+  );
+}
 
 export function ForgeBlueprint() {
   return (
     <div style={{ background: "#12305a", color: "#e8f1ff", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="forge" label="Room 11 · FORGE/BLUEPRINT" />
-      <RealityShell world="forge" current="blueprint" basePath="/worlds/forge" />
+      <ForgeNav current="blueprint" />
       <svg width="100%" height="60" preserveAspectRatio="none" viewBox="0 0 400 60" aria-hidden style={{ display: "block", borderBottom: "1px solid rgba(232,241,255,0.3)" }}>
         {Array.from({ length: 20 }, (_, i) => (
           <line key={i} x1={i * 20} y1="0" x2={i * 20} y2="60" stroke="rgba(232,241,255,0.15)" strokeWidth="1" />
@@ -55,7 +95,7 @@ export function ForgeDatasheet() {
   return (
     <div style={{ background: "#f4f4f0", color: "#111", minHeight: "100dvh", fontFamily: "var(--font-code)", fontSize: "0.85rem" }}>
       <WorldExit id="forge" label="Room 11 · FORGE/DATASHEET" />
-      <RealityShell world="forge" current="datasheet" basePath="/worlds/forge" />
+      <ForgeNav current="datasheet" />
       <div style={{ maxWidth: 860, margin: "0 auto", padding: "32px 20px 80px" }}>
         <div style={{ border: "3px solid #111", padding: "16px 20px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
           <strong>FORGE INDUSTRIES — CONDENSED DATASHEET</strong>
@@ -91,7 +131,7 @@ export function ForgeAnalog() {
   return (
     <div style={{ background: "#d8cfb8", color: "#2a241c", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="forge" label="Room 11 · FORGE/MICROFICHE" />
-      <RealityShell world="forge" current="analog" basePath="/worlds/forge" />
+      <ForgeNav current="analog" />
       <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>MICROFICHE · DRAWER 11 · DO NOT REMOVE</p>
         <h1 style={{ fontSize: "clamp(2.2rem, 6vw, 3.8rem)", margin: "8px 0", fontWeight: 400 }}>Parts, on film.</h1>
@@ -122,7 +162,7 @@ export function ForgeFloor() {
   return (
     <div style={{ background: "#14161a", color: "#e8eaee", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="forge" label="Room 11 · FORGE/FLOOR" />
-      <RealityShell world="forge" current="floor" basePath="/worlds/forge" />
+      <ForgeNav current="floor" />
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#ffb020" }}>SHIFT B · THREE CELLS · FLOOR IS AUDIBLE</p>
         <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0" }}>Floor.</h1>
@@ -171,7 +211,7 @@ export function ForgeCompare() {
   return (
     <div style={{ background: "#f4f4f0", color: "#111", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="forge" label="Room 11 · FORGE/COMPARE" />
-      <RealityShell world="forge" current="compare" basePath="/worlds/forge" />
+      <ForgeNav current="compare" />
       <div style={{ maxWidth: 860, margin: "0 auto", padding: "32px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>HEAD TO HEAD · NO SALES REP REQUIRED</p>
         <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0" }}>Compare.</h1>
@@ -211,6 +251,120 @@ export function ForgeCompare() {
         proves="Decisions, accelerated: side-by-side specs with differences lit — the fastest page in B2B."
         relatedHref="/worlds/vector"
         relatedName="VECTOR"
+      />
+    </div>
+  );
+}
+
+export function ForgeCatalogue() {
+  const fams = [...new Set(forgeProducts.map((p) => p.family))];
+  return (
+    <div style={{ background: "#f4f4f0", color: "#111", minHeight: "100dvh", fontFamily: "var(--font-code)", paddingBottom: 80 }}>
+      <WorldExit id="forge" label="Room 11 · FORGE/CATALOGUE" />
+      <ForgeNav current="catalogue" />
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 0" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>GENERAL CATALOGUE · {forgeProducts.length} PARTS · ALL FAMILIES</p>
+        <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0" }}>Catalogue.</h1>
+        {fams.map((fam) => (
+          <section key={fam} style={{ marginTop: 32 }}>
+            <h2 style={{ fontSize: 12, letterSpacing: "0.3em", borderBottom: "3px solid #111", paddingBottom: 8 }}>{fam.toUpperCase()}</h2>
+            {forgeProducts
+              .filter((p) => p.family === fam)
+              .map((p) => (
+                <div key={p.slug} style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 12, padding: "14px 0", borderBottom: "1px solid #111", alignItems: "baseline" }}>
+                  <span>
+                    <Link href={`/worlds/forge/${p.slug}`} style={{ fontSize: "1.3rem", fontWeight: 700, textDecoration: "underline" }}>{p.name}</Link>
+                    <br />
+                    <span style={{ fontSize: "0.85rem", color: "#555" }}>
+                      {p.load}kN · {p.tolerance} · {p.finishes.join(" / ")} · {p.lead}
+                    </span>
+                  </span>
+                  <Link href={`/worlds/forge/${p.slug}`} style={{ border: "2px solid #111", padding: "8px 16px", fontSize: 12, fontWeight: 700 }}>
+                    DWG →
+                  </Link>
+                </div>
+              ))}
+          </section>
+        ))}
+        <p style={{ marginTop: 28 }}>
+          Found it? <Link href="/worlds/forge/quote" style={{ textDecoration: "underline", fontWeight: 700 }}>Request a quote →</Link>
+        </p>
+      </div>
+      <WorldProof
+        proves="The index before the drawings: every part findable in one scroll."
+        relatedHref="/worlds/orbit"
+        relatedName="ORBIT"
+      />
+    </div>
+  );
+}
+
+export function ForgeInspect() {
+  const [slug, setSlug] = useState(forgeProducts[0].slug);
+  const [finish, setFinish] = useState(0);
+  const p = forgeProducts.find((x) => x.slug === slug) ?? forgeProducts[0];
+  return (
+    <div style={{ background: "#0a1c33", color: "#e8f1ff", minHeight: "100dvh", fontFamily: "var(--font-code)", paddingBottom: 80 }}>
+      <WorldExit id="forge" label="Room 11 · FORGE/INSPECT" />
+      <ForgeNav current="inspect" />
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 0" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#6fc3ff" }}>INSPECTION BENCH · ONE PART AT A TIME</p>
+        <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 5rem)", margin: "8px 0" }}>Inspect.</h1>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
+          {forgeProducts.map((x) => (
+            <button
+              key={x.slug}
+              type="button"
+              aria-pressed={slug === x.slug}
+              onClick={() => { setSlug(x.slug); setFinish(0); }}
+              style={{ border: "1px solid rgba(232,241,255,0.4)", background: slug === x.slug ? "#6fc3ff" : "transparent", color: slug === x.slug ? "#0a1c33" : "#e8f1ff", padding: "8px 14px", fontSize: 12 }}
+            >
+              {x.name}
+            </button>
+          ))}
+        </div>
+        <div style={{ border: "1px solid rgba(232,241,255,0.3)", marginTop: 24, padding: 24 }}>
+          <p style={{ fontSize: 11, letterSpacing: "0.25em", color: "#6fc3ff", margin: 0 }}>PART · {p.family.toUpperCase()}</p>
+          <h2 style={{ fontSize: "2rem", margin: "8px 0" }}>{p.name}</h2>
+          <p style={{ color: "#8ba6c9" }}>{p.desc}</p>
+          <dl style={{ margin: "20px 0 0" }}>
+            {[
+              ["Rated load", `${p.load} kN`],
+              ["Tolerance", p.tolerance],
+              ["Lead time", p.lead],
+              ["W×H×bore", `${p.dims.w}×${p.dims.h}×${p.dims.bore}mm`],
+            ].map(([k, v]) => (
+              <div key={k} style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px dashed rgba(232,241,255,0.25)", padding: "8px 0", fontSize: "0.95rem" }}>
+                <dt>{k}</dt><dd style={{ margin: 0 }}>{v}</dd>
+              </div>
+            ))}
+          </dl>
+          <p style={{ fontSize: 11, letterSpacing: "0.25em", color: "#6fc3ff", margin: "20px 0 8px" }}>FINISH</p>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {p.finishes.map((f, i) => (
+              <button
+                key={f}
+                type="button"
+                aria-pressed={finish === i}
+                onClick={() => setFinish(i)}
+                style={{ border: "1px solid rgba(232,241,255,0.4)", background: finish === i ? "#e8f1ff" : "transparent", color: finish === i ? "#0a1c33" : "#e8f1ff", padding: "8px 14px", fontSize: 12 }}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+          <p style={{ fontSize: "0.85rem", color: "#8ba6c9" }}>Selected: {p.finishes[finish]} · lead {p.lead}.</p>
+          <p style={{ marginTop: 16 }}>
+            <Link href={`/worlds/forge/${p.slug}`} style={{ textDecoration: "underline" }}>Full datasheet →</Link>
+            {" · "}
+            <Link href="/worlds/forge/quote" style={{ background: "#6fc3ff", color: "#0a1c33", padding: "10px 20px", fontWeight: 700, fontSize: 12 }}>QUOTE {p.name.toUpperCase()} →</Link>
+          </p>
+        </div>
+      </div>
+      <WorldProof
+        proves="One part, fully interrogated: variants, dimensions, lead — then the quote."
+        relatedHref="/worlds/objects"
+        relatedName="OBJECTS"
       />
     </div>
   );

@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { casa } from "@/data/casa";
 import { media } from "@/lib/media";
+import { CasaNav } from "@/components/worlds/casa-realities";
 
 export default function CasaHome() {
   return (
     <div>
+      <CasaNav current="classic" />
       <section className="casa-hero">
         <div>
           <p className="kicker" style={{ color: "#d7cfc4" }}>

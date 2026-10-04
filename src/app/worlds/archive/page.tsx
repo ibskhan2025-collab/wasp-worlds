@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { ArchiveNav } from "@/components/worlds/archive-realities";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { archiveCategories, archiveIssues } from "@/data/archive";
 import { loadJson, saveJson } from "@/lib/storage";
@@ -47,6 +48,7 @@ export default function ArchiveHome() {
   return (
     <div className="arc-root">
       <WorldExit id="archive" label="Room 07 · ARCHIVE" />
+      <ArchiveNav current="classic" />
       <header style={{ padding: "32px 20px 12px", borderBottom: "1px solid var(--line)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
           <p className="kicker">Vol. 04 · Independent</p>

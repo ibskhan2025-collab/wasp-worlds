@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
+import { AtlasNav } from "@/components/worlds/atlas-realities";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { destinations } from "@/data/atlas";
 import { money } from "@/lib/use-cart";
@@ -32,7 +32,7 @@ export function AtlasMiniature() {
   return (
     <div style={{ background: "#101418", color: "#e8e4dc", minHeight: "100dvh" }}>
       <WorldExit id="atlas" label="Room 10 · ATLAS/MINIATURE" />
-      <RealityShell world="atlas" current="miniature" basePath="/worlds/atlas" />
+      <AtlasNav current="miniature" />
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "28px 20px 80px", textAlign: "center" }}>
         <p style={{ fontFamily: "var(--font-code)", fontSize: 11, letterSpacing: "0.3em", color: "#c98a3d" }}>TABLETOP MODEL · DRAG TO SPIN · TILT {tilt}°</p>
         <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.4rem, 7vw, 4.6rem)", margin: "8px 0" }}>THE VALLEY, SMALL.</h1>

@@ -140,6 +140,10 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#241a12", "--fg": "#e8ddc4", "--muted": "#a89878", "--line": "#3a2c1c", "--accent": "#c9a86d" }),
     ALT("reading", "Reading", "One essay, full stamina", "reading",
       { "--bg": "#faf7f0", "--fg": "#141210", "--muted": "#6a6254", "--line": "rgba(20,18,16,0.2)", "--accent": "#8a3b1f" }),
+    ALT("broadsheet", "Broadsheet", "Set in columns, read slow", "broadsheet",
+      { "--bg": "#f3efe6", "--fg": "#1c1a17", "--muted": "#6b6254", "--line": "rgba(28,26,23,0.3)", "--accent": "#8a3b1f" }),
+    ALT("index", "Index", "Every essay in a row", "index",
+      { "--bg": "#ffffff", "--fg": "#111111", "--muted": "#555555", "--line": "#111111", "--accent": "#111111" }),
   ],
   motion: [
     CLASSIC("Campaign", "Full-bleed black chapters"),
@@ -153,6 +157,8 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#efe9dc", "--fg": "#1a1712", "--muted": "#6b6254", "--line": "#1a1712", "--accent": "#b24a2e" }),
     ALT("credits", "Credits", "After the loop", "credits",
       { "--bg": "#000000", "--fg": "#f4f1ea", "--muted": "#8a8580", "--line": "rgba(244,241,234,0.2)", "--accent": "#f4f1ea" }),
+    ALT("stage", "Stage", "The headline performs", "stage",
+      { "--bg": "#0c0c0c", "--fg": "#f2f2ee", "--muted": "#8a8580", "--line": "rgba(242,242,238,0.2)", "--accent": "#f2f2ee" }),
   ],
   void: [
     CLASSIC("Void", "Monochrome particles"),
@@ -166,6 +172,10 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#04060c", "--fg": "#9fd8ff", "--muted": "#5f7f99", "--line": "rgba(159,216,255,0.3)", "--accent": "#e8f4ff" }),
     ALT("field", "Field", "It leans toward you", "field",
       { "--bg": "#06080e", "--fg": "#bfe3ff", "--muted": "#5f7f99", "--line": "rgba(191,227,255,0.3)", "--accent": "#a0dcff" }),
+    ALT("shader", "Shader", "Computed per pixel", "shader",
+      { "--bg": "#050508", "--fg": "#bfe3ff", "--muted": "#5f7f99", "--line": "rgba(191,227,255,0.3)", "--accent": "#7a5cff" }),
+    ALT("space", "Space", "Depth you can push", "space",
+      { "--bg": "#000000", "--fg": "#bfe3ff", "--muted": "#5f7f99", "--line": "rgba(191,227,255,0.3)", "--accent": "#b6a4ff" }),
   ],
   atlas: [
     CLASSIC("Survey", "Parchment survey sheet"),
@@ -181,6 +191,8 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#101418", "--fg": "#e8e4dc", "--muted": "#8a938f", "--line": "rgba(232,228,220,0.25)", "--accent": "#c98a3d" }),
     ALT("postcards", "Postcards", "Wish you were here", "postcards",
       { "--bg": "#e4dcc8", "--fg": "#241f16", "--muted": "#6f6350", "--line": "#241f16", "--accent": "#5a6e3f" }),
+    ALT("globe", "Globe", "The valley as a planet", "globe",
+      { "--bg": "#07121f", "--fg": "#e8e4dc", "--muted": "#8a938f", "--line": "rgba(232,228,220,0.2)", "--accent": "#e8a33d" }),
   ],
   forge: [
     CLASSIC("Ops", "Light, utilitarian, dense"),
@@ -196,6 +208,10 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#14161a", "--fg": "#e8eaee", "--muted": "#9aa0ac", "--line": "rgba(232,234,238,0.3)", "--accent": "#ffb020" }),
     ALT("compare", "Compare", "Head to head, no rep", "compare",
       { "--bg": "#f4f4f0", "--fg": "#111111", "--muted": "#555555", "--line": "#111111", "--accent": "#b24a2e" }),
+    ALT("catalogue", "Catalogue", "Every part in one scroll", "catalogue",
+      { "--bg": "#f4f4f0", "--fg": "#111111", "--muted": "#555555", "--line": "#111111", "--accent": "#111111" }),
+    ALT("inspect", "Inspect", "One part on the bench", "inspect",
+      { "--bg": "#0a1c33", "--fg": "#e8f1ff", "--muted": "#8ba6c9", "--line": "rgba(232,241,255,0.3)", "--accent": "#6fc3ff" }),
   ],
   pulse: [
     CLASSIC("Signal", "Stage black, signal red"),
@@ -209,6 +225,10 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#ece8df", "--fg": "#111111", "--muted": "#555555", "--line": "#111111", "--accent": "#b24a2e" }),
     ALT("booth", "Booth", "Two decks, crates below", "booth",
       { "--bg": "#0d0716", "--fg": "#e9defc", "--muted": "#8f7fb8", "--line": "rgba(233,222,252,0.3)", "--accent": "#9d5cff" }),
+    ALT("board", "Board", "The tour, departing", "board",
+      { "--bg": "#0b0b0b", "--fg": "#f5c518", "--muted": "#8a8580", "--line": "rgba(255,255,255,0.12)", "--accent": "#f5c518" }),
+    ALT("sound", "Sound", "Every release has a mix", "sound",
+      { "--bg": "#0a0a0a", "--fg": "#ffffff", "--muted": "#8a8a8a", "--line": "rgba(255,255,255,0.2)", "--accent": "#e5ff3a" }),
   ],
   civic: [
     CLASSIC("Service", "High contrast, calm"),
@@ -222,6 +242,10 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#1c1611", "--fg": "#ece4d2", "--muted": "#a89878", "--line": "rgba(236,228,210,0.3)", "--accent": "#c9a86d" }),
     ALT("desk", "Desk", "Plain words, steps out", "desk",
       { "--bg": "#e9e2d0", "--fg": "#2a241c", "--muted": "#6a6254", "--line": "#2a241c", "--accent": "#2e6bd8" }),
+    ALT("contrast", "Contrast", "Nothing mistakable", "contrast",
+      { "--bg": "#000000", "--fg": "#ffeb3b", "--muted": "#ffeb3b", "--line": "#ffeb3b", "--accent": "#ffeb3b" }),
+    ALT("plain", "Plain", "No stylesheets", "plain",
+      { "--bg": "#ffffff", "--fg": "#000000", "--muted": "#333333", "--line": "#000000", "--accent": "#000000" }),
   ],
   nest: [
     CLASSIC("Plaster", "Daylight, bone, oak"),
@@ -248,6 +272,8 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#0b0e13", "--fg": "#dfe8f2", "--muted": "#7f8fb0", "--line": "rgba(223,232,242,0.2)", "--accent": "#6fc3ff" }),
     ALT("letter", "Letter", "The quarterly letter", "letter",
       { "--bg": "#faf8f2", "--fg": "#141414", "--muted": "#555555", "--line": "rgba(20,20,20,0.2)", "--accent": "#8a1f2d" }),
+    ALT("report", "Report", "Half-year, honestly", "report",
+      { "--bg": "#f6f1e7", "--fg": "#1b1b1b", "--muted": "#555555", "--line": "rgba(27,27,27,0.3)", "--accent": "#1b1b1b" }),
   ],
 };
 

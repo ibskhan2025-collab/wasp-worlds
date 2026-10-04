@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
+import { NestNav } from "@/components/worlds/nest-realities";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { nestMaterials, nestRooms } from "@/data/nest";
 
@@ -60,7 +60,7 @@ export function NestWalk() {
   return (
     <div style={{ background: "#101210", color: "#e8e0d2", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="nest" label="Room 14 · NEST/WALK" />
-      <RealityShell world="nest" current="walk" basePath="/worlds/nest" />
+      <NestNav current="walk" />
       <div style={{ maxWidth: 860, margin: "0 auto", padding: "28px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.25em", color: "#c98a3d" }}>IN THE ROOM · DRAG TO ORBIT</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.6rem)", margin: "8px 0" }}>{room.name}</h1>

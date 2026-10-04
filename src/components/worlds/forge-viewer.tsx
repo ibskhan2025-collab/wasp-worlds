@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
+import { ForgeNav } from "@/components/worlds/forge-realities";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { forgeProducts } from "@/data/forge";
 
@@ -66,7 +66,7 @@ export function ForgeViewer() {
   return (
     <div style={{ background: "#0a1c33", color: "#e8f1ff", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="forge" label="Room 11 · FORGE/VIEWER" />
-      <RealityShell world="forge" current="viewer" basePath="/worlds/forge" />
+      <ForgeNav current="viewer" />
       <div style={{ maxWidth: 860, margin: "0 auto", padding: "28px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.25em", color: "#6fc3ff" }}>VIEWER · DRAG TO ROTATE · SCROLL FOR SPECS</p>
         <h1 style={{ fontSize: "clamp(2.2rem, 6vw, 4rem)", margin: "8px 0" }}>{p.name}</h1>

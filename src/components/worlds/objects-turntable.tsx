@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
+import { ObjectsNav } from "@/components/worlds/objects-workshop";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { objectProducts } from "@/data/objects";
 import { money } from "@/lib/use-cart";
@@ -31,7 +31,7 @@ export function ObjectsTurntable() {
   return (
     <div style={{ background: "#141210", color: "#efeae2", minHeight: "100dvh", fontFamily: "var(--font-shop)" }}>
       <WorldExit id="objects" label="Room 06 · OBJECTS/TURNTABLE" />
-      <RealityShell world="objects" current="turntable" basePath="/worlds/objects" />
+      <ObjectsNav current="turntable" />
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "28px 20px 80px", textAlign: "center" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#a89a80" }}>DRAG TO SPIN · CLICK TO OPEN</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.6rem)", margin: "8px 0 4px", fontWeight: 500 }}>Turntable</h1>

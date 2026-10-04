@@ -8,12 +8,50 @@ import { casa, casaGallery, dishes } from "@/data/casa";
 import { media } from "@/lib/media";
 import { money } from "@/lib/use-cart";
 
+export function CasaNav({ current }: { current: string }) {
+  return (
+    <nav aria-label="CASA realities" style={{ display: "flex", gap: 2, alignItems: "center", background: "#140f0c", color: "#f3e8d8", borderBottom: "1px solid rgba(243,232,216,0.25)", padding: "0 12px", overflowX: "auto" }}>
+      <Link href="/worlds/casa" style={{ padding: "12px 8px", letterSpacing: "0.25em", fontSize: 12, fontWeight: 800, fontFamily: "var(--font-code)" }}>
+        CASA◌
+      </Link>
+      {[
+        ["classic", "Classic", "/worlds/casa"],
+        ["oceanic", "Oceanic", "/worlds/casa/oceanic"],
+        ["analog", "Analog", "/worlds/casa/analog"],
+        ["zen", "Zen", "/worlds/casa/zen"],
+        ["counter", "Counter", "/worlds/casa/counter"],
+        ["cellar", "Cellar", "/worlds/casa/cellar"],
+        ["brutalist", "Brutalist", "/worlds/casa/brutalist"],
+        ["japanese", "Japanese", "/worlds/casa/japanese"],
+        ["spatial", "Spatial", "/worlds/casa/spatial"],
+      ].map(([id, label, href]) => (
+        <Link
+          key={id}
+          href={href}
+          aria-current={current === id ? "page" : undefined}
+          style={{
+            padding: "12px 12px",
+            fontSize: 12,
+            letterSpacing: "0.1em",
+            fontFamily: "var(--font-code)",
+            color: current === id ? "#140f0c" : "#f3e8d8",
+            background: current === id ? "#ff5a2e" : "transparent",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {label}
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
 const KANJI = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二", "十三", "十四"];
 
 const shell = (id: "oceanic" | "analog" | "counter" | "cellar" | "brutalist" | "japanese") => (
   <>
     <WorldExit id="casa" label={`Room 01 · CASA/${id.toUpperCase()}`} />
-    <RealityShell world="casa" current={id} basePath="/worlds/casa" />
+    <CasaNav current={id} />
   </>
 );
 
@@ -192,7 +230,7 @@ export function CasaZen() {
   return (
     <div style={{ background: "#f2efe6", color: "#2a2723", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
       <WorldExit id="casa" label="Room 01 · CASA/ZEN" />
-      <RealityShell world="casa" current="zen" basePath="/worlds/casa" />
+      <CasaNav current="zen" />
       <div style={{ maxWidth: 560, margin: "0 auto", padding: "64px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.35em", textAlign: "center" }}>一期一会 · ONE TIME, ONE MEETING</p>
         <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 4.6rem)", fontWeight: 400, textAlign: "center", margin: "16px 0 8px" }}>Casa, quietly.</h1>

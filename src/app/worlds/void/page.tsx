@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { VoidNav } from "@/components/worlds/void-shader";
 import { useWasp } from "@/context/wasp-context";
 import { loadJson, saveJson } from "@/lib/storage";
 
@@ -161,6 +162,7 @@ export default function VoidPage() {
   return (
     <div className="void-root">
       <WorldExit id="void" label="Room 09 · VOID" />
+      <VoidNav current="classic" />
       <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
       <div className="void-ui">
         <div>VOID</div>

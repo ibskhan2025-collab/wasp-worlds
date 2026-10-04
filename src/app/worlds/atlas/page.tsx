@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { AtlasNav } from "@/components/worlds/atlas-realities";
 import { AtlasBrowser } from "./browser";
 import { AtlasMap } from "./map";
 import { WorldProof } from "@/components/worlds/world-proof";
@@ -14,6 +15,7 @@ export default function AtlasPage() {
   return (
     <div className="arc-root">
       <WorldExit id="atlas" label="Room 10 · ATLAS" />
+      <AtlasNav current="classic" />
       <header style={{ padding: "32px 20px 12px", borderBottom: "1px solid var(--line)" }}>
         <p className="kicker">Room 10 · Travel / Places</p>
         <h1 className="arc-hero-title">ATLAS</h1>

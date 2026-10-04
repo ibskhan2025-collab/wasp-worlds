@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldProof } from "@/components/worlds/world-proof";
+import { ForgeNav } from "@/components/worlds/forge-realities";
 import { ForgeBrowser } from "./browser";
 
 export const metadata: Metadata = {
@@ -13,6 +14,7 @@ export default function ForgePage() {
   return (
     <div className="orbit-root">
       <WorldExit id="forge" label="Room 11 · FORGE" />
+      <ForgeNav current="classic" />
       <header style={{ padding: "28px 20px 12px", borderBottom: "1px solid var(--line)" }}>
         <p className="kicker">Room 11 · Industrial / B2B</p>
         <h1 style={{ fontSize: "clamp(2.8rem, 8vw, 6rem)", margin: "4px 0", letterSpacing: "-0.05em" }}>FORGE</h1>

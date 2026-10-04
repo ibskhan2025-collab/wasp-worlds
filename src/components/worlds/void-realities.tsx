@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
-import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
+import { VoidNav } from "@/components/worlds/void-shader";
 
 type Dot = { x: number; y: number; vx: number; vy: number; r: number; pulse: number };
 
@@ -58,7 +58,7 @@ export function VoidAbyss() {
   return (
     <div style={{ background: "#020610", color: "#bfe3ff", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="void" label="Room 09 · VOID/ABYSS" />
-      <RealityShell world="void" current="abyss" basePath="/worlds/void" />
+      <VoidNav current="abyss" />
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.25em" }}>DESCENT · HANDS OFF THE CONTROLS</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 5rem)", margin: "8px 0" }}>ABYSS</h1>
@@ -116,7 +116,7 @@ export function VoidInk() {
   return (
     <div style={{ background: "#e8e4dc", color: "#111", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="void" label="Room 09 · VOID/INK" />
-      <RealityShell world="void" current="ink" basePath="/worlds/void" />
+      <VoidNav current="ink" />
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "32px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.25em" }}>GENERATIVE PRINT · SEEDED</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.6rem)", margin: "8px 0" }}>INK</h1>
@@ -173,7 +173,7 @@ export function VoidReactor() {
   return (
     <div style={{ background: "#0a0d12", color: "#9fd8ff", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="void" label="Room 09 · VOID/REACTOR" />
-      <RealityShell world="void" current="reactor" basePath="/worlds/void" />
+      <VoidNav current="reactor" />
       <div style={{ maxWidth: 860, margin: "0 auto", padding: "28px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>CHARGED FIELD · DO NOT TAP GLASS</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.6rem)", margin: "8px 0" }}>REACTOR</h1>
@@ -242,7 +242,7 @@ export function VoidOrbit() {
   return (
     <div style={{ background: "#04060c", color: "#9fd8ff", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="void" label="Room 09 · VOID/ORBIT" />
-      <RealityShell world="void" current="orbit" basePath="/worlds/void" />
+      <VoidNav current="orbit" />
       <div style={{ maxWidth: 860, margin: "0 auto", padding: "28px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>CLOCKWORK · FOUR RINGS · NOTHING DRIFTS</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.6rem)", margin: "8px 0" }}>ORBIT</h1>
@@ -311,7 +311,7 @@ export function VoidField() {
   return (
     <div style={{ background: "#06080e", color: "#bfe3ff", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="void" label="Room 09 · VOID/FIELD" />
-      <RealityShell world="void" current="field" basePath="/worlds/void" />
+      <VoidNav current="field" />
       <div style={{ maxWidth: 860, margin: "0 auto", padding: "28px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>NOTICED · MOVE SLOWLY · IT LEANS IN</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.6rem)", margin: "8px 0" }}>FIELD</h1>
