@@ -752,8 +752,9 @@ function Room3D() {
 
 /** Radial nav: click anywhere, destinations fan out around the pointer. */
 function Radial() {
-  const [o, setO] = useState<{ x: number; y: number } | null>(null);
+  const [o, setO] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
   const items: [string, string][] = [["Worlds", "/matrix"], ["Lab", "/lab"], ["Tools", "/tools"], ["Studio", "/studio"], ["OS", "/os"], ["Start", "/start"]];
+  const spread = o ? Math.min(62, o.w * 0.28, o.h * 0.3) : 62;
   return (
     <section style={{ padding: "36px 0", borderTop: "1px solid var(--line)" }}>
       <p className="kicker">11 · Experimental navigation — click anywhere, choose a door</p>
@@ -762,7 +763,7 @@ function Radial() {
         onPointerDown={(e) => {
           if ((e.target as HTMLElement).closest("a")) return;
           const r = e.currentTarget.getBoundingClientRect();
-          setO(o ? null : { x: e.clientX - r.left, y: e.clientY - r.top });
+          setO(o ? null : { x: e.clientX - r.left, y: e.clientY - r.top, w: r.width, h: r.height });
         }}
       >
         <p style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", fontSize: 12, color: "var(--muted)", margin: 0 }}>
@@ -771,21 +772,21 @@ function Radial() {
         {o && items.map(([l, h], i) => {
           const a = (i / items.length) * Math.PI * 2 - Math.PI / 2;
           return (
-              <a
-                key={l}
-                href={h}
-                style={{
-                  position: "absolute",
-                  width: 64, height: 64, borderRadius: "50%",
-                  display: "grid", placeItems: "center",
-                  background: "var(--fg)", color: "var(--bg)",
-                  fontSize: 10, fontWeight: 700,
-                  left: Math.max(34, Math.min(366, o.x + Math.cos(a) * 62)),
-                  top: Math.max(34, Math.min(186, o.y + Math.sin(a) * 52)),
-                  transform: "translate(-50%,-50%)",
-                  animation: `wasp-in .3s ${i * 0.04}s both`,
-                }}
-              >
+            <a
+              key={l}
+              href={h}
+              style={{
+                position: "absolute",
+                width: 64, height: 64, borderRadius: "50%",
+                display: "grid", placeItems: "center",
+                background: "var(--fg)", color: "var(--bg)",
+                fontSize: 10, fontWeight: 700,
+                left: Math.max(34, Math.min(o.w - 34, o.x + Math.cos(a) * spread)),
+                top: Math.max(34, Math.min(o.h - 34, o.y + Math.sin(a) * spread * 0.85)),
+                transform: "translate(-50%,-50%)",
+                animation: `wasp-in .3s ${i * 0.04}s both`,
+              }}
+            >
               {l}
             </a>
           );
@@ -830,7 +831,7 @@ function Chain() {
         ty = s.y;
         ctx.fillStyle = `hsl(${48 - i * 3},100%,${62 - i * 2}%)`;
         ctx.beginPath();
-        ctx.arc(s.x, s.y, 14 - i * 0.8, 0, 7);
+        ctx.arc(s.x, s.y, Math.max(1, 14 - i * 0.8), 0, 7);
         ctx.fill();
       });
     };
