@@ -135,6 +135,9 @@ export default function LabPage() {
       <Fountain />
       <Drone />
       <Terrain />
+      <Room3D />
+      <Radial />
+      <Chain />
     </div>
   );
 }
@@ -741,6 +744,299 @@ function Terrain() {
         <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 200 }}>
           Ridges {ridges}
           <input type="range" min={8} max={80} value={ridges} onChange={(e) => setRidges(Number(e.target.value))} aria-label="Ridges" style={{ flex: 1 }} />
+        </label>
+      </div>
+    </section>
+  );
+}
+
+/** 3D room: seeded raw-three.js box room. Drag to orbit, scroll to zoom. */
+function Room3D() {
+  const mount = useRef<HTMLDivElement | null>(null);
+  const [dims, setDims] = useState({ w: 8, d: 6, h: 3, items: 8, seed: 3 });
+  const [wall, setWall] = useState("#c9b8a0");
+  const cfg = useRef(dims);
+  const wallRef = useRef(wall);
+  useEffect(() => {
+    cfg.current = dims;
+    wallRef.current = wall;
+  }, [dims, wall]);
+  useEffect(() => {
+    let raf = 0;
+    let dead = false;
+    let cleanup = () => {};
+    void import("three").then((m) => {
+      if (dead) return;
+      const T = m;
+      const el = mount.current;
+      if (!el) return;
+      const W = el.clientWidth || 1;
+      const H = 260;
+      const renderer = new T.WebGLRenderer({ antialias: true });
+      renderer.setSize(W, H);
+      renderer.domElement.style.width = "100%";
+      renderer.domElement.style.display = "block";
+      renderer.domElement.style.touchAction = "none";
+      el.appendChild(renderer.domElement);
+      const scene = new T.Scene();
+      scene.background = new T.Color(0x15151a);
+      const camera = new T.PerspectiveCamera(45, W / H, 0.1, 200);
+      scene.add(new T.AmbientLight(0xffffff, 0.6));
+      const sun = new T.DirectionalLight(0xffffff, 1.6);
+      sun.position.set(5, 8, 4);
+      scene.add(sun);
+      const group = new T.Group();
+      scene.add(group);
+      const build = () => {
+        const { w, d, h, items, seed } = cfg.current;
+        while (group.children.length) {
+          const o = group.children.pop()!;
+          group.remove(o);
+        }
+        const r = rng(seed * 991 + 3);
+        const floor = new T.Mesh(
+          new T.PlaneGeometry(w, d),
+          new T.MeshStandardMaterial({ color: 0x8a6a48, roughness: 0.7 }),
+        );
+        floor.rotation.x = -Math.PI / 2;
+        group.add(floor);
+        const wallMat = new T.MeshStandardMaterial({ color: new T.Color(wallRef.current), roughness: 0.9 });
+        const back = new T.Mesh(new T.BoxGeometry(w, h, 0.1), wallMat);
+        back.position.set(0, h / 2, -d / 2);
+        group.add(back);
+        const side = new T.Mesh(new T.BoxGeometry(0.1, h, d), wallMat);
+        side.position.set(-w / 2, h / 2, 0);
+        group.add(side);
+        for (let i = 0; i < items; i++) {
+          const s: [number, number, number] = [0.4 + r() * 0.9, 0.3 + r() * 1.1, 0.4 + r() * 0.9];
+          const mesh = new T.Mesh(
+            new T.BoxGeometry(s[0], s[1], s[2]),
+            new T.MeshStandardMaterial({ color: new T.Color(`hsl(${Math.floor(r() * 360)},35%,${45 + Math.floor(r() * 25)}%)`), roughness: 0.6 }),
+          );
+          mesh.position.set((r() - 0.5) * (w - 1.2), s[1] / 2, (r() - 0.5) * (d - 1.2));
+          group.add(mesh);
+        }
+        const { w: bw, d: bd, h: bh } = cfg.current;
+        camera.position.set(bw * 0.9, bh * 1.6, bd * 1.2);
+        camera.lookAt(0, bh / 3, 0);
+      };
+      build();
+      let theta = 0.6;
+      let dist = 14;
+      let dragging: { x: number; y: number } | null = null;
+      const dom = renderer.domElement;
+      const down = (e: PointerEvent) => {
+        dragging = { x: e.clientX, y: e.clientY };
+        dom.setPointerCapture(e.pointerId);
+      };
+      const mv = (e: PointerEvent) => {
+        if (!dragging) return;
+        theta += (e.clientX - dragging.x) * 0.008;
+        dragging = { x: e.clientX, y: e.clientY };
+      };
+      const up = () => { dragging = null; };
+      const wheel = (e: WheelEvent) => {
+        e.preventDefault();
+        dist = Math.max(6, Math.min(30, dist + e.deltaY * 0.02));
+      };
+      dom.addEventListener("pointerdown", down);
+      dom.addEventListener("pointermove", mv);
+      dom.addEventListener("pointerup", up);
+      dom.addEventListener("wheel", wheel, { passive: false });
+      const size = () => {
+        const w = el.clientWidth || 1;
+        renderer.setSize(w, 260, false);
+        camera.aspect = w / 260;
+        camera.updateProjectionMatrix();
+      };
+      window.addEventListener("resize", size);
+      let lastKey = "";
+      const loop = () => {
+        const key = JSON.stringify([cfg.current.w, cfg.current.d, cfg.current.h, cfg.current.items, cfg.current.seed]);
+        if (key !== lastKey) {
+          lastKey = key;
+          build();
+        }
+        const bh = cfg.current.h;
+        camera.position.set(
+          Math.sin(theta) * dist,
+          bh * 1.6,
+          Math.cos(theta) * dist,
+        );
+        camera.lookAt(0, bh / 3, 0);
+        renderer.render(scene, camera);
+        raf = requestAnimationFrame(loop);
+      };
+      raf = requestAnimationFrame(loop);
+      cleanup = () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener("resize", size);
+        dom.removeEventListener("pointerdown", down);
+        dom.removeEventListener("pointermove", mv);
+        dom.removeEventListener("pointerup", up);
+        dom.removeEventListener("wheel", wheel);
+        renderer.dispose();
+        if (dom.parentElement === el) el.removeChild(dom);
+      };
+    });
+    return () => {
+      dead = true;
+      cleanup();
+    };
+  }, []);
+  // Controls read the live dims below.
+  const geo = dims;
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">09 · 3D room generator — real WebGL, drag to orbit</p>
+      <div ref={mount} style={{ width: "100%", height: 260, border: "1px solid var(--line)", marginTop: 12 }} role="application" aria-label="Procedural 3D room. Drag to orbit, scroll to zoom." />
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12, marginTop: 12 }}>
+        {(["w", "d", "h", "items"] as const).map((k) => (
+          <label key={k} style={{ fontSize: 12 }}>
+            {k.toUpperCase()} {geo[k]}
+            <input
+              type="range"
+              min={k === "items" ? 0 : k === "h" ? 2 : 4}
+              max={k === "items" ? 20 : k === "h" ? 5 : 14}
+              step={k === "h" ? 0.5 : 1}
+              value={geo[k]}
+              onChange={(e) => setDims({ ...geo, [k]: Number(e.target.value) })}
+              aria-label={k}
+              style={{ width: "100%" }}
+            />
+          </label>
+        ))}
+        <label style={{ fontSize: 12 }}>
+          Wall
+          <input type="color" value={wall} onChange={(e) => setWall(e.target.value)} aria-label="Wall color" style={{ display: "block", width: 60, height: 30 }} />
+        </label>
+      </div>
+      <button type="button" onClick={() => setDims({ ...geo, seed: geo.seed + 1 })} style={{ border: "1px solid var(--fg)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12, marginTop: 12 }}>
+        New layout ({geo.seed})
+      </button>
+    </section>
+  );
+}
+
+/** Radial nav: click anywhere, destinations fan out around the pointer. */
+function Radial() {
+  const [o, setO] = useState<{ x: number; y: number } | null>(null);
+  const items: [string, string][] = [["Worlds", "/matrix"], ["Lab", "/lab"], ["Tools", "/tools"], ["Studio", "/studio"], ["OS", "/os"], ["Start", "/start"]];
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">10 · Experimental navigation — click anywhere, choose a door</p>
+      <div
+        style={{ position: "relative", height: 220, overflow: "hidden", border: "1px solid var(--line)", marginTop: 12, background: "var(--bg)" }}
+        onPointerDown={(e) => {
+          if ((e.target as HTMLElement).closest("a")) return;
+          const r = e.currentTarget.getBoundingClientRect();
+          setO(o ? null : { x: e.clientX - r.left, y: e.clientY - r.top });
+        }}
+      >
+        <p style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", fontSize: 12, color: "var(--muted)", margin: 0 }}>
+          {o ? "Choose a destination" : "Click anywhere"}
+        </p>
+        {o && items.map(([l, h], i) => {
+          const a = (i / items.length) * Math.PI * 2 - Math.PI / 2;
+          return (
+            <a
+              key={l}
+              href={h}
+              style={{
+                position: "absolute",
+                width: 64, height: 64, borderRadius: "50%",
+                display: "grid", placeItems: "center",
+                background: "var(--fg)", color: "var(--bg)",
+                fontSize: 10, fontWeight: 700,
+                left: Math.max(34, Math.min(366, o.x + Math.cos(a) * 62)),
+                top: Math.max(34, Math.min(186, o.y + Math.sin(a) * 52)),
+                transform: "translate(-50%,-50%)",
+              }}
+            >
+              {l}
+            </a>
+          );
+        })}
+        {o && <span style={{ position: "absolute", width: 10, height: 10, borderRadius: "50%", background: "var(--fg)", left: o.x, top: o.y, transform: "translate(-50%,-50%)" }} />}
+      </div>
+    </section>
+  );
+}
+
+/** Physics chain: spring-damped links chasing the pointer. */
+function Chain() {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  const [stiff, setStiff] = useState(0.3);
+  const [links, setLinks] = useState(14);
+  const cfg = useRef({ stiff, links });
+  useEffect(() => {
+    cfg.current = { stiff, links };
+  }, [stiff, links]);
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const W = (canvas.width = canvas.offsetWidth);
+    const H = (canvas.height = 176);
+    const fg = getComputedStyle(document.body).getPropertyValue("--fg").trim() || "#fff";
+    const bg = getComputedStyle(document.body).getPropertyValue("--bg").trim() || "#000";
+    const ptr = { x: W / 2, y: H / 2 };
+    let chain: { x: number; y: number }[] = [];
+    const paint = () => {
+      const { stiff: k, links: n } = cfg.current;
+      if (chain.length !== n) chain = Array.from({ length: n }, () => ({ x: W / 2, y: H / 2 }));
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+      let tx = ptr.x;
+      let ty = ptr.y;
+      chain.forEach((s, i) => {
+        s.x += (tx - s.x) * k;
+        s.y += (ty - s.y) * k;
+        tx = s.x;
+        ty = s.y;
+        ctx.fillStyle = fg;
+        ctx.globalAlpha = 1 - (i / n) * 0.7;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 14 - i * 0.8, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+    };
+    const mv = (e: PointerEvent) => {
+      const r = canvas.getBoundingClientRect();
+      ptr.x = ((e.clientX - r.left) / r.width) * W;
+      ptr.y = ((e.clientY - r.top) / r.height) * H;
+    };
+    canvas.addEventListener("pointermove", mv);
+    if (reduced) {
+      paint();
+      return () => canvas.removeEventListener("pointermove", mv);
+    }
+    let raf = 0;
+    const loop = () => {
+      paint();
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      canvas.removeEventListener("pointermove", mv);
+    };
+  }, []);
+  return (
+    <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
+      <p className="kicker">11 · Physics chain — each link chases the one before it</p>
+      <canvas ref={ref} style={{ width: "100%", height: 176, display: "block", border: "1px solid var(--line)", marginTop: 12, touchAction: "none" }} aria-label="A chain of circles following the pointer with lag" />
+      <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginTop: 12 }}>
+        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 200 }}>
+          Stiffness {stiff.toFixed(2)}
+          <input type="range" min={0.04} max={0.5} step={0.01} value={stiff} onChange={(e) => setStiff(Number(e.target.value))} aria-label="Stiffness" style={{ flex: 1 }} />
+        </label>
+        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 200 }}>
+          Links {links}
+          <input type="range" min={3} max={30} value={links} onChange={(e) => setLinks(Number(e.target.value))} aria-label="Links" style={{ flex: 1 }} />
         </label>
       </div>
     </section>

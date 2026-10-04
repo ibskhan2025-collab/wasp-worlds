@@ -34,11 +34,14 @@ export type OsProject = {
   scope: string;
   timeline: string;
   status: PipelineStatus;
+  source: string;
   notes: string;
   payment: "Unpaid" | "Deposit" | "Scheduled" | "Paid";
   onboarding: "Not started" | "In progress" | "Complete";
   tasks: { id: string; title: string; done: boolean }[];
 };
+
+export const LEAD_SOURCES = ["Website", "Referral", "Lab", "Tools", "Worlds", "Other"];
 
 export const seedProjects: OsProject[] = [
   {
@@ -50,6 +53,7 @@ export const seedProjects: OsProject[] = [
     scope: "5 pages, no ecommerce, light motion",
     timeline: "6 weeks",
     status: "Consultation",
+    source: "Website",
     notes: "Demonstration record. Replace with real work.",
     payment: "Unpaid",
     onboarding: "Not started",
@@ -67,6 +71,7 @@ export const seedProjects: OsProject[] = [
     scope: "Store, CMS, 20 products",
     timeline: "10 weeks",
     status: "Design",
+    source: "Worlds",
     notes: "Demonstration record.",
     payment: "Deposit",
     onboarding: "Complete",
@@ -84,10 +89,41 @@ export const seedProjects: OsProject[] = [
     scope: "App UI, 8 views",
     timeline: "12 weeks",
     status: "Proposal",
+    source: "Referral",
     notes: "Demonstration record.",
     payment: "Unpaid",
     onboarding: "Not started",
     tasks: [{ id: "t5", title: "Write proposal", done: false }],
+  },
+  {
+    id: "os4",
+    client: "Sample — not a real client",
+    company: "Harbor Kitchen",
+    project: "Bookings + menu",
+    budget: "Mid",
+    scope: "Menu CMS, reservations, reminders",
+    timeline: "8 weeks",
+    status: "New lead",
+    source: "Lab",
+    notes: "Demonstration record.",
+    payment: "Unpaid",
+    onboarding: "Not started",
+    tasks: [{ id: "t6", title: "Reply within one working day", done: false }],
+  },
+  {
+    id: "os5",
+    client: "Sample — not a real client",
+    company: "Fern Records",
+    project: "Release + tour site",
+    budget: "Lower",
+    scope: "Releases, dates, RSVP",
+    timeline: "5 weeks",
+    status: "Qualified",
+    source: "Tools",
+    notes: "Demonstration record.",
+    payment: "Unpaid",
+    onboarding: "Not started",
+    tasks: [{ id: "t7", title: "Send fit questions", done: true }],
   },
 ];
 

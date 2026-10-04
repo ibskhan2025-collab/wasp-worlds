@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { contentIdeas, PIPELINE, seedProjects, type OsProject, type PipelineStatus } from "@/data/os";
+import { contentIdeas, LEAD_SOURCES, PIPELINE, seedProjects, type OsProject, type PipelineStatus } from "@/data/os";
 import { sops } from "@/data/studio";
 import { loadJson, OS_KEY, saveJson } from "@/lib/storage";
 
@@ -55,13 +55,14 @@ export default function OsPage() {
   const [idea, setIdea] = useState("");
   const [note, setNote] = useState("");
   const [dragId, setDragId] = useState<string | null>(null);
-  const [lead, setLead] = useState({ project: "", company: "", client: "" });
+  const [lead, setLead] = useState({ project: "", company: "", client: "", source: "Website" });
 
   // Hydrate persisted OS state after mount (avoids SSR mismatch).
   useEffect(() => {
     const saved = loadJson(OS_KEY, { projects: seedProjects, ideas: contentIdeas });
+    // Migrate records saved before the source field existed.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setProjects(saved.projects);
+    setProjects(saved.projects.map((p) => ({ ...p, source: (p as Partial<OsProject>).source ?? "Website" })));
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIdeas(saved.ideas);
   }, []);
@@ -92,13 +93,14 @@ export default function OsPage() {
       scope: "",
       timeline: "",
       status: "New lead",
+      source: lead.source,
       notes: "",
       payment: "Unpaid",
       onboarding: "Not started",
       tasks: [],
     };
     setProjects((ps) => [p, ...ps]);
-    setLead({ project: "", company: "", client: "" });
+    setLead({ project: "", company: "", client: "", source: "Website" });
     setActive(p.id);
     setView("Record");
   }
@@ -153,6 +155,9 @@ This is a working draft inside WASP OS, not a contract.`;
               <input value={lead.project} onChange={(e) => setLead({ ...lead, project: e.target.value })} placeholder="New project" aria-label="New project name" style={{ background: "transparent", border: "1px solid var(--line)", padding: 10 }} />
               <input value={lead.company} onChange={(e) => setLead({ ...lead, company: e.target.value })} placeholder="Company" aria-label="Company" style={{ background: "transparent", border: "1px solid var(--line)", padding: 10 }} />
               <input value={lead.client} onChange={(e) => setLead({ ...lead, client: e.target.value })} placeholder="Contact (optional)" aria-label="Contact" style={{ background: "transparent", border: "1px solid var(--line)", padding: 10 }} />
+              <select value={lead.source} onChange={(e) => setLead({ ...lead, source: e.target.value })} aria-label="Lead source" style={{ background: "transparent", border: "1px solid var(--line)", padding: 10 }}>
+                {LEAD_SOURCES.map((s) => <option key={s}>{s}</option>)}
+              </select>
               <button className="btn" type="button" onClick={addLead}>Add lead</button>
               <span className="kicker" style={{ alignSelf: "center" }}>Drag cards between stages · keys 1–8 switch views</span>
             </div>
@@ -179,7 +184,7 @@ This is a working draft inside WASP OS, not a contract.`;
                       style={{ width: "100%", textAlign: "left", opacity: dragId === p.id ? 0.5 : 1 }}
                     >
                       <strong>{p.project}</strong>
-                      <div className="kicker">{p.company}</div>
+                      <div className="kicker">{p.company} · {p.source}</div>
                     </div>
                   ))}
                 </div>
