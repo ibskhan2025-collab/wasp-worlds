@@ -230,8 +230,6 @@ export function Experience() {
         </p>
       ) : null}
 
-      <Identity />
-
       <WorldsRail />
 
       <section id="selected" aria-label="Selected work" style={{ borderBottom: "1px solid var(--line)" }}>
@@ -391,66 +389,6 @@ export function Experience() {
         </div>
       ) : null}
     </div>
-  );
-}
-
-/**
- * Identity: who, what, and the manifesto — the human before the museum.
- * Capability map links each discipline to the world that proves it.
- */
-const CAPS: [string, [string, string][]][] = [
-  ["DESIGN", [["Branding", "/worlds/noir"], ["Art Direction", "/worlds/still"], ["Typography", "/worlds/archive"], ["Editorial", "/worlds/archive/reading"], ["Identity", "/worlds/motion"]]],
-  ["DIGITAL", [["Websites", "/worlds/casa"], ["UX/UI", "/worlds/orbit"], ["SaaS", "/worlds/orbit/forecast"], ["E-commerce", "/worlds/objects"], ["Product", "/worlds/forge/compare"]]],
-  ["CODE", [["Creative Coding", "/worlds/void"], ["Generative Systems", "/worlds/void/orbit"], ["Games", "/worlds/signal"], ["Data Visualization", "/worlds/vector/chart"], ["Interaction", "/worlds/void/field"]]],
-  ["MOTION / 3D", [["Motion", "/worlds/motion"], ["WebGL", "/worlds/nest/volume"], ["3D Environments", "/worlds/nest/walk"], ["Camera Systems", "/worlds/objects/turntable"]]],
-  ["EXPERIMENTAL", [["Prototypes", "/lab"], ["Interactive Art", "/worlds/void/abyss"], ["New Interfaces", "/worlds/civic/desk"]]],
-];
-
-function Identity() {
-  return (
-    <section aria-label="The studio" style={{ borderBottom: "1px solid var(--line)", padding: "56px var(--pad) 48px" }}>
-      <p className="kicker">THE STUDIO · ONE HUMAN · EST. 2026</p>
-      <h2 className="display" style={{ maxWidth: "22ch" }}>
-        WASP is the working portfolio of Ibrahim&nbsp;F.&nbsp;Khan — designer and builder of websites that behave like places.
-      </h2>
-      <div className="grid-2" style={{ marginTop: 28 }}>
-        <div>
-          <p className="kicker">Manifesto</p>
-          <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.25rem", lineHeight: 1.6 }}>
-            Most portfolios show pictures of work. This one shows work. Every room below operates — carts add,
-            bookings store, games keep score. If it doesn&apos;t run, it isn&apos;t here.
-          </p>
-          <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.25rem", lineHeight: 1.6 }}>
-            Range is the point and the risk. Fifteen worlds in fifteen visual languages, because a studio should
-            create a style for the problem — not drag one style across every problem.
-          </p>
-          <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.25rem", lineHeight: 1.6 }}>
-            And restraint where it counts: no invented clients, no invented numbers, no screenshots posing as
-            product. The frames stay reserved until reality fills them. <Link href="/studio/proof" style={{ textDecoration: "underline" }}>The policy →</Link>
-          </p>
-        </div>
-        <div>
-          <p className="kicker">Capability map — every claim links to proof</p>
-          {CAPS.map(([group, items]) => (
-            <div key={group} style={{ padding: "12px 0", borderTop: "1px solid var(--line)" }}>
-              <p className="kicker" style={{ margin: "0 0 6px" }}>{group}</p>
-              <p style={{ margin: 0 }}>
-                {items.map(([label, href], i) => (
-                  <span key={label}>
-                    <Link href={href} style={{ textDecoration: "underline" }}>{label}</Link>
-                    {i < items.length - 1 ? <span style={{ color: "var(--muted)" }}> · </span> : null}
-                  </span>
-                ))}
-              </p>
-            </div>
-          ))}
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 20 }}>
-            <Link className="btn" href="/start">Start a project</Link>
-            <Link className="btn ghost" href="/studio">The studio</Link>
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }
 
