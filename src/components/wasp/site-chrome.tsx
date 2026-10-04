@@ -8,6 +8,7 @@ import { CommandPalette } from "@/components/wasp/command-palette";
 
 const LINKS = [
   { href: "/", label: "Work" },
+  { href: "/lab", label: "Lab" },
   { href: "/studio/services", label: "Services" },
   { href: "/studio", label: "Studio" },
   { href: "/process", label: "Process" },
@@ -15,9 +16,8 @@ const LINKS = [
   { href: "/start", label: "Start" },
 ];
 
-// Lab and OS live one click deeper: studio grid, homepage meta-links, footer.
+// OS lives one click deeper: studio grid, homepage meta-links, footer.
 const MORE_LINKS = [
-  { href: "/lab", label: "Lab" },
   { href: "/os", label: "OS" },
 ];
 
