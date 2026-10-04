@@ -304,10 +304,169 @@ function rng(seed: number) {
 }
 
 /** Poster generator: seeded shapes + a word. Same seed, same poster — always. */
+type PlateKind = "dunes" | "peaks" | "sea" | "city" | "forest" | "ice" | "rings" | "grid" | "wave";
+const PLATE_KINDS: PlateKind[] = ["dunes", "peaks", "sea", "city", "forest", "ice", "rings", "grid", "wave"];
+
+/** Procedural imagery: every plate generated from a seed. */
+function drawPlate(ctx: CanvasRenderingContext2D, w: number, h: number, seed: number, kind: PlateKind, hue = 30) {
+  const R = rng(seed * 9973 + 11);
+  const hs = (hh: number, s: number, l: number, a = 1) => `hsla(${hh},${s}%,${l}%,${a})`;
+  const sky = (top: string, bot: string, to = h) => {
+    const g = ctx.createLinearGradient(0, 0, 0, to);
+    g.addColorStop(0, top);
+    g.addColorStop(1, bot);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+  };
+  const ridge = (base: number, amp: number, freq: number, col: string, jag = 0) => {
+    const ph = R() * 10;
+    ctx.beginPath();
+    ctx.moveTo(0, h);
+    for (let x = 0; x <= w; x += jag ? 6 : 4) {
+      const y = base + Math.sin(x * freq + ph) * amp + Math.sin(x * freq * 2.3 + ph * 2) * amp * 0.4 + (jag ? (R() - 0.5) * jag : 0);
+      ctx.lineTo(x, y);
+    }
+    ctx.lineTo(w, h);
+    ctx.closePath();
+    ctx.fillStyle = col;
+    ctx.fill();
+  };
+  if (kind === "dunes") {
+    sky(hs(hue, 55, 72), hs(hue + 15, 70, 88));
+    ctx.fillStyle = hs(hue, 90, 92, 0.9);
+    ctx.beginPath();
+    ctx.arc(w * (0.2 + R() * 0.6), h * 0.28, w * 0.07, 0, 7);
+    ctx.fill();
+    for (let i = 0; i < 6; i++) ridge(h * (0.45 + i * 0.1), 18 + i * 6, 0.006 + i * 0.002, hs(hue - i * 3, 50, 62 - i * 9));
+  } else if (kind === "peaks") {
+    sky(hs(hue, 30, 60), hs(hue, 30, 90));
+    for (let i = 0; i < 5; i++) {
+      ridge(h * (0.4 + i * 0.12), 40 - i * 4, 0.004 + i * 0.001, hs(hue + 190, 25, 70 - i * 13), 30 - i * 4);
+      const g = ctx.createLinearGradient(0, h * (0.45 + i * 0.12), 0, h * (0.6 + i * 0.12));
+      g.addColorStop(0, hs(hue, 20, 92, 0));
+      g.addColorStop(1, hs(hue, 20, 92, 0.55));
+      ctx.fillStyle = g;
+      ctx.fillRect(0, h * (0.45 + i * 0.12), w, h * 0.2);
+    }
+  } else if (kind === "sea") {
+    const hz = h * (0.5 + R() * 0.12);
+    sky(hs(hue + 200, 40, 30), hs(hue, 80, 78), hz);
+    ctx.fillStyle = hs(hue + 200, 40, 30);
+    ctx.fillRect(0, 0, w, hz * 0.02);
+    const g = ctx.createLinearGradient(0, hz, 0, h);
+    g.addColorStop(0, hs(hue + 10, 60, 60));
+    g.addColorStop(1, hs(hue + 210, 50, 12));
+    ctx.fillStyle = g;
+    ctx.fillRect(0, hz, w, h - hz);
+    ctx.fillStyle = hs(hue, 95, 90, 0.9);
+    ctx.beginPath();
+    ctx.arc(w * 0.5, hz - 4, w * 0.06, Math.PI, 0);
+    ctx.fill();
+    for (let y = hz + 4; y < h; y += 5 + (y - hz) * 0.06) {
+      ctx.fillStyle = hs(hue, 90, 85, Math.max(0, 0.5 - (y - hz) / h));
+      const ww = w * 0.12 * R() + 10;
+      ctx.fillRect(w * 0.5 - ww / 2 + (R() - 0.5) * 30, y, ww, 1.5);
+    }
+  } else if (kind === "city") {
+    sky(hs(hue + 220, 50, 8), hs(hue + 280, 50, 24));
+    for (let l = 0; l < 3; l++) {
+      let x = -10;
+      while (x < w) {
+        const bw = 20 + R() * 50;
+        const bh = h * (0.15 + R() * 0.4) * (1 - l * 0.2);
+        ctx.fillStyle = hs(hue + 230, 30, 6 + l * 6);
+        ctx.fillRect(x, h - bh - l * 30, bw, bh + l * 30);
+        if (l < 2)
+          for (let wy = h - bh - l * 30 + 8; wy < h - 8; wy += 10)
+            for (let wx = x + 4; wx < x + bw - 4; wx += 8) if (R() > 0.72) { ctx.fillStyle = hs(hue + 10, 90, 70, 0.85); ctx.fillRect(wx, wy, 3, 4); }
+        x += bw + R() * 4;
+      }
+    }
+  } else if (kind === "forest") {
+    sky(hs(hue + 100, 20, 70), hs(hue + 90, 20, 92));
+    for (let l = 0; l < 4; l++) {
+      ctx.fillStyle = hs(hue + 110, 30 - l * 4, 62 - l * 15);
+      for (let x = -20; x < w + 20; x += 14 + R() * 12) {
+        const th = h * (0.3 + R() * 0.25) * (1 + l * 0.12);
+        const by = h * (0.62 + l * 0.11);
+        ctx.beginPath();
+        ctx.moveTo(x, by - th);
+        ctx.lineTo(x - 14 - l * 3, by);
+        ctx.lineTo(x + 14 - l * 3, by);
+        ctx.fill();
+      }
+      const g = ctx.createLinearGradient(0, h * (0.5 + l * 0.1), 0, h * (0.75 + l * 0.1));
+      g.addColorStop(0, hs(hue + 90, 20, 92, 0));
+      g.addColorStop(1, hs(hue + 90, 20, 92, 0.5));
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+    }
+  } else if (kind === "ice") {
+    sky(hs(hue + 190, 40, 88), hs(hue + 200, 50, 62));
+    for (let i = 0; i < 14; i++) {
+      const x = R() * w, y = h * (0.35 + R() * 0.6), s = 30 + R() * 130;
+      ctx.fillStyle = hs(hue + 190 + R() * 20, 40, 50 + R() * 45, 0.9);
+      ctx.beginPath();
+      ctx.moveTo(x, y - s);
+      ctx.lineTo(x + s * 0.5, y);
+      ctx.lineTo(x - s * 0.4, y + s * 0.2);
+      ctx.fill();
+    }
+  } else if (kind === "rings") {
+    sky(hs(hue, 60, 8), hs(hue + 30, 60, 18));
+    const cx = w * (0.35 + R() * 0.3), cy = h * (0.35 + R() * 0.3);
+    for (let i = 26; i > 0; i--) {
+      ctx.strokeStyle = hs(hue + i * 6, 90, 35 + i * 2);
+      ctx.lineWidth = 1 + i * 0.25;
+      ctx.beginPath();
+      ctx.arc(cx + i * R() * 1.5, cy + i * R() * 1.5, i * (w / 36), 0, 7);
+      ctx.stroke();
+    }
+  } else if (kind === "grid") {
+    ctx.fillStyle = hs(hue, 10, 94);
+    ctx.fillRect(0, 0, w, h);
+    const n = 14;
+    for (let i = 0; i <= n; i++) {
+      ctx.strokeStyle = hs(hue, 80, 20);
+      ctx.lineWidth = 1 + R() * 2;
+      ctx.beginPath();
+      for (let j = 0; j <= 60; j++) {
+        const t = j / 60;
+        const x = (i / n) * w + Math.sin(t * 6 + seed) * 30 * Math.sin(i + seed);
+        if (j) ctx.lineTo(x, t * h);
+        else ctx.moveTo(x, 0);
+      }
+      ctx.stroke();
+    }
+    ctx.fillStyle = hs(hue + 160, 90, 50);
+    ctx.fillRect(w * 0.1, h * 0.72, w * 0.8, h * 0.08);
+  } else {
+    sky(hs(hue, 70, 12), hs(hue + 60, 80, 30));
+    for (let i = 0; i < 40; i++) {
+      ctx.strokeStyle = hs(hue + i * 4, 90, 60, 0.8);
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      for (let x = 0; x <= w; x += 6) {
+        const y = h * 0.5 + (i - 20) * 9 + Math.sin(x * 0.02 + i * 0.3 + seed) * (30 + i) * Math.sin(x * 0.004 + seed);
+        if (x) ctx.lineTo(x, y);
+        else ctx.moveTo(x, y);
+      }
+      ctx.stroke();
+    }
+  }
+  const n = Math.floor((w * h) / 30);
+  for (let i = 0; i < n; i++) {
+    ctx.fillStyle = R() > 0.5 ? "rgba(255,255,255,.05)" : "rgba(0,0,0,.06)";
+    ctx.fillRect(R() * w, R() * h, 1.5, 1.5);
+  }
+}
+
 function PosterGen() {
   const ref = useRef<HTMLCanvasElement | null>(null);
   const [seed, setSeed] = useState(3);
   const [word, setWord] = useState("WASP");
+  const [kind, setKind] = useState<PlateKind>("rings");
+  const [hue, setHue] = useState(30);
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
@@ -315,42 +474,41 @@ function PosterGen() {
     if (!ctx) return;
     const W = (canvas.width = canvas.offsetWidth);
     const H = (canvas.height = 240);
-    const r = rng(seed * 1337);
-    const pals = [
-      ["#0b0b0c", "#ffe34d", "#ff4d2e"],
-      ["#f3f1ec", "#0b0b0c", "#3fd6a0"],
-      ["#1b1a17", "#e8ff3a", "#4f8cff"],
-    ];
-    const pal = pals[Math.floor(r() * pals.length)] ?? pals[0];
-    ctx.fillStyle = pal[0];
-    ctx.fillRect(0, 0, W, H);
-    for (let i = 0; i < 6; i++) {
-      ctx.fillStyle = r() > 0.5 ? pal[1] : pal[2];
-      ctx.globalAlpha = 0.15 + r() * 0.5;
-      if (r() > 0.5) ctx.fillRect(r() * W, r() * H, r() * W * 0.6, r() * 14 + 4);
-      else {
-        ctx.beginPath();
-        ctx.arc(r() * W, r() * H, r() * 70 + 12, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-    ctx.globalAlpha = 1;
+    drawPlate(ctx, W, H, seed, kind, hue);
     const w = (word || "WASP").toUpperCase().slice(0, 12);
     const size = Math.min(W / (w.length * 0.62), H * 0.5);
     ctx.font = `900 ${size}px sans-serif`;
-    ctx.fillStyle = pal[1];
+    ctx.fillStyle = "rgba(255,255,255,0.92)";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(w, W / 2, H / 2);
     ctx.font = "600 10px monospace";
-    ctx.fillStyle = pal[2];
     ctx.textAlign = "left";
-    ctx.fillText(`SEED ${seed}`, 12, H - 14);
-  }, [seed, word]);
+    ctx.fillText(`SEED ${seed} · ${kind.toUpperCase()}`, 12, H - 14);
+  }, [seed, word, kind, hue]);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT")) return;
+      if (e.code === "Space") {
+        e.preventDefault();
+        setSeed((s) => s + 1);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">03 · Generative poster — same seed, same poster</p>
+      <p className="kicker">03 · Generative poster — nine kinds, spacebar rerolls</p>
       <canvas ref={ref} style={{ width: "100%", height: 240, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="Generated poster" />
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
+        {PLATE_KINDS.map((k) => (
+          <button key={k} type="button" onClick={() => setKind(k)} aria-pressed={kind === k} style={{ border: "1px solid var(--line)", background: kind === k ? "var(--fg)" : "transparent", color: kind === k ? "var(--bg)" : "var(--fg)", padding: "6px 12px", fontSize: 11 }}>
+            {k}
+          </button>
+        ))}
+      </div>
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
         <button type="button" onClick={() => setSeed((s) => s + 1)} style={{ border: "1px solid var(--fg)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12 }}>
           New poster ({seed})
@@ -378,31 +536,31 @@ function PosterGen() {
           Word
           <input value={word} maxLength={12} onChange={(e) => setWord(e.target.value)} aria-label="Poster word" style={{ border: "1px solid var(--line)", background: "transparent", color: "var(--fg)", padding: "8px 12px" }} />
         </label>
+        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12 }}>
+          Hue {hue}
+          <input type="range" min={0} max={360} value={hue} onChange={(e) => setHue(Number(e.target.value))} aria-label="Hue" />
+        </label>
+        <span style={{ fontSize: 11, color: "var(--muted)" }}>Spacebar rerolls (outside inputs).</span>
       </div>
     </section>
   );
 }
 
-const FRAG = `precision highp float;
-uniform vec2 u_res; uniform float u_time; uniform float u_scale; uniform float u_warp;
+const FRAG = `precision mediump float;
+uniform vec2 u_res; uniform float u_time; uniform float u_freq; uniform float u_speed; uniform float u_hue; uniform float u_warp;
+vec3 pal(float x){return .5+.5*cos(6.283*(x+vec3(u_hue,u_hue+.33,u_hue+.66)));}
 void main(){
-  vec2 p = (gl_FragCoord.xy - 0.5*u_res)/u_res.y * u_scale;
-  float t = u_time*0.25;
-  for(int i=0;i<4;i++){
-    p += u_warp*0.35*vec2(sin(p.y*1.7+t), cos(p.x*1.5-t));
-  }
-  float v = 0.5+0.5*sin(p.x*2.0+p.y*1.3);
-  vec3 col = mix(vec3(0.02,0.02,0.03), vec3(1.0,0.89,0.30), smoothstep(0.35,0.75,v));
-  col = mix(col, vec3(0.1,0.5,0.9), smoothstep(0.8,1.0,v));
-  gl_FragColor = vec4(col,1.0);
+  vec2 p=(gl_FragCoord.xy*2.-u_res)/u_res.y;
+  float a=0.;
+  for(float i=1.;i<5.;i++){p+=u_warp*sin(p.yx*u_freq*.3*i+u_time*u_speed*.5*i)/i;a+=length(p);}
+  gl_FragColor=vec4(pal(a*.25+u_time*.05),1.);
 }`;
 
-/** Shader playground: hand-written GLSL, scale + warp as live uniforms. */
+/** Shader playground: live GLSL, four uniforms under your control. */
 function ShaderPlay() {
   const ref = useRef<HTMLCanvasElement | null>(null);
-  const uni = useRef({ scale: 3, warp: 0.6 });
-  const [scale, setScale] = useState(3);
-  const [warp, setWarp] = useState(0.6);
+  const uni = useRef({ f: 4, s: 1, h: 0.6, w: 0.5 });
+  const [v, setV] = useState(uni.current);
   const [ok, setOk] = useState(true);
   useEffect(() => {
     const canvas = ref.current;
@@ -444,7 +602,9 @@ function ShaderPlay() {
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     const uRes = gl.getUniformLocation(pr, "u_res");
     const uTime = gl.getUniformLocation(pr, "u_time");
-    const uScale = gl.getUniformLocation(pr, "u_scale");
+    const uFreq = gl.getUniformLocation(pr, "u_freq");
+    const uSpeed = gl.getUniformLocation(pr, "u_speed");
+    const uHue = gl.getUniformLocation(pr, "u_hue");
     const uWarp = gl.getUniformLocation(pr, "u_warp");
     let raf = 0;
     const t0 = performance.now();
@@ -454,8 +614,10 @@ function ShaderPlay() {
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform1f(uTime, t);
-      gl.uniform1f(uScale, uni.current.scale);
-      gl.uniform1f(uWarp, uni.current.warp);
+      gl.uniform1f(uFreq, uni.current.f);
+      gl.uniform1f(uSpeed, uni.current.s);
+      gl.uniform1f(uHue, uni.current.h);
+      gl.uniform1f(uWarp, uni.current.w);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
     if (reduced) {
@@ -471,21 +633,24 @@ function ShaderPlay() {
   }, []);
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">04 · Shader playground — four-iteration domain warp, live uniforms</p>
+      <p className="kicker">04 · Shader playground — a live fragment shader, four uniforms</p>
       {ok ? (
-        <canvas ref={ref} style={{ width: "100%", height: 240, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="GLSL domain-warp shader" />
+        <canvas ref={ref} style={{ width: "100%", height: 240, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="Live GLSL shader with adjustable uniforms" />
       ) : (
         <p style={{ border: "1px solid var(--line)", padding: 20, marginTop: 12 }}>WebGL unavailable here — the canvas experiments above still run.</p>
       )}
-      <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginTop: 12 }}>
-        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 200 }}>
-          Scale {scale.toFixed(1)}
-          <input type="range" min={1} max={9} step={0.1} value={scale} onChange={(e) => { const v = Number(e.target.value); uni.current.scale = v; setScale(v); }} aria-label="Scale" style={{ flex: 1 }} />
-        </label>
-        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 200 }}>
-          Warp {warp.toFixed(2)}
-          <input type="range" min={0} max={1.6} step={0.02} value={warp} onChange={(e) => { const v = Number(e.target.value); uni.current.warp = v; setWarp(v); }} aria-label="Warp" style={{ flex: 1 }} />
-        </label>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "8px 16px", marginTop: 12 }}>
+        {([
+          ["Frequency", "f", v.f, 1, 12, 0.5],
+          ["Speed", "s", v.s, 0, 4, 0.1],
+          ["Hue", "h", v.h, 0, 1, 0.02],
+          ["Warp", "w", v.w, 0, 1.2, 0.05],
+        ] as const).map(([label, k, val, min, max, step]) => (
+          <label key={k} style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12 }}>
+            {label} {typeof val === "number" ? val.toFixed(2) : val}
+            <input type="range" min={min} max={max} step={step} value={val} onChange={(e) => { const n = Number(e.target.value); uni.current[k] = n; setV({ ...v, [k]: n }); }} aria-label={label} style={{ flex: 1 }} />
+          </label>
+        ))}
       </div>
     </section>
   );
@@ -699,6 +864,7 @@ function Terrain() {
   const ref = useRef<HTMLCanvasElement | null>(null);
   const [seed, setSeed] = useState(7);
   const [ridges, setRidges] = useState(46);
+  const [fly, setFly] = useState(false);
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
@@ -708,41 +874,55 @@ function Terrain() {
     const H = (canvas.height = 220);
     const fg = getComputedStyle(document.body).getPropertyValue("--fg").trim() || "#fff";
     const bg = getComputedStyle(document.body).getPropertyValue("--bg").trim() || "#000";
-    const h = (i: number, j: number, oct: number) => {
+    const h = (i: number, j: number, oct: number, t: number) => {
       let v = 0;
       for (let o = 0; o < oct; o++) {
         const f = 2 ** o;
-        v += (Math.sin(i * 0.11 * f + seed * 1.7 + o) * Math.cos(j * 0.17 * f + seed * 0.9)) / f;
+        v += (Math.sin(i * 0.11 * f + seed * 1.7 + o + t) * Math.cos(j * 0.17 * f + seed * 0.9)) / f;
       }
       return v;
     };
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, W, H);
-    for (let k = ridges; k >= 0; k--) {
-      const d = k / ridges;
-      ctx.beginPath();
-      ctx.moveTo(0, H);
-      for (let x = 0; x <= W; x += 8) {
-        const y = H * (0.35 + d * 0.6) - h(x / 8, k, 3) * 60 * (1 - d * 0.5) - Math.sin(x * 0.01 + k) * 8;
-        ctx.lineTo(x, y);
-      }
-      ctx.lineTo(W, H);
-      ctx.closePath();
+    const paint = (t: number) => {
       ctx.fillStyle = bg;
-      ctx.fill();
-      ctx.strokeStyle = fg;
-      ctx.globalAlpha = 0.5 - d * 0.4;
-      ctx.stroke();
-      ctx.globalAlpha = 1;
+      ctx.fillRect(0, 0, W, H);
+      for (let k = ridges; k >= 0; k--) {
+        const d = k / ridges;
+        ctx.beginPath();
+        ctx.moveTo(0, H);
+        for (let x = 0; x <= W; x += 8) {
+          const y = H * (0.35 + d * 0.6) - h(x / 8, k, 3, t) * 60 * (1 - d * 0.5) - Math.sin(x * 0.01 + k) * 8;
+          ctx.lineTo(x, y);
+        }
+        ctx.lineTo(W, H);
+        ctx.closePath();
+        ctx.fillStyle = bg;
+        ctx.fill();
+        ctx.strokeStyle = fg;
+        ctx.globalAlpha = 0.5 - d * 0.4;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+    };
+    if (!fly) {
+      paint(0);
+      return;
     }
-  }, [seed, ridges]);
+    let raf = 0;
+    const t0 = performance.now();
+    const loop = () => {
+      paint((performance.now() - t0) / 2000);
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [seed, ridges, fly]);
   return (
     <section style={{ padding: "24px 0", borderTop: "1px solid var(--line)" }}>
-      <p className="kicker">08 · Procedural terrain — ridge lines, seeded</p>
+      <p className="kicker">08 · Procedural terrain — ridge lines, seeded, flyable</p>
       <canvas ref={ref} style={{ width: "100%", height: 220, display: "block", border: "1px solid var(--line)", marginTop: 12 }} aria-label="Procedural terrain" />
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
-        <button type="button" onClick={() => setSeed((s) => s + 1)} style={{ border: "1px solid var(--fg)", background: "transparent", color: "var(--fg)", padding: "8px 16px", fontSize: 12 }}>
-          New terrain ({seed})
+        <button type="button" onClick={() => setFly((f) => !f)} aria-pressed={fly} style={{ border: "1px solid var(--fg)", background: fly ? "var(--fg)" : "transparent", color: fly ? "var(--bg)" : "var(--fg)", padding: "8px 16px", fontSize: 12 }}>
+          {fly ? "■ Land" : "▶ Fly"}
         </button>
         <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12, flex: 1, minWidth: 200 }}>
           Ridges {ridges}
