@@ -23,6 +23,9 @@ const R: Record<string, Record<string, ComponentType>> = {
     zen: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaZen), { loading: loading("ZEN") }),
     counter: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaCounter), { loading: loading("COUNTER") }),
     cellar: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaCellar), { loading: loading("CELLAR") }),
+    brutalist: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaBrutalist), { loading: loading("BRUTALIST") }),
+    japanese: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaJapanese), { loading: loading("JAPANESE") }),
+    spatial: dynamic(() => import("@/components/worlds/casa-spatial").then((m) => m.CasaSpatial), { loading: loading("SPATIAL") }),
   },
   noir: {
     brutalist: dynamic(() => import("@/components/worlds/noir-brutalist").then((m) => m.NoirBrutalist), { loading: loading("BRUTALIST") }),

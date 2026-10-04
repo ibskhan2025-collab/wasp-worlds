@@ -40,6 +40,12 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#140f0c", "--fg": "#f3e8d8", "--muted": "#c9a98a", "--line": "rgba(243,232,216,0.25)", "--accent": "#ff5a2e" }),
     ALT("cellar", "Cellar", "The wine book, by the glass", "cellar",
       { "--bg": "#171008", "--fg": "#e9dcc0", "--muted": "#a08a60", "--line": "rgba(185,138,61,0.4)", "--accent": "#b98a3d" }),
+    ALT("brutalist", "Brutalist", "Ledger, no mercy", "brutalist",
+      { "--bg": "#f2f0e8", "--fg": "#111111", "--muted": "#555555", "--line": "#111111", "--accent": "#111111" }),
+    ALT("japanese", "Japanese", "Courses in silence", "japanese",
+      { "--bg": "#f3eee3", "--fg": "#1d1b18", "--muted": "#7a6a5c", "--line": "rgba(29,27,24,0.2)", "--accent": "#b2332a" }),
+    ALT("spatial", "Spatial", "The dining room in 3D", "spatial",
+      { "--bg": "#171310", "--fg": "#e8e0d2", "--muted": "#8a7f6e", "--line": "rgba(232,224,210,0.25)", "--accent": "#c9803f" }),
   ],
   noir: [
     CLASSIC("Classic", "Absolute black, grayscale"),

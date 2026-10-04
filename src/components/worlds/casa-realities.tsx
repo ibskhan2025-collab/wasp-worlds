@@ -4,10 +4,13 @@ import Link from "next/link";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
-import { dishes } from "@/data/casa";
+import { casa, casaGallery, dishes } from "@/data/casa";
+import { media } from "@/lib/media";
 import { money } from "@/lib/use-cart";
 
-const shell = (id: "oceanic" | "analog" | "counter" | "cellar") => (
+const KANJI = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二", "十三", "十四"];
+
+const shell = (id: "oceanic" | "analog" | "counter" | "cellar" | "brutalist" | "japanese") => (
   <>
     <WorldExit id="casa" label={`Room 01 · CASA/${id.toUpperCase()}`} />
     <RealityShell world="casa" current={id} basePath="/worlds/casa" />
@@ -206,6 +209,134 @@ export function CasaZen() {
       </div>
       <WorldProof
         proves="Restraint as hospitality: five courses, no menu to decode, booking in one gesture."
+        relatedHref="/worlds/still"
+        relatedName="STILL"
+      />
+    </div>
+  );
+}
+
+export function CasaBrutalist() {
+  return (
+    <div style={{ background: "#f2f0e8", color: "#111", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <div aria-hidden style={{ overflow: "hidden", borderBottom: "4px solid #111", background: "#ffe600", padding: "8px 0", fontSize: 13, fontWeight: 700 }}>
+        <div style={{ display: "flex", gap: 40, whiteSpace: "nowrap", width: "max-content" }}>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <span key={i}>Tue–Sun 17:30 – 22:30 · Fire · Salt · Sea · No tasting menu</span>
+          ))}
+        </div>
+      </div>
+      {shell("brutalist")}
+      <section style={{ borderBottom: "4px solid #111", padding: "24px 16px 0" }}>
+        <h1 style={{ fontFamily: "var(--font-bebas)", fontSize: "clamp(4rem, 26vw, 22rem)", lineHeight: 0.85, margin: 0, letterSpacing: "0.01em" }}>CASA</h1>
+        <div style={{ display: "grid", gap: 0, borderTop: "4px solid #111", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
+          <p style={{ padding: 16, fontWeight: 700, fontSize: "1.1rem", margin: 0 }}>FOOD IS NOT A CONCEPT. IT IS HEAT, SALT, TIMING.</p>
+          <p style={{ padding: 16, margin: 0 }}>12 dishes. One grill. Eight tables. A valley.</p>
+          <Link href="/worlds/casa/reservations" style={{ background: "#111", padding: 16, fontWeight: 800, fontSize: "1.4rem", color: "#ffe600" }}>
+            Book a table →
+          </Link>
+        </div>
+      </section>
+      <section style={{ padding: "40px 16px" }}>
+        <h2 style={{ fontFamily: "var(--font-bebas)", fontSize: "clamp(2.6rem, 9vw, 6rem)", lineHeight: 0.9, margin: "0 0 24px" }}>
+          MENU / {String(dishes.length).padStart(2, "0")}
+        </h2>
+        <table style={{ width: "100%", borderCollapse: "collapse", borderTop: "4px solid #111", borderBottom: "4px solid #111", textAlign: "left" }}>
+          <caption style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>Menu ledger</caption>
+          <tbody>
+            {dishes.map((d, i) => (
+              <tr key={d.id} style={{ borderBottom: "2px solid #111" }}>
+                <td style={{ padding: 0 }} colSpan={4}>
+                  <Link href={`/worlds/casa/menu/${d.id}`} style={{ display: "grid", gridTemplateColumns: "2.5rem 1fr auto", gap: 12, padding: "12px 4px", alignItems: "baseline" }}>
+                    <span style={{ fontSize: "0.85rem" }}>{String(i + 1).padStart(2, "0")}</span>
+                    <span>
+                      <span style={{ display: "block", fontFamily: "var(--font-bebas)", fontSize: "clamp(1.5rem, 4vw, 2.5rem)", lineHeight: 1 }}>{d.name}</span>
+                      <span style={{ fontSize: 12, textTransform: "uppercase" }}>{d.category} · {d.dietary.join(" / ") || "omnivore"}</span>
+                    </span>
+                    <span style={{ fontWeight: 800, fontSize: "1.2rem" }}>{money(d.price)}</span>
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+      <section style={{ borderTop: "4px solid #111", background: "#ffe600", padding: "40px 16px" }}>
+        <h2 style={{ fontFamily: "var(--font-bebas)", fontSize: "clamp(2.6rem, 9vw, 6rem)", lineHeight: 0.9, margin: "0 0 8px" }}>EVIDENCE</h2>
+        <p style={{ maxWidth: "52ch" }}>The room, the fire, the plates. <Link href="/worlds/casa/gallery" style={{ textDecoration: "underline", fontWeight: 800 }}>See the gallery →</Link></p>
+      </section>
+      <section style={{ borderTop: "4px solid #111", padding: "40px 16px 64px" }}>
+        <h2 style={{ fontFamily: "var(--font-bebas)", fontSize: "clamp(2.6rem, 9vw, 6rem)", lineHeight: 0.9, margin: "0 0 8px" }}>RESERVE</h2>
+        <p>Names, dates, parties. Nothing else. <Link href="/worlds/casa/reservations" style={{ background: "#111", color: "#ffe600", padding: "10px 18px", fontWeight: 800 }}>Book →</Link></p>
+        <p style={{ marginTop: 24, fontWeight: 700 }}>{casa.address.toUpperCase()} · CLOSED MONDAYS.</p>
+      </section>
+      <WorldProof
+        proves="Luxury removed, appetite intact: the same kitchen as a ledger — numbered, priced, bookable."
+        relatedHref="/worlds/noir"
+        relatedName="NOIR"
+      />
+    </div>
+  );
+}
+
+export function CasaJapanese() {
+  return (
+    <div style={{ background: "#f3eee3", color: "#1d1b18", minHeight: "100dvh", fontFamily: "var(--font-plex)", fontWeight: 300 }}>
+      {shell("japanese")}
+      <section style={{ maxWidth: 1100, margin: "0 auto", display: "grid", gridTemplateColumns: "auto 1fr", gap: 32, padding: "64px 20px" }}>
+        <h1 style={{ fontFamily: "var(--font-cormorant)", fontWeight: 300, fontSize: "clamp(3.5rem, 9vw, 8rem)", letterSpacing: "0.3em", margin: 0, writingMode: "vertical-rl", textOrientation: "upright" }}>
+          CASA
+        </h1>
+        <div style={{ position: "relative", alignSelf: "stretch", minHeight: 320 }}>
+          <img src={media.casa.hero} alt="The CASA dining room in soft light" loading="lazy" decoding="async" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "saturate(.35) contrast(.9) brightness(1.05)" }} />
+          <span aria-hidden style={{ position: "absolute", bottom: -20, right: 16, width: 56, height: 56, display: "grid", placeItems: "center", background: "#b2332a", color: "#f3eee3", fontSize: 28 }}>
+            家
+          </span>
+          <p style={{ position: "absolute", left: 0, top: 0, maxWidth: "14rem", background: "#f3eee3", padding: "8px 16px 8px 0", fontStyle: "italic", fontSize: "0.9rem", margin: 0 }}>
+            A table, a fire, and silence between courses.
+          </p>
+        </div>
+      </section>
+      <section style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px" }}>
+        <h2 style={{ textAlign: "center", fontFamily: "var(--font-cormorant)", fontWeight: 300, fontSize: "clamp(1.8rem, 4vw, 2.6rem)", letterSpacing: "0.3em", margin: 0 }}>
+          MENU · 品書き
+        </h2>
+        <ol style={{ listStyle: "none", margin: "32px 0 0", padding: 0, display: "grid", gap: "0 64px", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}>
+          {dishes.map((d, i) => (
+            <li key={d.id} style={{ borderTop: "1px solid rgba(29,27,24,0.2)" }}>
+              <Link href={`/worlds/casa/menu/${d.id}`} style={{ display: "flex", gap: 16, padding: "20px 0", textAlign: "left", width: "100%" }}>
+                <span style={{ width: 32, flexShrink: 0, paddingTop: 4, fontSize: "0.9rem", color: "#b2332a", fontFamily: "var(--font-cormorant)" }}>
+                  {KANJI[i] ?? String(i + 1)}
+                </span>
+                <span style={{ flex: 1 }}>
+                  <span style={{ display: "block", fontSize: "1.4rem", fontFamily: "var(--font-cormorant)" }}>{d.name}</span>
+                  <span style={{ display: "block", marginTop: 4, fontSize: "0.85rem", lineHeight: 1.6, opacity: 0.7 }}>{d.desc}</span>
+                </span>
+                <span style={{ fontSize: "1.1rem", fontFamily: "var(--font-cormorant)" }}>{money(d.price)}</span>
+              </Link>
+            </li>
+          ))}
+        </ol>
+      </section>
+      <section style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px" }}>
+        <div style={{ display: "grid", gap: 32, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
+          {casaGallery.slice(0, 3).map((g) => (
+            <figure key={g.src} style={{ margin: 0 }}>
+              <img src={g.src} alt={g.alt} loading="lazy" decoding="async" style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", filter: "saturate(.4) brightness(1.05)" }} />
+            </figure>
+          ))}
+        </div>
+      </section>
+      <section style={{ maxWidth: 560, margin: "0 auto", padding: "40px 20px 112px", textAlign: "center" }}>
+        <h2 style={{ fontFamily: "var(--font-cormorant)", fontWeight: 300, fontSize: "clamp(1.8rem, 4vw, 2.6rem)", letterSpacing: "0.3em", margin: "0 0 24px" }}>
+          予約 · RESERVE
+        </h2>
+        <Link href="/worlds/casa/reservations" style={{ border: "1px solid #1d1b18", padding: "12px 28px", letterSpacing: "0.15em", fontSize: 12 }}>
+          BOOK BY MEDITATION →
+        </Link>
+      </section>
+      <WorldProof
+        proves="Stillness as service: the same kitchen at half tempo — courses, quiet, stamp."
         relatedHref="/worlds/still"
         relatedName="STILL"
       />
