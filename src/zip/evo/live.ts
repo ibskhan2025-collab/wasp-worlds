@@ -1,4 +1,4 @@
-import { CAPS, TECH, WORLDS as ZIP_WORLDS, capName, techName, type Cap, type World } from "./graph";
+import { buildIndex, CAPS, LAB, score, TECH, WORLDS as ZIP_WORLDS, capName, techName, worldBySlug, type Cap, type Entry, type World } from "./graph";
 import { REALITIES } from "@/lib/realities";
 
 /**
@@ -7,7 +7,7 @@ import { REALITIES } from "@/lib/realities";
  * CTAs). Only the realities arrays are re-homed here so counts always
  * match the live site instead of the export date.
  */
-export { CAPS, TECH, capName, techName, type Cap, type World };
+export { buildIndex, CAPS, LAB, score, TECH, capName, techName, worldBySlug, type Cap, type Entry, type World };
 
 export const WORLDS: World[] = ZIP_WORLDS.map((w) => ({
   ...w,

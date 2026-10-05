@@ -10,7 +10,7 @@ import { REALITIES } from "@/lib/realities";
 import { pexels } from "@/lib/media";
 import { ProofPoke } from "@/components/wasp/proof-poke";
 import { SpaceField } from "@/components/wasp/space-field";
-import { ZipPaperMap, ZipTechnoField } from "@/zip/fields";
+import { ZipHero, ZipPaperMap, ZipTechnoLanding } from "@/zip/fields";
 
 const ROOM_SPAN = ["span8", "span4", "span4", "span5", "span3", "span4", "span4", "span5", "span3", "span7", "span5", "span4", "span4", "span5", "span7"];
 
@@ -210,11 +210,13 @@ export function Experience() {
         </p>
       ) : null}
 
+      {wasp.feel === "paper" ? <ZipHero /> : null}
+
       <WorldsRail />
 
       <ProofPoke />
 
-      {wasp.feel === "techno" ? <ZipTechnoField /> : wasp.feel === "paper" ? <ZipPaperMap /> : <SpaceField />}
+      {wasp.feel === "paper" ? <ZipPaperMap /> : <SpaceField />}
 
       <div style={{ padding: "16px var(--pad) 8px", borderBottom: "1px solid var(--line)", display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "baseline" }}>
         <p className="ex-kicker" style={{ margin: 0 }}>The exhibition · all 15 rooms</p>
@@ -223,7 +225,9 @@ export function Experience() {
       <div className="rooms">
         {WORLDS.map((world, i) => {
           const rec = recIds.includes(world.id);
-          return (
+  if (wasp.feel === "techno") return <ZipTechnoLanding />;
+
+  return (
             <Link
               key={world.id}
               href={world.href}

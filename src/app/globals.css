@@ -1513,3 +1513,9 @@ input, textarea, select { max-width: 100%; }
   --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, monospace;
   color-scheme: dark;
 }
+/* Fixed zip headers overlay page top: offset main per feel (mirrors their layouts). */
+html[data-feel="techno"] #main { padding-top: 44px; }
+html[data-feel="paper"] #main { padding-top: 56px; }
+@media (max-width: 767px) {
+  html[data-feel="paper"] body { padding-bottom: 48px; }
+}

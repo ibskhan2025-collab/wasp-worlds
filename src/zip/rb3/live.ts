@@ -1,4 +1,4 @@
-import { DISCIPLINES, WORLDS as ZIP_WORLDS, type World } from "./worlds";
+import { DISCIPLINES, NAV, WORLDS as ZIP_WORLDS, type World } from "./worlds";
 import { REALITIES } from "@/lib/realities";
 
 /**
@@ -7,7 +7,7 @@ import { REALITIES } from "@/lib/realities";
  * Only the realities arrays are re-homed here so counts and labels always
  * match the live site instead of the export date.
  */
-export { DISCIPLINES, type World };
+export { DISCIPLINES, NAV, type World };
 
 export const WORLDS: World[] = ZIP_WORLDS.map((w) => ({
   ...w,

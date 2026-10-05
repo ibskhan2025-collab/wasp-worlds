@@ -7,6 +7,8 @@ import { useWasp } from "@/context/wasp-context";
 import { CommandPalette } from "@/components/wasp/command-palette";
 import { WorldSwitch } from "@/components/wasp/world-switch";
 import { WorldWipeHost } from "@/components/wasp/world-wipe";
+import ZipHeader from "@/zip/rb3/Header";
+import { Nav as ZipNav } from "@/zip/evo/Nav";
 
 const LINKS = [
   { href: "/", label: "Work" },
@@ -59,6 +61,11 @@ export function SiteChrome({ children }: { children: ReactNode }) {
     <>
       {fine && !standalone ? <WaspCursor /> : null}
       {!inWorld && !standalone ? (
+        feel === "techno" ? (
+          <ZipHeader />
+        ) : feel === "paper" ? (
+          <ZipNav />
+        ) : (
         <header className="nav-wasp">
           <Link className="nav-mark" href="/">
             WASP
@@ -75,6 +82,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
             <CommandPalette />
           </nav>
         </header>
+        )
       ) : null}
       <WorldSwitch />
       <WorldWipeHost />
