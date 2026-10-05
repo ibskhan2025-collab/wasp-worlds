@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useWasp } from "@/context/wasp-context";
 import { REALITIES } from "@/lib/realities";
 import { WORLDS } from "@/lib/worlds";
@@ -58,11 +58,9 @@ export function TechnoField() {
   const on = (id: string) => sel.length === 0 || sel.some((s) => WORLDS.find((w) => w.id === id)!.tags.includes(s));
   const litCount = WORLDS.filter((w) => on(w.id)).length;
   return (
-    <section id="space" aria-label="Space: all fifteen worlds" style={{ borderBottom: "1px solid var(--line)", background: "#09090a", color: "#f4f4f5" }}>
-      <div style={{ padding: "56px var(--pad) 0" }}>
-        <p style={{ fontFamily: "var(--font-code)", fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(244,244,245,0.5)", margin: 0 }}>The field</p>
-        <h2 style={{ margin: "12px 0 0", fontSize: "clamp(2.2rem,6vw,5.5rem)", fontWeight: 900, lineHeight: 0.95, letterSpacing: "-0.02em" }}>Fifteen worlds, one sky.</h2>
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8, marginTop: 24 }} role="group" aria-label="Filter worlds by capability">
+    <section id="space" aria-label="Space: all fifteen worlds" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)", background: "#09090a", color: "#f4f4f5" }}>
+      <div style={{ padding: "40px var(--pad) 0" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8 }} role="group" aria-label="Filter worlds by capability">
           {TAGS.map((d) => {
             const n = WORLDS.filter((w) => w.tags.includes(d)).length;
             const active = sel.includes(d);
@@ -119,7 +117,7 @@ export function TechnoField() {
               <p style={{ fontSize: "1.9rem", fontWeight: 900, margin: 0, color: ACCENT[hw.id] }}>{hw.name}</p>
               <p style={{ maxWidth: 480, margin: 0, fontSize: "0.95rem", color: "rgba(255,255,255,0.8)" }}>{hw.line}</p>
               <p style={{ fontFamily: "var(--font-code)", fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", margin: 0 }}>
-                {(REALITIES[hw.id] ?? []).length} realities · {hw.tags.join(" / ")} · <WorldNavLink world={hw.id} label={hw.name} href={hw.href} style={{ textDecoration: "underline", color: "#ffd23f" }}>Enter →</WorldNavLink>
+                {(REALITIES[hw.id] ?? []).length} realities · {hw.tags.join(" / ")}
               </p>
             </div>
           ) : (
@@ -140,6 +138,40 @@ const PAPER_POS: Record<string, [number, number]> = {
   forge: [0.34, 0.97], pulse: [0.9, 0.6], civic: [0.02, 0.99], nest: [0.24, 0.58], vector: [0.28, 0.4],
 };
 
+const TAG_PLAIN: Record<string, string> = {
+  hospitality: "Rooms, tables and bookings that actually take bookings.",
+  commerce: "Carts, tills and checkouts that really charge.",
+  luxury: "Desire first, price later.",
+  fashion: "Garments as objects of study.",
+  product: "Software someone could operate on a Tuesday.",
+  saas: "Dashboards, accounts and the jobs behind them.",
+  systems: "Pipes, stages and state, made legible.",
+  portfolio: "Work shown as working things.",
+  editorial: "Reading as an interface.",
+  art: "Images that set the terms.",
+  play: "Rules, scores and one more go.",
+  interactive: "The page notices you back.",
+  entertainment: "Spectacle with a scoreboard.",
+  retail: "Shelves, stock and discovery.",
+  content: "Words organized until they behave.",
+  knowledge: "Archives you can actually use.",
+  campaign: "Launches with a tempo.",
+  brand: "Identity doing a job.",
+  motion: "Time as a material.",
+  experimental: "No obvious reason. Good.",
+  generative: "The machine draws too.",
+  travel: "Places you can explore before arriving.",
+  place: "Websites that behave like locations.",
+  b2b: "Complicated buyers, clarified.",
+  industrial: "Shop floors and schematics.",
+  culture: "Nights out, on the web.",
+  music: "Loud pages for loud rooms.",
+  civic: "Public information, plainly.",
+  accessibility: "Nobody left at the door.",
+  architecture: "Plans you can walk through.",
+  finance: "Serious numbers, no beige.",
+};
+
 /**
  * PAPER map: the 8154 worlds map, detail for detail — loud/useful scatter,
  * photo bubbles that open under the cursor, dashed fan-out to kin, visited
@@ -151,6 +183,14 @@ export function PaperMap() {
   const [view, setView] = useState<"map" | "index">("map");
   const [h, setH] = useState<string | null>(null);
   const [cap, setCap] = useState<string | null>(null);
+  const [wide, setWide] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 640px)");
+    const apply = () => setWide(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
   const hw = h ? (WORLDS.find((w) => w.id === h) ?? null) : null;
   const links = useMemo(() => {
     if (!hw) return [];
@@ -160,7 +200,7 @@ export function PaperMap() {
   }, [hw]);
   const lit = (id: string) => !cap || WORLDS.find((w) => w.id === id)!.tags.includes(cap);
   return (
-    <section id="space" aria-label="Space: all fifteen worlds" style={{ background: "#efece4", color: "#141412", borderBottom: "1px solid #141412", padding: "64px 0 96px" }}>
+    <section id="space" aria-label="Space: all fifteen worlds" style={{ background: "#efece4", color: "#141412", borderBottom: "1px solid #141412", padding: "96px 0" }}>
       <div style={{ maxWidth: 1600, margin: "0 auto", padding: "0 16px" }}>
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: 24 }}>
           <div>
@@ -184,10 +224,10 @@ export function PaperMap() {
             </button>
           ))}
         </div>
-        {cap ? <p style={{ marginTop: 12, fontSize: "1.1rem" }}>{WORLDS.filter((w) => w.tags.includes(cap)).length} worlds prove {cap}.</p> : null}
+        {cap ? <p style={{ marginTop: 12, fontSize: "1.1rem" }}>{TAG_PLAIN[cap] ?? `${WORLDS.filter((w) => w.tags.includes(cap)).length} worlds prove ${cap}.`}</p> : null}
 
         {view === "map" ? (
-          <div style={{ position: "relative", marginTop: 32, width: "100%", aspectRatio: "16/10", border: "1px solid #141412", background: "#e6e2d7" }} onPointerLeave={() => setH(null)}>
+          <div style={{ position: "relative", marginTop: 32, width: "100%", aspectRatio: wide ? "16/10" : "4/5", border: "1px solid #141412", background: "#e6e2d7" }} onPointerLeave={() => setH(null)}>
             <span style={{ position: "absolute", bottom: 8, left: 12, fontFamily: "var(--font-code)", fontSize: 11, color: "#57544c" }}>← quiet</span>
             <span style={{ position: "absolute", bottom: 8, right: 12, fontFamily: "var(--font-code)", fontSize: 11, color: "#57544c" }}>loud →</span>
             <span style={{ position: "absolute", left: 8, top: 12, fontFamily: "var(--font-code)", fontSize: 11, color: "#57544c", writingMode: "vertical-rl", transform: "rotate(180deg)" }}>product ↑</span>
@@ -217,7 +257,7 @@ export function PaperMap() {
                   aria-label={`Room ${w.room}: ${w.name}. ${w.line}`}
                   style={{ position: "absolute", left: `${6 + x * 88}%`, top: `${6 + (1 - y) * 88}%`, transform: "translate(-50%,-50%)", opacity: isOn ? (hw && !near ? 0.35 : 1) : 0.12, zIndex: big ? 10 : 1, transition: "opacity 500ms" }}
                 >
-                  <span style={{ display: "block", overflow: "hidden", borderRadius: "50%", border: "2px solid #141412", width: big ? 128 : 56, height: big ? 128 : 56, transition: "width 500ms, height 500ms" }}>
+                  <span style={{ display: "block", overflow: "hidden", borderRadius: "50%", border: "2px solid #141412", width: big ? (wide ? 128 : 96) : wide ? 56 : 40, height: big ? (wide ? 128 : 96) : wide ? 56 : 40, transition: "width 500ms, height 500ms" }}>
                     <img src={ROOM_IMAGE[w.id]} alt="" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   </span>
                   <span style={{ position: "absolute", left: "50%", top: "100%", transform: "translateX(-50%)", marginTop: 4, whiteSpace: "nowrap", fontFamily: "var(--font-code)", fontSize: 11, textTransform: "uppercase", background: "#efece4", padding: "0 4px" }}>
