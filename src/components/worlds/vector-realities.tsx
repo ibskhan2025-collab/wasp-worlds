@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { vectorInsights, vectorPractices, vectorQuarters } from "@/data/vector";
@@ -287,7 +288,9 @@ export function VectorNav({ current }: { current: string }) {
         ["letter", "Letter", "/worlds/vector/letter"],
         ["report", "Report", "/worlds/vector/report"],
       ].map(([id, label, href]) => (
-        <Link
+        <WorldNavLink
+          world="vector"
+          label={label}
           key={id}
           href={href}
           aria-current={current === id ? "page" : undefined}
@@ -302,7 +305,7 @@ export function VectorNav({ current }: { current: string }) {
           }}
         >
           {label}
-        </Link>
+        </WorldNavLink>
       ))}
     </nav>
   );

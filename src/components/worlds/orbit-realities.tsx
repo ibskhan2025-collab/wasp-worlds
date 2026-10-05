@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldProof } from "@/components/worlds/world-proof";
@@ -270,8 +271,89 @@ export function OrbitPaper() {
   );
 }
 
-export function OrbitNav({ current }: { current: string }) {
+const SCENARIOS = [
+  { id: "hold", label: "Hold", growth: 1, churn: 2, recover: true },
+  { id: "grow", label: "Grow", growth: 5, churn: 1.5, recover: true },
+  { id: "strain", label: "Strain", growth: 0.5, churn: 4, recover: false },
+] as const;
+
+export function OrbitFuture() {
+  const s = useSnapshot();
+  const base = s.customers.reduce((n, c) => n + c.spend, 0);
+  const atRisk = s.customers.filter((c) => c.health === "Risk").reduce((n, c) => n + c.spend, 0);
+  const [preset, setPreset] = useState<(typeof SCENARIOS)[number]>(SCENARIOS[0]);
+  const [growth, setGrowth] = useState<number>(SCENARIOS[0].growth);
+  const [churn, setChurn] = useState<number>(SCENARIOS[0].churn);
+  const [recover, setRecover] = useState(true);
+  const months = Array.from({ length: 12 }, (_, m) => {
+    let rev = base;
+    for (let i = 0; i <= m; i++) {
+      rev = rev * (1 + growth / 100) - rev * (churn / 100) - (recover ? 0 : (atRisk / 12) * 0.5);
+    }
+    return Math.max(Math.round(rev), 0);
+  });
+  const max = Math.max(...months, base);
+  const delta = months[11] - base;
   return (
+    <div style={{ background: "#0a0e1c", color: "#dfe4ff", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="orbit" label="Room 03 · ORBIT/FUTURE" />
+      <OrbitNav current="future" />
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#a78bfa", margin: 0 }}>12-MONTH MODEL · PROJECTION, NOT PROMISE</p>
+        <h1 style={{ fontSize: "clamp(2.4rem, 8vw, 5rem)", margin: "8px 0" }}>
+          ${months[11].toLocaleString()} <span style={{ fontSize: "1.2rem", color: delta >= 0 ? "#7dff8a" : "#ff7d7d" }}>{delta >= 0 ? "+" : ""}{delta.toLocaleString()} vs today</span>
+        </h1>
+        <p style={{ fontSize: "0.85rem", color: "#8a93b8", maxWidth: "62ch" }}>
+          Assumes {growth}% new business and {churn}% churn monthly on today&apos;s ${(base).toLocaleString()} across {s.customers.length} accounts
+          {recover ? ", with at-risk revenue recovering" : ", with at-risk revenue draining"}. Change the weather below; the maths re-runs.
+        </p>
+        <div style={{ display: "flex", gap: 8, marginTop: 20 }} role="group" aria-label="Scenarios">
+          {SCENARIOS.map((sc) => (
+            <button
+              key={sc.id}
+              type="button"
+              aria-pressed={preset.id === sc.id && growth === sc.growth && churn === sc.churn}
+              onClick={() => { setPreset(sc); setGrowth(sc.growth); setChurn(sc.churn); setRecover(sc.recover); }}
+              style={{ background: preset.id === sc.id ? "#a78bfa" : "transparent", color: preset.id === sc.id ? "#0a0e1c" : "#dfe4ff", border: "1px solid #a78bfa", padding: "10px 20px", fontSize: 12, letterSpacing: "0.15em", fontFamily: "inherit" }}
+            >
+              {sc.label.toUpperCase()}
+            </button>
+          ))}
+        </div>
+        <div style={{ display: "grid", gap: 16, marginTop: 24, maxWidth: 520 }}>
+          <label style={{ display: "grid", gap: 8, fontSize: 12, letterSpacing: "0.15em" }}>
+            NEW BUSINESS · {growth}% / MO
+            <input type="range" min={0} max={10} step={0.5} value={growth} onChange={(e) => setGrowth(Number(e.target.value))} aria-label="Monthly new business percent" />
+          </label>
+          <label style={{ display: "grid", gap: 8, fontSize: 12, letterSpacing: "0.15em" }}>
+            CHURN · {churn}% / MO
+            <input type="range" min={0} max={8} step={0.5} value={churn} onChange={(e) => setChurn(Number(e.target.value))} aria-label="Monthly churn percent" />
+          </label>
+          <label style={{ display: "flex", gap: 10, alignItems: "center", fontSize: 12, letterSpacing: "0.15em" }}>
+            <input type="checkbox" checked={recover} onChange={(e) => setRecover(e.target.checked)} aria-label="At-risk revenue recovers" />
+            AT-RISK ${atRisk.toLocaleString()} RECOVERS
+          </label>
+        </div>
+        <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 180, marginTop: 32, borderBottom: "1px solid rgba(223,228,255,0.25)", paddingBottom: 0 }} role="img" aria-label={`Projected revenue over 12 months, ending at $${months[11].toLocaleString()}`}>
+          {months.map((v, i) => (
+            <div key={i} title={`Month ${i + 1}: $${v.toLocaleString()}`} style={{ flex: 1, height: `${Math.max(Math.round((v / max) * 100), 3)}%`, background: i === 11 ? "#a78bfa" : "rgba(167,139,250,0.45)" }} />
+          ))}
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#8a93b8", marginTop: 8 }}>
+          <span>NOW · ${base.toLocaleString()}</span><span>+12 MO · ${months[11].toLocaleString()}</span>
+        </div>
+        <p style={{ marginTop: 24 }}>The present, unmodeled: <Link href="/worlds/orbit/forecast" style={{ textDecoration: "underline", color: "#a78bfa" }}>the forecast →</Link></p>
+      </div>
+      <WorldProof
+        proves="Planning as play: the same ledger, bent by your assumptions — every number traceable to today."
+        relatedHref="/worlds/vector"
+        relatedName="VECTOR"
+      />
+    </div>
+  );
+}
+
+export function OrbitNav({ current }: { current: string }) {  return (
     <nav aria-label="ORBIT realities" style={{ display: "flex", gap: 2, alignItems: "stretch", background: "#0d1420", color: "#dfe8f2", borderBottom: "2px solid #6fc3ff", padding: "0 12px", overflowX: "auto", fontFamily: "var(--font-code)" }}>
       <Link href="/worlds/orbit" style={{ padding: "12px 8px", fontWeight: 800, letterSpacing: "0.15em", fontSize: 12 }}>
         ORBIT://
@@ -284,8 +366,13 @@ export function OrbitNav({ current }: { current: string }) {
         ["standup", "Standup", "/worlds/orbit/standup"],
         ["forecast", "Forecast", "/worlds/orbit/forecast"],
         ["paper", "Paper", "/worlds/orbit/paper"],
+        ["retro", "Retro", "/worlds/orbit/retro"],
+        ["terminal", "Terminal", "/worlds/orbit/terminal"],
+        ["future", "Future", "/worlds/orbit/future"],
       ].map(([id, label, href]) => (
-        <Link
+        <WorldNavLink
+          world="orbit"
+          label={label}
           key={id}
           href={href}
           aria-current={current === id ? "page" : undefined}
@@ -299,8 +386,103 @@ export function OrbitNav({ current }: { current: string }) {
           }}
         >
           {label}
-        </Link>
+        </WorldNavLink>
       ))}
     </nav>
+  );
+}
+
+export function OrbitRetro() {
+  const s = useSnapshot();
+  const today = new Date().toISOString().slice(0, 10);
+  const rows = [
+    ...s.customers.map((c) => `C ${c.name.toUpperCase()} ${c.company.toUpperCase()} ${c.plan.toUpperCase()} $${c.spend} ${c.health.toUpperCase()}`),
+    ...s.projects.map((p) => `P ${p.name.toUpperCase()} ${p.client.toUpperCase()} ${p.stage.toUpperCase()} DUE ${p.due.toUpperCase()}`),
+  ];
+  return (
+    <div style={{ background: "#f4f1e4", color: "#1c1b16", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="orbit" label="Room 03 · ORBIT/RETRO" />
+      <OrbitNav current="retro" />
+      <div style={{ display: "flex", maxWidth: 900, margin: "32px auto" }}>
+        <div aria-hidden style={{ width: 36, flexShrink: 0, background: "radial-gradient(circle at 50% 8px, #1c1b16 4px, transparent 5px)", backgroundSize: "100% 24px", backgroundRepeat: "repeat-y", borderRight: "1px dashed #1c1b16" }} />
+        <div style={{ flex: 1, background: "repeating-linear-gradient(#f4f1e4 0 22px, #dde8d2 22px 44px)", padding: "24px 28px", borderTop: "1px solid #1c1b16", borderBottom: "1px solid #1c1b16" }}>
+          <p style={{ margin: 0 }}>ORBIT MANAGEMENT SUMMARY · PRINTED {today} · PAGE 1 OF 1</p>
+          <p style={{ margin: "4px 0 0" }}>*** {rows.length} RECORDS ON FILE *** DO NOT FOLD, SPINDLE, OR MUTILATE ***</p>
+          <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", margin: "16px 0", fontSize: "0.85rem", lineHeight: "22px" }}>
+            {rows.join("\n")}
+          </pre>
+          <p style={{ margin: 0 }}>*** END OF REPORT *** FEED PAPER TO TEAR ***</p>
+          <p style={{ marginTop: 16 }}><Link href="/worlds/orbit" style={{ textDecoration: "underline" }}>BACK TO THE LIVE CONSOLE →</Link></p>
+        </div>
+        <div aria-hidden style={{ width: 36, flexShrink: 0, background: "radial-gradient(circle at 50% 8px, #1c1b16 4px, transparent 5px)", backgroundSize: "100% 24px", backgroundRepeat: "repeat-y", borderLeft: "1px dashed #1c1b16" }} />
+      </div>
+      <WorldProof
+        proves="The same dataset, printed: fanfold honesty — if the numbers survive dot-matrix, they're modeled right."
+        relatedHref="/worlds/orbit/paper"
+        relatedName="PAPER"
+      />
+    </div>
+  );
+}
+
+const HELP = "commands: customers [quiet|watch|risk] · projects [stage] · risk · search <q> · team · clear";
+
+export function OrbitTerminal() {
+  const s = useSnapshot();
+  const [lines, setLines] = useState<string[]>(["ORBIT://TERMINAL — live data, typed. " + HELP]);
+  const [value, setValue] = useState("");
+  function run(raw: string) {
+    const cmd = raw.trim();
+    if (!cmd) return;
+    const [verb, ...rest] = cmd.toLowerCase().split(/\s+/);
+    const q = rest.join(" ");
+    let out: string[] = [];
+    if (verb === "help") out = [HELP];
+    else if (verb === "clear") { setLines([]); return; }
+    else if (verb === "customers") {
+      const list = q ? s.customers.filter((c) => c.health === q[0].toUpperCase() + q.slice(1)) : s.customers;
+      out = list.length ? list.map((c) => `${c.name} · ${c.company} · ${c.plan} · $${c.spend.toLocaleString()} · ${c.health}`) : [`no customers with health "${q}"`];
+    } else if (verb === "projects") {
+      const list = q ? s.projects.filter((p) => p.stage.toLowerCase() === q) : s.projects;
+      out = list.length ? list.map((p) => `${p.name} · ${p.client} · ${p.stage} · ${p.due}`) : [`no projects in stage "${q}"`];
+    } else if (verb === "risk") {
+      const list = s.customers.filter((c) => c.health === "Risk");
+      out = list.length ? list.map((c) => `! ${c.name} · ${c.company} · $${c.spend.toLocaleString()} · ${c.last}`) : ["no accounts at risk. stand down."];
+    } else if (verb === "search") {
+      if (!q) out = ["usage: search <name, company, or project>"];
+      else {
+        const hit = [
+          ...s.customers.filter((c) => `${c.name} ${c.company}`.toLowerCase().includes(q)).map((c) => `C ${c.name} · ${c.company} · ${c.health}`),
+          ...s.projects.filter((p) => `${p.name} ${p.client}`.toLowerCase().includes(q)).map((p) => `P ${p.name} · ${p.client} · ${p.stage}`),
+        ];
+        out = hit.length ? hit : [`nothing matches "${q}"`];
+      }
+    } else if (verb === "team") {
+      out = s.team.map((t) => `${t.name} · ${t.role} · ${t.status}`);
+    } else out = [`unknown: "${verb}". ` + HELP];
+    setLines((l) => [...l.slice(-60), `$ ${cmd}`, ...out]);
+  }
+  return (
+    <div style={{ background: "#0a0d0a", color: "#c8f0c8", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
+      <WorldExit id="orbit" label="Room 03 · ORBIT/TERMINAL" />
+      <OrbitNav current="terminal" />
+      <div style={{ maxWidth: 860, margin: "0 auto", padding: "28px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#5c705c" }}>{s.customers.length} ACCOUNTS · {s.projects.length} PROJECTS · LOCAL FIRST</p>
+        <div role="log" aria-label="Terminal output" style={{ marginTop: 16, minHeight: 320, fontSize: "0.9rem", lineHeight: 1.7 }}>
+          {lines.map((l, i) => (
+            <p key={i} style={{ margin: 0, color: l.startsWith("$") ? "#7dff8a" : l.startsWith("!") ? "#ff7d7d" : "#c8f0c8", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{l}</p>
+          ))}
+        </div>
+        <form onSubmit={(e) => { e.preventDefault(); run(value); setValue(""); }} style={{ display: "flex", gap: 8, marginTop: 16, borderTop: "1px solid rgba(200,240,200,0.25)", paddingTop: 16 }}>
+          <label htmlFor="orbit-term" style={{ color: "#7dff8a" }}>$</label>
+          <input id="orbit-term" value={value} onChange={(e) => setValue(e.target.value)} autoComplete="off" spellCheck={false} placeholder="type help and press enter" style={{ flex: 1, background: "transparent", border: "none", outline: "none", color: "#c8f0c8", font: "inherit" }} />
+        </form>
+      </div>
+      <WorldProof
+        proves="Conversation as interface: the whole operations dataset, queryable by typing — same store, zero chrome."
+        relatedHref="/worlds/orbit/console"
+        relatedName="CONSOLE"
+      />
+    </div>
   );
 }

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { REALITIES, saveReality } from "@/lib/realities";
 import { track } from "@/lib/track";
 import type { WorldId } from "@/lib/types";
+import { WipeOverlay, WORLD_WIPE_MS } from "@/components/wasp/world-wipe";
 
 /**
  * Dimension strip + designed transition between a world's realities.
@@ -36,7 +37,7 @@ export function RealityShell({ world, current, basePath, options: override }: {
       return;
     }
     setWipe(opt.label);
-    window.setTimeout(() => router.push(target), 560);
+    window.setTimeout(() => router.push(target), WORLD_WIPE_MS[world] ?? 560);
   }
 
   return (
@@ -58,9 +59,7 @@ export function RealityShell({ world, current, basePath, options: override }: {
         <span className="kicker reality-note">{options.find((r) => r.id === current)?.note}</span>
       </div>
       {wipe ? (
-        <div className="reality-wipe" aria-hidden>
-          <span>{wipe}</span>
-        </div>
+        <WipeOverlay world={world} label={wipe} />
       ) : null}
     </>
   );

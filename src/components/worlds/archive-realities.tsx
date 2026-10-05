@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldProof } from "@/components/worlds/world-proof";
@@ -293,7 +294,9 @@ export function ArchiveNav({ current }: { current: string }) {
         ["broadsheet", "Broadsheet", "/worlds/archive/broadsheet"],
         ["index", "Index", "/worlds/archive/index"],
       ].map(([id, label, href]) => (
-        <Link
+        <WorldNavLink
+          world="archive"
+          label={label}
           key={id}
           href={href}
           aria-current={current === id ? "page" : undefined}
@@ -308,7 +311,7 @@ export function ArchiveNav({ current }: { current: string }) {
           }}
         >
           {label}
-        </Link>
+        </WorldNavLink>
       ))}
     </nav>
   );

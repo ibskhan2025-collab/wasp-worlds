@@ -10,10 +10,11 @@ import { REALITIES } from "@/lib/realities";
 import { pexels } from "@/lib/media";
 import { ProofPoke } from "@/components/wasp/proof-poke";
 import { SpaceField } from "@/components/wasp/space-field";
+import { PaperMap, TechnoField } from "@/components/wasp/feel-fields";
 
 const ROOM_SPAN = ["span8", "span4", "span4", "span5", "span3", "span4", "span4", "span5", "span3", "span7", "span5", "span4", "span4", "span5", "span7"];
 
-const ROOM_IMAGE: Record<string, string> = {
+export const ROOM_IMAGE: Record<string, string> = {
   // Card-sized (800w) variants — the full-res media.* URLs stay on the
   // world pages themselves. Loading 15 × 2000px hero images for cards
   // was the biggest homepage payload.
@@ -213,7 +214,7 @@ export function Experience() {
 
       <ProofPoke />
 
-      <SpaceField />
+      {wasp.feel === "techno" ? <TechnoField /> : wasp.feel === "paper" ? <PaperMap /> : <SpaceField />}
 
       <div style={{ padding: "16px var(--pad) 8px", borderBottom: "1px solid var(--line)", display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "baseline" }}>
         <p className="ex-kicker" style={{ margin: 0 }}>The exhibition · all 15 rooms</p>

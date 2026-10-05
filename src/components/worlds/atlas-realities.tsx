@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { useEffect, useRef, useState } from "react";
 import type { Mesh as ThreeMesh } from "three";
 import { WorldExit } from "@/components/wasp/world-exit";
@@ -349,7 +350,9 @@ export function AtlasNav({ current }: { current: string }) {
         ["postcards", "Postcards", "/worlds/atlas/postcards"],
         ["globe", "Globe", "/worlds/atlas/globe"],
       ].map(([id, label, href]) => (
-        <Link
+        <WorldNavLink
+          world="atlas"
+          label={label}
           key={id}
           href={href}
           aria-current={current === id ? "page" : undefined}
@@ -364,7 +367,7 @@ export function AtlasNav({ current }: { current: string }) {
           }}
         >
           {label}
-        </Link>
+        </WorldNavLink>
       ))}
     </nav>
   );

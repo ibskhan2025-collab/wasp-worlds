@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { useEffect, useRef, useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldProof } from "@/components/worlds/world-proof";
@@ -466,7 +467,9 @@ export function PulseNav({ current }: { current: string }) {
         ["board", "Board", "/worlds/pulse/board"],
         ["sound", "Sound", "/worlds/pulse/sound"],
       ].map(([id, label, href]) => (
-        <Link
+        <WorldNavLink
+          world="pulse"
+          label={label}
           key={id}
           href={href}
           aria-current={current === id ? "page" : undefined}
@@ -480,7 +483,7 @@ export function PulseNav({ current }: { current: string }) {
           }}
         >
           {label}
-        </Link>
+        </WorldNavLink>
       ))}
     </nav>
   );

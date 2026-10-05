@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { civicServices } from "@/data/civic";
@@ -239,7 +240,9 @@ export function CivicNav({ current }: { current: string }) {
         ["contrast", "Contrast", "/worlds/civic/contrast"],
         ["plain", "Plain", "/worlds/civic/plain"],
       ].map(([id, label, href]) => (
-        <Link
+        <WorldNavLink
+          world="civic"
+          label={label}
           key={id}
           href={href}
           aria-current={current === id ? "page" : undefined}
@@ -253,7 +256,7 @@ export function CivicNav({ current }: { current: string }) {
           }}
         >
           {label}
-        </Link>
+        </WorldNavLink>
       ))}
     </nav>
   );

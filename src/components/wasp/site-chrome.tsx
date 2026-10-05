@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useWasp } from "@/context/wasp-context";
 import { CommandPalette } from "@/components/wasp/command-palette";
 import { WorldSwitch } from "@/components/wasp/world-switch";
+import { WorldWipeHost } from "@/components/wasp/world-wipe";
 
 const LINKS = [
   { href: "/", label: "Work" },
@@ -76,6 +77,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
         </header>
       ) : null}
       <WorldSwitch />
+      <WorldWipeHost />
       <div id="main">{children}</div>
       {!inWorld && !standalone ? (
         <footer className="wasp-footer">

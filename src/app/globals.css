@@ -40,6 +40,8 @@ html[data-feel="raw"] { --bg: #000000; --fg: #f5f5f5; --muted: #9a9a9a; --line: 
 html[data-feel="playful"] { --bg: #141021; --fg: #f4ecff; --muted: #a79bc4; --line: rgba(244, 236, 255, 0.16); --accent: #ffd166; }
 html[data-feel="dark"] { --bg: #050505; --fg: #f4f1ea; --muted: #8a8580; --accent: #f4f1ea; }
 html[data-feel="futuristic"] { --bg: #06090d; --fg: #d8ecff; --muted: #7fa3c0; --line: rgba(180, 220, 255, 0.18); --accent: #3ddc84; --font-display: var(--font-code), ui-monospace, monospace; }
+html[data-feel="techno"] { --bg: #09090a; --fg: #f4f4f5; --muted: rgba(244, 244, 245, 0.55); --line: rgba(255, 255, 255, 0.1); --accent: #ffd23f; --font-display: var(--font-poster), Impact, sans-serif; }
+html[data-feel="paper"] { --bg: #efece4; --fg: #141412; --muted: #57544c; --line: #141412; --accent: #ffd400; --font-display: var(--font-serif), Georgia, serif; }
 
 /* Theme morph: switching feels cross-fades instead of snapping */
 body, .exhibition, .nav-wasp, .wasp-footer, .room, .chip, .chip-on, .btn, .ghost {
@@ -1204,9 +1206,13 @@ input, textarea, select { max-width: 100%; }
   from { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
   to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
+@keyframes wasp-float { 0%, 100% { transform: translate(-50%,-50%) translateY(0); } 50% { transform: translate(-50%,-50%) translateY(-7px); } }
 @keyframes motion-rise {
   from { transform: translateY(110%) rotate(8deg); opacity: 0; }
   to { transform: none; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [style*="wasp-float"] { animation: none !important; }
 }
 @media (prefers-reduced-motion: reduce) {
   @keyframes motion-rise {
@@ -1423,4 +1429,59 @@ input, textarea, select { max-width: 100%; }
   .resume-sheet p, .resume-sheet li { font-size: 9.5pt; line-height: 1.45; }
   .resume-sheet section { padding: 8px 0; }
   .resume-contact a { border-bottom: 0; text-decoration: none; }
+}
+
+/* ---- Per-world reality transitions: one wipe each, same overlay ---- */
+.reality-wipe--casa { background: radial-gradient(circle at 50% 60%, #e8a33d 0%, #3a1c08 45%, #0d0805 75%); animation: wipe-casa 620ms var(--ease) forwards; }
+@keyframes wipe-casa { from { opacity: 0; } 40% { opacity: 1; } to { opacity: 1; } }
+.reality-wipe--noir { background: #000; animation: wipe-noir 480ms var(--ease) forwards; }
+@keyframes wipe-noir { 0% { opacity: 0; } 25% { opacity: 1; background: #fff; } 45% { background: #000; } 100% { opacity: 1; background: #000; } }
+.reality-wipe--orbit { background: #0d1420; animation: wipe-orbit 520ms var(--ease) forwards; }
+.reality-wipe--orbit::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: #6fc3ff; animation: wipe-orbit-scan 520ms linear forwards; }
+@keyframes wipe-orbit { from { opacity: 0; } 30% { opacity: 1; } to { opacity: 1; } }
+@keyframes wipe-orbit-scan { from { top: 0; } to { top: 100%; } }
+.reality-wipe--still { background: #8a1f1f; animation: wipe-still 700ms var(--ease) forwards; }
+@keyframes wipe-still { from { opacity: 0; } 35% { opacity: 1; } to { opacity: 1; background: #0c0c0c; } }
+.reality-wipe--signal { background: #000; animation: wipe-signal 450ms var(--ease) forwards; }
+@keyframes wipe-signal { from { opacity: 0; transform: scaleY(1); } 60% { opacity: 1; transform: scaleY(0.02); } to { opacity: 1; transform: scale(0.02, 0.02); } }
+.reality-wipe--objects { background: #100e0c; animation: wipe-objects 600ms var(--ease) forwards; }
+.reality-wipe--objects span { display: inline-block; animation: wipe-objects-spin 600ms var(--ease) forwards; }
+@keyframes wipe-objects { from { opacity: 0; } 30% { opacity: 1; } to { opacity: 1; } }
+@keyframes wipe-objects-spin { from { transform: rotate(-8deg) scale(0.9); } to { transform: rotate(0) scale(1); } }
+.reality-wipe--archive { background: #faf7f0; color: #141210; animation: wipe-archive 560ms var(--ease) forwards; }
+@keyframes wipe-archive { from { opacity: 0; transform: translateX(6%); } to { opacity: 1; transform: none; } }
+.reality-wipe--motion { background: #0c0c0c; animation: wipe-motion 540ms var(--ease) forwards; }
+.reality-wipe--motion span { display: inline-block; animation: wipe-motion-rise 540ms var(--ease) forwards; }
+@keyframes wipe-motion { from { opacity: 0; } 25% { opacity: 1; } to { opacity: 1; } }
+@keyframes wipe-motion-rise { from { transform: translateY(110%); } to { transform: none; } }
+.reality-wipe--void { background: #04060c; animation: wipe-void 580ms var(--ease) forwards; }
+.reality-wipe--void span { display: inline-block; animation: wipe-void-in 580ms var(--ease) forwards; }
+@keyframes wipe-void { from { opacity: 0; } 30% { opacity: 1; } to { opacity: 1; } }
+@keyframes wipe-void-in { from { transform: scale(2.2); opacity: 0; letter-spacing: 0.4em; } to { transform: scale(1); opacity: 1; } }
+.reality-wipe--atlas { background: #e4dcc8; color: #241f16; animation: wipe-atlas 620ms var(--ease) forwards; transform-origin: top; }
+@keyframes wipe-atlas { from { opacity: 0; transform: scaleY(0.2); } to { opacity: 1; transform: scaleY(1); } }
+.reality-wipe--forge { background: #14161a; animation: wipe-forge 480ms steps(3) forwards; }
+@keyframes wipe-forge { from { opacity: 0; } 50% { opacity: 1; } to { opacity: 1; } }
+.reality-wipe--pulse { background: #0b0b0b; animation: wipe-pulse 500ms var(--ease) forwards; }
+.reality-wipe--pulse span { display: inline-block; animation: wipe-pulse-beat 500ms var(--ease) forwards; }
+@keyframes wipe-pulse { from { opacity: 0; } 20% { opacity: 1; } to { opacity: 1; } }
+@keyframes wipe-pulse-beat { 0% { transform: scale(0.92); } 40% { transform: scale(1.04); } 100% { transform: scale(1); } }
+.reality-wipe--civic { background: #1c1611; animation: none; opacity: 1; }
+.reality-wipe--nest { background: #ece7db; color: #2a2723; animation: wipe-nest 750ms var(--ease) forwards; }
+@keyframes wipe-nest { from { opacity: 0; } to { opacity: 1; } }
+.reality-wipe--vector { background: #0b0e13; color: #6fc3ff; font-family: var(--font-code); animation: wipe-vector 420ms steps(4) forwards; }
+.reality-wipe--vector span::after { content: "▊"; animation: wipe-vector-blink 420ms steps(2) infinite; }
+@keyframes wipe-vector { from { opacity: 0; } to { opacity: 1; } }
+@keyframes wipe-vector-blink { 50% { opacity: 0; } }
+
+/* ---- New spec realities: candlelight flame, CRT glass, arena crowd ---- */
+.casa-flame { position: fixed; inset: 0; pointer-events: none; z-index: 1; background: radial-gradient(circle at 50% 30%, rgba(232,163,61,0.55) 0%, rgba(232,163,61,0.12) 35%, transparent 65%); animation: casa-flicker 3.2s ease-in-out infinite; }
+@keyframes casa-flicker { 0%, 100% { transform: scale(1); opacity: 0.85; } 30% { transform: scale(1.04, 0.98); opacity: 1; } 60% { transform: scale(0.98, 1.03); opacity: 0.75; } }
+.sig-scan { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(rgba(0,0,0,0) 0 2px, rgba(0,0,0,0.28) 2px 4px); }
+.sig-off { background: #000; position: relative; }
+.sig-off::after { content: ""; position: absolute; left: 10%; right: 10%; top: 50%; height: 2px; background: #ffb84d; opacity: 0.8; }
+.sig-crowd { display: inline-block; width: 8px; height: 8px; border-radius: 50%; animation: sig-bounce 1.1s ease-in-out infinite; }
+@keyframes sig-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+@media (prefers-reduced-motion: reduce) {
+  .casa-flame, .sig-crowd { animation: none; }
 }

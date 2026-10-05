@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldProof } from "@/components/worlds/world-proof";
@@ -182,7 +183,9 @@ export function ObjectsNav({ current }: { current: string }) {
         ["workshop", "Workshop", "/worlds/objects/workshop"],
         ["inspect", "Inspect", "/worlds/objects/inspect"],
       ].map(([id, label, href]) => (
-        <Link
+        <WorldNavLink
+          world="objects"
+          label={label}
           key={id}
           href={href}
           aria-current={current === id ? "page" : undefined}
@@ -196,7 +199,7 @@ export function ObjectsNav({ current }: { current: string }) {
           }}
         >
           {label}
-        </Link>
+        </WorldNavLink>
       ))}
       <Link href="/worlds/objects/cart" style={{ marginLeft: "auto", padding: "12px 8px", fontSize: 12 }}>
         Cart →

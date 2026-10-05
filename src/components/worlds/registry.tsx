@@ -26,6 +26,8 @@ const R: Record<string, Record<string, ComponentType>> = {
     brutalist: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaBrutalist), { loading: loading("BRUTALIST") }),
     japanese: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaJapanese), { loading: loading("JAPANESE") }),
     spatial: dynamic(() => import("@/components/worlds/casa-spatial").then((m) => m.CasaSpatial), { loading: loading("SPATIAL") }),
+    candlelight: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaCandlelight), { loading: loading("CANDLELIGHT") }),
+    garden: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaGarden), { loading: loading("GARDEN") }),
   },
   noir: {
     brutalist: dynamic(() => import("@/components/worlds/noir-brutalist").then((m) => m.NoirBrutalist), { loading: loading("BRUTALIST") }),
@@ -43,6 +45,9 @@ const R: Record<string, Record<string, ComponentType>> = {
     standup: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitStandup), { loading: loading("STANDUP") }),
     forecast: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitForecast), { loading: loading("FORECAST") }),
     paper: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitPaper), { loading: loading("PAPER") }),
+    retro: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitRetro), { loading: loading("RETRO") }),
+    terminal: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitTerminal), { loading: loading("TERMINAL") }),
+    future: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitFuture), { loading: loading("FUTURE") }),
   },
   still: {
     negative: dynamic(() => import("@/components/worlds/still-realities").then((m) => m.StillNegative), { loading: loading("NEGATIVE") }),
@@ -59,6 +64,8 @@ const R: Record<string, Record<string, ComponentType>> = {
     arcade: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalArcade), { loading: loading("ARCADE") }),
     pocket: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalPocket), { loading: loading("POCKET") }),
     ink: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalInk), { loading: loading("INK") }),
+    crt: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalCrt), { loading: loading("CRT") }),
+    arena: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalArena), { loading: loading("ARENA") }),
   },
   objects: {
     tidal: dynamic(() => import("@/components/worlds/objects-realities").then((m) => m.ObjectsTidal), { loading: loading("TIDAL") }),

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
@@ -230,7 +231,9 @@ export function NoirNav({ current }: { current: string }) {
 function NoirNavLink({ id, label, href, current }: { id: string; label: string; href: string; current: string }) {
   const on = id === current;
   return (
-    <Link
+    <WorldNavLink
+      world="noir"
+      label={label}
       href={href}
       aria-current={on ? "page" : undefined}
       style={{
@@ -243,6 +246,6 @@ function NoirNavLink({ id, label, href, current }: { id: string; label: string; 
       }}
     >
       {label}
-      </Link>
+    </WorldNavLink>
   );
 }

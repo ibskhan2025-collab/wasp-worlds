@@ -12,7 +12,9 @@ export type Feel =
   | "raw"
   | "playful"
   | "dark"
-  | "futuristic";
+  | "futuristic"
+  | "techno"
+  | "paper";
 
 export type MotionPref = "subtle" | "cinematic" | "chaotic" | "still";
 
@@ -108,6 +110,8 @@ export const FEELS: { id: Feel; label: string }[] = [
   { id: "playful", label: "PLAYFUL" },
   { id: "dark", label: "DARK" },
   { id: "futuristic", label: "FUTURISTIC" },
+  { id: "techno", label: "TECHNO" },
+  { id: "paper", label: "PAPER" },
 ];
 
 export const MOTIONS: { id: MotionPref; label: string }[] = [

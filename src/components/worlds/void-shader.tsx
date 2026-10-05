@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { useEffect, useRef, useState } from "react";
 import { Field } from "@/lib/three";
 import * as THREE from "three";
@@ -201,7 +202,9 @@ export function VoidNav({ current }: { current: string }) {
         ["shader", "Shader", "/worlds/void/shader"],
         ["space", "Space", "/worlds/void/space"],
       ].map(([id, label, href]) => (
-        <Link
+        <WorldNavLink
+          world="void"
+          label={label}
           key={id}
           href={href}
           aria-current={current === id ? "page" : undefined}
@@ -215,7 +218,7 @@ export function VoidNav({ current }: { current: string }) {
           }}
         >
           {label}
-        </Link>
+        </WorldNavLink>
       ))}
     </nav>
   );

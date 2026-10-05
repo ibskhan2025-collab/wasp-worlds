@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { nestMaterials, nestRooms } from "@/data/nest";
@@ -19,7 +20,9 @@ export function NestNav({ current }: { current: string }) {
         ["mockup", "Mockup", "/worlds/nest/mockup"],
         ["volume", "Volume", "/worlds/nest/volume"],
       ].map(([id, label, href]) => (
-        <Link
+        <WorldNavLink
+          world="nest"
+          label={label}
           key={id}
           href={href}
           aria-current={current === id ? "page" : undefined}
@@ -34,7 +37,7 @@ export function NestNav({ current }: { current: string }) {
           }}
         >
           {label}
-        </Link>
+        </WorldNavLink>
       ))}
     </nav>
   );

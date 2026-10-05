@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { WorldExit } from "@/components/wasp/world-exit";
@@ -151,7 +152,9 @@ export function StillNav({ current }: { current: string }) {
         ["folio", "Folio", "/worlds/still/folio"],
         ["hall", "Hall", "/worlds/still/hall"],
       ].map(([id, label, href]) => (
-        <Link
+        <WorldNavLink
+          world="still"
+          label={label}
           key={id}
           href={href}
           aria-current={current === id ? "page" : undefined}
@@ -166,7 +169,7 @@ export function StillNav({ current }: { current: string }) {
           }}
         >
           {label}
-        </Link>
+        </WorldNavLink>
       ))}
     </nav>
   );

@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { casa, casaGallery, dishes } from "@/data/casa";
@@ -24,8 +26,12 @@ export function CasaNav({ current }: { current: string }) {
         ["brutalist", "Brutalist", "/worlds/casa/brutalist"],
         ["japanese", "Japanese", "/worlds/casa/japanese"],
         ["spatial", "Spatial", "/worlds/casa/spatial"],
+        ["candlelight", "Candlelight", "/worlds/casa/candlelight"],
+        ["garden", "Garden", "/worlds/casa/garden"],
       ].map(([id, label, href]) => (
-        <Link
+        <WorldNavLink
+          world="casa"
+          label={label}
           key={id}
           href={href}
           aria-current={current === id ? "page" : undefined}
@@ -40,7 +46,7 @@ export function CasaNav({ current }: { current: string }) {
           }}
         >
           {label}
-        </Link>
+        </WorldNavLink>
       ))}
     </nav>
   );
@@ -48,7 +54,7 @@ export function CasaNav({ current }: { current: string }) {
 
 const KANJI = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二", "十三", "十四"];
 
-const shell = (id: "oceanic" | "analog" | "counter" | "cellar" | "brutalist" | "japanese") => (
+const shell = (id: "oceanic" | "analog" | "counter" | "cellar" | "brutalist" | "japanese" | "candlelight" | "garden") => (
   <>
     <WorldExit id="casa" label={`Room 01 · CASA/${id.toUpperCase()}`} />
     <CasaNav current={id} />
@@ -377,6 +383,127 @@ export function CasaJapanese() {
         proves="Stillness as service: the same kitchen at half tempo — courses, quiet, stamp."
         relatedHref="/worlds/still"
         relatedName="STILL"
+      />
+    </div>
+  );
+}
+
+const COURSES = [
+  { wine: "Fino, chilled hard", tip: "Drink it cold enough to hurt." },
+  { wine: "Skin-contact white", tip: "Texture before fruit." },
+  { wine: "Light red, slight chill", tip: "The fire course wants acid." },
+  { wine: "Amontillado", tip: "Savoury loves savoury." },
+  { wine: "Cold amaro over ice", tip: "Bitter to close." },
+];
+
+export function CasaCandlelight() {
+  const mains = dishes.filter((d) => d.category === "Fire" || d.category === "Sea");
+  const wines = dishes.filter((d) => d.category === "Wine");
+  const [course, setCourse] = useState(0);
+  const dish = mains[course % Math.max(mains.length, 1)];
+  const pour = wines[course % Math.max(wines.length, 1)];
+  const glow = 0.35 + (course / Math.max(mains.length - 1, 1)) * 0.65;
+  return (
+    <div style={{ background: "#0d0805", color: "#f3e2c2", minHeight: "100dvh", fontFamily: "var(--font-serif)" }}>
+      {shell("candlelight")}
+      <div aria-hidden className="casa-flame" style={{ opacity: glow }} />
+      <header style={{ position: "relative", textAlign: "center", padding: "56px 20px 8px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.35em", color: "#a08050", margin: 0 }}>ONE FLAME · SEVEN SEATS · NO MENU UNTIL YOU SIT</p>
+        <h1 style={{ fontSize: "clamp(3rem, 11vw, 8rem)", lineHeight: 0.95, margin: "12px 0", fontWeight: 500 }}>Candle&shy;light</h1>
+        <p style={{ maxWidth: "48ch", margin: "0 auto", color: "#c9a86d", fontStyle: "italic" }}>The dining room after the lights go out. Courses arrive when the flame says so — you set the pace below.</p>
+      </header>
+      <section style={{ position: "relative", maxWidth: 720, margin: "0 auto", padding: "24px 20px 80px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#e8a33d" }}>COURSE {course + 1} OF {mains.length}</p>
+        {dish ? (
+          <div key={dish.id} style={{ border: "1px solid rgba(232,163,61,0.4)", padding: 28, marginTop: 12, background: "rgba(20,12,6,0.85)" }}>
+            <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#a08050", margin: "0 0 8px" }}>{dish.category.toUpperCase()} · {money(dish.price)}</p>
+            <h2 style={{ fontSize: "clamp(1.8rem, 5vw, 3rem)", margin: "0 0 8px", fontWeight: 500 }}>{dish.name}</h2>
+            <p style={{ color: "#c9a86d" }}>{dish.desc}</p>
+            <p style={{ fontStyle: "italic", color: "#e8a33d" }}>{dish.note}</p>
+            {pour ? <p style={{ fontSize: "0.9rem", color: "#a08050" }}>Poured alongside: <strong style={{ color: "#f3e2c2" }}>{pour.name}</strong> — {COURSES[course % COURSES.length].wine}. {COURSES[course % COURSES.length].tip}</p> : null}
+          </div>
+        ) : null}
+        <div style={{ display: "flex", gap: 10, marginTop: 20, flexWrap: "wrap" }}>
+          <button type="button" onClick={() => setCourse((c) => (c + 1) % Math.max(mains.length, 1))} style={{ background: "#e8a33d", color: "#0d0805", border: "none", padding: "12px 24px", fontWeight: 700, fontSize: 12, letterSpacing: "0.15em" }}>
+            NEXT COURSE →
+          </button>
+          <button type="button" onClick={() => setCourse(0)} style={{ background: "transparent", color: "#e8a33d", border: "1px solid rgba(232,163,61,0.5)", padding: "12px 24px", fontSize: 12, letterSpacing: "0.15em" }}>
+            START OVER
+          </button>
+        </div>
+        <div style={{ display: "flex", gap: 6, marginTop: 20 }} aria-hidden>
+          {mains.map((d, i) => (
+            <span key={d.id} style={{ flex: 1, height: 3, background: i <= course ? "#e8a33d" : "rgba(232,163,61,0.2)" }} />
+          ))}
+        </div>
+        <p style={{ marginTop: 28 }}><Link href="/worlds/casa/reservations" style={{ background: "#e8a33d", color: "#0d0805", padding: "12px 20px", fontWeight: 700, fontSize: 12, letterSpacing: "0.15em" }}>BOOK THE DARK TABLE →</Link></p>
+      </section>
+      <WorldProof
+        proves="Scarcity as service: one seating, one flame, the same kitchen — paced by the guest, booked like everything else."
+        relatedHref="/worlds/casa/cellar"
+        relatedName="CELLAR"
+      />
+    </div>
+  );
+}
+
+const BEDS = ["Bed 01 · Alliums", "Bed 02 · Leaves", "Bed 03 · Roots", "Bed 04 · Herbs", "Bed 05 · Flowers", "Bed 06 · Compost"];
+
+export function CasaGarden() {
+  const [veg, setVeg] = useState(false);
+  const greens = dishes.filter((d) => d.category === "Garden");
+  const shown = veg ? greens.filter((d) => d.dietary.includes("vegetarian")) : greens;
+  const rest = dishes.filter((d) => d.category !== "Garden");
+  return (
+    <div style={{ background: "#eef3e4", color: "#1d2a16", minHeight: "100dvh", fontFamily: "var(--font-serif)" }}>
+      {shell("garden")}
+      <header style={{ textAlign: "center", padding: "56px 20px 8px" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.35em", color: "#5c7050", margin: 0 }}>THE KITCHEN GARDEN · PICKED AT 16:00, PLATED AT 17:30</p>
+        <h1 style={{ fontSize: "clamp(3rem, 11vw, 8rem)", lineHeight: 0.95, margin: "12px 0", fontWeight: 500 }}>Garden</h1>
+        <p style={{ maxWidth: "48ch", margin: "0 auto", color: "#3c4a34", fontStyle: "italic" }}>Eaten where it grows. The garden dishes lead the menu; the beds below are the actual planting plan.</p>
+      </header>
+      <section style={{ maxWidth: 760, margin: "0 auto", padding: "24px 20px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+          <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#4a7c2e", margin: 0 }}>FROM THE BEDS · {shown.length} PLATES</p>
+          <button type="button" aria-pressed={veg} onClick={() => setVeg((v) => !v)} style={{ background: veg ? "#1d2a16" : "transparent", color: veg ? "#eef3e4" : "#1d2a16", border: "1px solid #1d2a16", padding: "8px 16px", fontSize: 12, letterSpacing: "0.1em" }}>
+            {veg ? "● VEGETARIAN ONLY" : "○ VEGETARIAN ONLY"}
+          </button>
+        </div>
+        {shown.map((d) => (
+          <Link key={d.id} href={`/worlds/casa/menu/${d.id}`} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "18px 0", borderBottom: "1px solid rgba(29,42,22,0.25)" }}>
+            <span><strong style={{ fontSize: "1.4rem", fontWeight: 500 }}>{d.name}</strong><br /><span style={{ color: "#5c7050" }}>{d.desc}</span></span>
+            <span style={{ fontSize: "1.4rem", whiteSpace: "nowrap" }}>{money(d.price)}</span>
+          </Link>
+        ))}
+        <svg viewBox="0 0 600 220" width="100%" role="img" aria-label="Planting plan: six beds" style={{ marginTop: 32, border: "1px solid #1d2a16", background: "#e2e9d2" }}>
+          {BEDS.map((b, i) => {
+            const x = 20 + (i % 3) * 190;
+            const y = 20 + Math.floor(i / 3) * 100;
+            const dish = greens[i % Math.max(greens.length, 1)];
+            return (
+              <g key={b}>
+                <rect x={x} y={y} width={170} height={80} fill="none" stroke="#1d2a16" strokeWidth="2" />
+                {[0, 1, 2, 3].map((r) => (
+                  <line key={r} x1={x} y1={y + 16 + r * 16} x2={x + 170} y2={y + 16 + r * 16} stroke="#4a7c2e" strokeWidth="1" opacity="0.5" />
+                ))}
+                <text x={x + 8} y={y + 18} fontSize="11" fill="#1d2a16" fontFamily="monospace">{b.toUpperCase()}</text>
+                {dish ? <text x={x + 8} y={y + 68} fontSize="11" fill="#4a7c2e" fontStyle="italic" fontFamily="serif">{dish.name}</text> : null}
+              </g>
+            );
+          })}
+        </svg>
+        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#4a7c2e", marginTop: 32 }}>FROM THE KITCHEN · THE REST</p>
+        {rest.slice(0, 6).map((d) => (
+          <Link key={d.id} href={`/worlds/casa/menu/${d.id}`} style={{ display: "block", padding: "10px 0", borderBottom: "1px solid rgba(29,42,22,0.15)", color: "#3c4a34" }}>
+            {d.name} <span style={{ opacity: 0.6 }}>· {d.category}</span>
+          </Link>
+        ))}
+        <p style={{ marginTop: 28 }}><Link href="/worlds/casa/reservations" style={{ background: "#1d2a16", color: "#eef3e4", padding: "12px 20px", fontWeight: 700, fontSize: 12, letterSpacing: "0.15em" }}>BOOK AMONG THE BEDS →</Link></p>
+      </section>
+      <WorldProof
+        proves="Provenance as menu: the planting plan is the menu plan — same dishes, same bookings, picked an hour before service."
+        relatedHref="/worlds/casa/counter"
+        relatedName="COUNTER"
       />
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldProof } from "@/components/worlds/world-proof";
@@ -268,7 +269,9 @@ export function MotionNav({ current }: { current: string }) {
         ["credits", "Credits", "/worlds/motion/credits"],
         ["stage", "Stage", "/worlds/motion/stage"],
       ].map(([id, label, href]) => (
-        <Link
+        <WorldNavLink
+          world="motion"
+          label={label}
           key={id}
           href={href}
           aria-current={current === id ? "page" : undefined}
@@ -282,7 +285,7 @@ export function MotionNav({ current }: { current: string }) {
           }}
         >
           {label}
-        </Link>
+        </WorldNavLink>
       ))}
     </nav>
   );
