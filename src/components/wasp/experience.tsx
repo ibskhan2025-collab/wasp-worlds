@@ -10,7 +10,7 @@ import { REALITIES } from "@/lib/realities";
 import { pexels } from "@/lib/media";
 import { ProofPoke } from "@/components/wasp/proof-poke";
 import { SpaceField } from "@/components/wasp/space-field";
-import { PaperMap, TechnoField } from "@/components/wasp/feel-fields";
+import { ZipPaperMap, ZipTechnoField } from "@/zip/fields";
 
 const ROOM_SPAN = ["span8", "span4", "span4", "span5", "span3", "span4", "span4", "span5", "span3", "span7", "span5", "span4", "span4", "span5", "span7"];
 
@@ -214,7 +214,7 @@ export function Experience() {
 
       <ProofPoke />
 
-      {wasp.feel === "techno" ? <TechnoField /> : wasp.feel === "paper" ? <PaperMap /> : <SpaceField />}
+      {wasp.feel === "techno" ? <ZipTechnoField /> : wasp.feel === "paper" ? <ZipPaperMap /> : <SpaceField />}
 
       <div style={{ padding: "16px var(--pad) 8px", borderBottom: "1px solid var(--line)", display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "baseline" }}>
         <p className="ex-kicker" style={{ margin: 0 }}>The exhibition · all 15 rooms</p>

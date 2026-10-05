@@ -1485,3 +1485,31 @@ input, textarea, select { max-width: 100%; }
 @media (prefers-reduced-motion: reduce) {
   .casa-flame, .sig-crowd { animation: none; }
 }
+
+/* ---- Verbatim ZIP ports (techno/paper feels): theme tokens + scopes ---- */
+@theme {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-signal: var(--signal);
+}
+.zip-evo {
+  --paper: #efece4;
+  --paper-2: #e6e2d7;
+  --ink: #141412;
+  --ink-2: #57544c;
+  --line: #141412;
+  --signal: #ffd400;
+  --signal-ink: #141412;
+  --display: var(--font-inst), Georgia, serif;
+  --sans: var(--font-tight), ui-sans-serif, system-ui, sans-serif;
+  --mono: "JetBrains Mono Variable", ui-monospace, monospace;
+}
+.zip-evo .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+.zip-evo .display { font-family: var(--display); font-weight: 400; letter-spacing: -0.02em; line-height: 0.92; }
+.zip-rb3 {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, monospace;
+  color-scheme: dark;
+}

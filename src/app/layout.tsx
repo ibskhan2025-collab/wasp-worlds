@@ -3,9 +3,13 @@ import type { ReactNode } from "react";
 import {
   IBM_Plex_Mono,
   IBM_Plex_Sans,
+  Instrument_Serif,
+  Inter_Tight,
   Newsreader,
   Syne,
 } from "next/font/google";
+import "@fontsource-variable/inter";
+import "@fontsource-variable/jetbrains-mono";
 import { WaspProvider } from "@/context/wasp-context";
 import { SiteChrome } from "@/components/wasp/site-chrome";
 import "./globals.css";
@@ -22,6 +26,18 @@ const mono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-mono",
+  display: "swap",
+});
+const inst = Instrument_Serif({
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["normal", "italic"],
+  variable: "--font-inst",
+  display: "swap",
+});
+const tight = Inter_Tight({
+  subsets: ["latin"],
+  variable: "--font-tight",
   display: "swap",
 });
 
@@ -48,7 +64,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${syne.variable} ${news.variable} ${plex.variable} ${mono.variable}`}
+      className={`${syne.variable} ${news.variable} ${plex.variable} ${mono.variable} ${inst.variable} ${tight.variable}`}
     >
       <body>
         <WaspProvider>
