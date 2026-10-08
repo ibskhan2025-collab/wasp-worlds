@@ -199,6 +199,9 @@ export function VoidNav({ current }: { current: string }) {
         ["gravity", "Gravity", "/worlds/void/gravity"],
         ["shader", "Shader", "/worlds/void/shader"],
         ["space", "3D", "/worlds/void/space"],
+        ["dust", "Dust", "/worlds/void/dust"],
+        ["glyphs", "Glyphs", "/worlds/void/glyphs"],
+        ["ink", "Ink", "/worlds/void/ink"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="void"

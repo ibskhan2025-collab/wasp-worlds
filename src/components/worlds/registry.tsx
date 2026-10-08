@@ -59,6 +59,14 @@ const R: Record<string, Record<string, ComponentType>> = {
       const C = m.default as ComponentType<{ reality: string }>;
       return { default: function OrbitPaper() { return <C reality="paper" />; } };
     }), { loading: loading("PAPER") }),
+    "light": dynamic(() => import("@/rb54w/Orbit").then((m) => {
+      const C = m.default as ComponentType<{ reality: string; world?: unknown }>;
+      return { default: function OrbitConsoleII54() { return <C reality="light" />; } };
+    }), { loading: loading("CONSOLE II") }),
+    "terminal": dynamic(() => import("@/rb54w/Orbit").then((m) => {
+      const C = m.default as ComponentType<{ reality: string; world?: unknown }>;
+      return { default: function OrbitTerminal54() { return <C reality="terminal" />; } };
+    }), { loading: loading("TERMINAL") }),
   },
   still: {
     "gallery": dynamic(() => import("@/rb15w/Still").then((m) => {
@@ -83,6 +91,14 @@ const R: Record<string, Record<string, ComponentType>> = {
       const C = m.default as ComponentType<{ reality: string }>;
       return { default: function SignalInk() { return <C reality="ink" />; } };
     }), { loading: loading("INK") }),
+    "neon": dynamic(() => import("@/rb54w/Signal").then((m) => {
+      const C = m.default as ComponentType<{ reality: string; world?: unknown }>;
+      return { default: function SignalNeon54() { return <C reality="arcade" />; } };
+    }), { loading: loading("NEON") }),
+    "vector": dynamic(() => import("@/rb54w/Signal").then((m) => {
+      const C = m.default as ComponentType<{ reality: string; world?: unknown }>;
+      return { default: function SignalVector54() { return <C reality="vector" />; } };
+    }), { loading: loading("VECTOR") }),
   },
   objects: {
     "workshop": dynamic(() => import("@/rb15w/Objects").then((m) => {
@@ -93,6 +109,10 @@ const R: Record<string, Record<string, ComponentType>> = {
       const C = m.default as ComponentType<{ reality: string }>;
       return { default: function Objects3DShelf() { return <C reality="inspect" />; } };
     }), { loading: loading("3D SHELF") }),
+    "shelf": dynamic(() => import("@/rb54w/Objects").then((m) => {
+      const C = m.default as ComponentType<{ reality: string; world?: unknown }>;
+      return { default: function ObjectsShelf54() { return <C reality="shelf" />; } };
+    }), { loading: loading("SHELF") }),
   },
   archive: {
   },
@@ -127,6 +147,18 @@ const R: Record<string, Record<string, ComponentType>> = {
       const C = m.default as ComponentType<{ reality: string }>;
       return { default: function Void3D() { return <C reality="space" />; } };
     }), { loading: loading("3D") }),
+    "dust": dynamic(() => import("@/rb54w/Void").then((m) => {
+      const C = m.default as ComponentType<{ reality: string; world?: unknown }>;
+      return { default: function VoidDust54() { return <C reality="dust" />; } };
+    }), { loading: loading("DUST") }),
+    "glyphs": dynamic(() => import("@/rb54w/Void").then((m) => {
+      const C = m.default as ComponentType<{ reality: string; world?: unknown }>;
+      return { default: function VoidGlyphs54() { return <C reality="glyphs" />; } };
+    }), { loading: loading("GLYPHS") }),
+    "ink": dynamic(() => import("@/rb54w/Void").then((m) => {
+      const C = m.default as ComponentType<{ reality: string; world?: unknown }>;
+      return { default: function VoidInk54() { return <C reality="ink" />; } };
+    }), { loading: loading("INK") }),
   },
   atlas: {
   },
