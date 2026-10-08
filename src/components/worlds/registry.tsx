@@ -23,10 +23,7 @@ const R: Record<string, Record<string, ComponentType>> = {
       const C = m.default as ComponentType<{ reality: string }>;
       return { default: function CasaOceanic() { return <C reality="oceanic" />; } };
     }), { loading: loading("OCEANIC") }),
-    "3d": dynamic(() => import("@/rb15w/Casa").then((m) => {
-      const C = m.default as ComponentType<{ reality: string }>;
-      return { default: function Casa3D() { return <C reality="3d" />; } };
-    }), { loading: loading("3D") }),
+
     "brutalist": dynamic(() => import("@/rb15w/Casa").then((m) => {
       const C = m.default as ComponentType<{ reality: string }>;
       return { default: function CasaBrutalist() { return <C reality="brutalist" />; } };

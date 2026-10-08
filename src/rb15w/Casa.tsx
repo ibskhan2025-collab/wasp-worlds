@@ -57,12 +57,12 @@ function Controls({ m, c, label = "Filter the menu" }: { m: Menu; c: Cls; label?
 const Empty = ({ m }: { m: Menu }) => <p className="py-10 text-lg">Nothing matches that. <button className="underline" onClick={m.reset}>Clear filters</button></p>;
 const tagLabel = (t: string) => DIETS.find((d) => d[0] === t)?.[1] ?? t;
 
-function DishModal({ dish, onClose, onReserve, cls }: { dish: Dish | null; onClose: () => void; onReserve: () => void; cls: string }) {
+function DishModal({ dish, onClose, onReserve, cls, art = true }: { dish: Dish | null; onClose: () => void; onReserve: () => void; cls: string; art?: boolean }) {
   if (!dish) return null;
   return (
     <Dialog open onClose={onClose} label={dish.name} className={"max-w-3xl " + cls}>
-      <div className="grid gap-0 md:grid-cols-2">
-        <div className="flex items-center justify-center bg-black/10 p-8"><DishArt d={dish} className="w-full max-w-[320px]" /></div>
+      <div className={art ? "grid gap-0 md:grid-cols-2" : "grid gap-0"}>
+        {art ? <div className="flex items-center justify-center bg-black/10 p-8"><DishArt d={dish} className="w-full max-w-[320px]" /></div> : null}
         <div className="p-7">
           <div className="flex items-start justify-between gap-4"><h2 className="text-3xl font-semibold leading-tight" style={{ fontFamily: "'Fraunces Variable', serif" }}>{dish.name}</h2><button onClick={onClose} aria-label="Close dish" className="border border-current/30 px-3 py-1 text-sm">Close</button></div>
           <p className="mt-1 text-xl">£{dish.price} <span className="text-sm opacity-60">· {dish.course}</span></p>
@@ -88,24 +88,33 @@ function GalleryTile({ g, className = "", filter = "" }: { g: (typeof GALLERY)[n
   );
 }
 
-function Gallery({ cls = "", tile = "aspect-[4/5]", filter = "", onOpen }: { cls?: string; tile?: string; filter?: string; onOpen: (i: number) => void }) {
+function Gallery({ cls = "", tile = "aspect-[4/5]", filter = "", art = true, onOpen }: { cls?: string; tile?: string; filter?: string; art?: boolean; onOpen: (i: number) => void }) {
   return (
     <ul className={"grid grid-cols-2 gap-3 md:grid-cols-4 " + cls}>
-      {GALLERY.map((g, i) => <li key={g.id}><button onClick={() => onOpen(i)} className="group block w-full text-left" aria-label={`Open photograph: ${g.cap}`}><GalleryTile g={g} className={tile + " transition-transform duration-500 group-hover:scale-[1.02]"} filter={filter} /><span className="mt-1 block text-xs opacity-70">{g.cap}</span></button></li>)}
+      {GALLERY.map((g, i) => ("dish" in g && !art) ? null : <li key={g.id}><button onClick={() => onOpen(i)} className="group block w-full text-left" aria-label={`Open photograph: ${g.cap}`}><GalleryTile g={g} className={tile + " transition-transform duration-500 group-hover:scale-[1.02]"} filter={filter} /><span className="mt-1 block text-xs opacity-70">{g.cap}</span></button></li>)}
     </ul>
   );
 }
 
-function Lightbox({ i, setI, cls }: { i: number | null; setI: (n: number | null) => void; cls: string }) {
+function Lightbox({ i, setI, cls, art = true }: { i: number | null; setI: (n: number | null) => void; cls: string; art?: boolean }) {
+  const step = (d: number) => {
+    if (i === null) return;
+    let n = i;
+    for (let k = 0; k < GALLERY.length; k++) {
+      n = (n + d + GALLERY.length) % GALLERY.length;
+      if (art || !("dish" in GALLERY[n])) break;
+    }
+    setI(n);
+  };
   useEffect(() => {
     if (i === null) return;
     const f = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") setI((i + 1) % GALLERY.length);
-      if (e.key === "ArrowLeft") setI((i + GALLERY.length - 1) % GALLERY.length);
+      if (e.key === "ArrowRight") step(1);
+      if (e.key === "ArrowLeft") step(-1);
     };
     document.addEventListener("keydown", f);
     return () => document.removeEventListener("keydown", f);
-  }, [i, setI]);
+  });
   if (i === null) return null;
   const g = GALLERY[i];
   return (
@@ -113,7 +122,7 @@ function Lightbox({ i, setI, cls }: { i: number | null; setI: (n: number | null)
       <figure className="p-3">
         <GalleryTile g={g} className="aspect-[4/3] w-full" />
         <figcaption className="flex items-center justify-between gap-3 px-1 pt-3 text-sm"><span>{g.cap} <span className="opacity-60">({i + 1}/{GALLERY.length})</span></span>
-          <span className="flex gap-2"><button className="border border-current/30 px-3 py-1" onClick={() => setI((i + GALLERY.length - 1) % GALLERY.length)}>← Prev</button><button className="border border-current/30 px-3 py-1" onClick={() => setI((i + 1) % GALLERY.length)}>Next →</button><button className="border border-current/30 px-3 py-1" onClick={() => setI(null)}>Close</button></span></figcaption>
+          <span className="flex gap-2"><button className="border border-current/30 px-3 py-1" onClick={() => step(-1)}>← Prev</button><button className="border border-current/30 px-3 py-1" onClick={() => step(1)}>Next →</button><button className="border border-current/30 px-3 py-1" onClick={() => setI(null)}>Close</button></span></figcaption>
       </figure>
     </Dialog>
   );
@@ -297,15 +306,14 @@ function Oceanic({ m, open, table, setTable, reserveRef, lb }: VP) {
               {m.list.filter((d) => d.course === c).map((d, i) => (
                 <li key={d.id} style={{ marginTop: (i % 3) * 28, animation: `casa-bob ${5 + (i % 4)}s ease-in-out ${i * 0.4}s infinite` }}>
                   <button onClick={() => open(d)} className="group flex w-44 flex-col items-center text-center">
-                    <span className="flex h-44 w-44 items-center justify-center rounded-full border border-white/40 bg-white/10 p-4 shadow-[inset_0_0_40px_rgba(255,255,255,.25)] backdrop-blur-sm transition-transform duration-500 group-hover:scale-110"><DishArt d={d} className="w-full" /></span>
-                    <span className="mt-3 text-lg leading-tight" style={{ fontFamily: "'Fraunces Variable', serif" }}>{d.name}</span><span className="text-sm text-white/70">£{d.price}</span>
+                    <span className="text-lg leading-tight" style={{ fontFamily: "'Fraunces Variable', serif" }}>{d.name}</span><span className="text-sm text-white/70">£{d.price}</span>
                   </button>
                 </li>
               ))}
             </ul>
           </section>
         ))}
-        <section className="px-6 py-20 sm:px-16"><h2 className="text-4xl font-light" style={{ fontFamily: "'Fraunces Variable', serif" }}>Through the glass</h2><div className="mt-6"><Gallery onOpen={lb} tile="aspect-square rounded-full" filter="saturate(.85) hue-rotate(-10deg)" /></div></section>
+        <section className="px-6 py-20 sm:px-16"><h2 className="text-4xl font-light" style={{ fontFamily: "'Fraunces Variable', serif" }}>Through the glass</h2><div className="mt-6"><Gallery onOpen={lb} tile="aspect-square rounded-full" filter="saturate(.85) hue-rotate(-10deg)" art={false} /></div></section>
         <section id="ocean-reserve" className="px-6 pb-32 pt-20 sm:px-16"><div className="max-w-3xl rounded-3xl border border-white/30 bg-black/30 p-6 backdrop-blur-md sm:p-10"><h2 className="text-5xl font-light" style={{ fontFamily: "'Fraunces Variable', serif" }}>Drop anchor.</h2><p className="mb-6 mt-2 text-white/75">Reserve a table. Tuesday–Sunday, 17:30–22:30.</p><Reserve skin={OC} table={table || undefined} onClearTable={() => setTable("")} /></div></section>
       </div>
     </div>
@@ -328,7 +336,7 @@ function Brutalist({ m, open, table, setTable, reserveRef, lb }: VP) {
               <tr key={d.id} className="group border-b-2 border-black"><td colSpan={4} className="p-0"><button onClick={() => open(d)} className="grid w-full grid-cols-[2.5rem_1fr_auto] items-baseline gap-3 px-1 py-3 text-left hover:bg-black hover:text-[#ffe600] sm:grid-cols-[4rem_1fr_12rem_5rem]"><span className="text-sm">{String(DISHES.indexOf(d) + 1).padStart(2, "0")}</span><span className="text-2xl uppercase leading-none sm:text-4xl" style={{ fontFamily: "Anton, sans-serif" }}>{d.name}</span><span className="hidden text-xs uppercase sm:block">{d.tags.join(" · ")}</span><span className="text-right text-xl font-semibold">£{d.price}</span></button></td></tr>
             ))}</tbody></table>
         )}</section>
-      <section className="border-t-4 border-black bg-[#ffe600] px-4 py-10"><h2 className="text-[14vw] leading-[0.85] sm:text-[8vw]" style={{ fontFamily: "Anton, sans-serif" }}>EVIDENCE</h2><div className="mt-5"><Gallery onOpen={lb} cls="gap-0 md:grid-cols-4 [&_li]:border-2 [&_li]:border-black" tile="aspect-square" filter="grayscale(1) contrast(1.25)" /></div></section>
+      <section className="border-t-4 border-black bg-[#ffe600] px-4 py-10"><h2 className="text-[14vw] leading-[0.85] sm:text-[8vw]" style={{ fontFamily: "Anton, sans-serif" }}>EVIDENCE</h2><div className="mt-5"><Gallery onOpen={lb} cls="gap-0 md:grid-cols-4 [&_li]:border-2 [&_li]:border-black" tile="aspect-square" filter="grayscale(1) contrast(1.25)" art={false} /></div></section>
       <section id="br-reserve" className="px-4 py-10"><h2 className="text-[16vw] leading-[0.85] sm:text-[9vw]" style={{ fontFamily: "Anton, sans-serif" }}>RESERVE</h2><div className="mt-6 max-w-3xl"><Reserve skin={BR} table={table || undefined} onClearTable={() => setTable("")} /></div></section>
       <section className="border-t-4 border-black px-4 py-10"><h2 className="text-[10vw] leading-[0.85] sm:text-6xl" style={{ fontFamily: "Anton, sans-serif" }}>WRITE / FIND</h2><div className="mt-4 grid gap-8 md:grid-cols-2"><p>14 HARBOUR LANE (FICTIONAL)<br />HELLO@CASA.EXAMPLE<br />CLOSED MONDAYS.</p><ContactForm skin={BR} /></div></section>
     </div>
@@ -352,7 +360,7 @@ function Japanese({ m, open, table, setTable, reserveRef, lb }: VP) {
         {m.list.length === 0 ? <Empty m={m} /> : <ol className="grid gap-x-16 md:grid-cols-2">{m.list.map((d) => (
           <li key={d.id} className="border-t border-[#1d1b18]/20"><button onClick={() => open(d)} className="flex w-full gap-4 py-6 text-left hover:opacity-60"><span className="w-8 shrink-0 pt-1 text-sm text-[#b2332a]" style={serif}>{KANJI[DISHES.indexOf(d)]}</span><span className="flex-1"><span className="block text-2xl" style={serif}>{d.name}</span><span className="mt-1 block text-sm leading-relaxed opacity-70">{d.desc}</span></span><span className="text-lg" style={serif}>{d.price}</span></button></li>
         ))}</ol>}</section>
-      <section className="mx-auto max-w-5xl px-6 py-16"><Gallery onOpen={lb} cls="gap-8" tile="aspect-[3/4]" filter="saturate(.4) brightness(1.05)" /></section>
+      <section className="mx-auto max-w-5xl px-6 py-16"><Gallery onOpen={lb} cls="gap-8" tile="aspect-[3/4]" filter="saturate(.4) brightness(1.05)" art={false} /></section>
       <section id="jp-reserve" className="mx-auto max-w-xl px-6 pb-28 pt-10"><h2 className="mb-8 text-center text-4xl font-light tracking-[0.3em]" style={serif}>予約 · RESERVE</h2><Reserve skin={JP} table={table || undefined} onClearTable={() => setTable("")} /></section>
     </div>
   );
@@ -374,8 +382,8 @@ export default function Casa({ reality }: { reality: string }) {
       {reality === "brutalist" && <Brutalist {...p} />}
       {reality === "japanese" && <Japanese {...p} />}
       {reality === "3d" && <Casa3D />}
-      <DishModal dish={dish} onClose={() => setDish(null)} onReserve={() => setTimeout(() => reserveRef.current(), 50)} cls={modalCls} />
-      <Lightbox i={lb} setI={setLb} cls={modalCls} />
+      <DishModal dish={dish} onClose={() => setDish(null)} onReserve={() => setTimeout(() => reserveRef.current(), 50)} cls={modalCls} art={reality === "classic"} />
+      <Lightbox i={lb} setI={setLb} cls={modalCls} art={reality === "classic"} />
     </>
   );
 }

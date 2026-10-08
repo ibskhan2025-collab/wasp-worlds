@@ -34,8 +34,7 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#171310", "--fg": "#e8e0d2", "--muted": "#8a7f6e", "--line": "rgba(232,224,210,0.25)", "--accent": "#c9803f" }),
     ALT("oceanic", "Oceanic", "The room floods. Depth replaces pages; the menu floats.", "rb15",
       { "--bg": "#2a1810", "--fg": "#f4e6d0", "--muted": "#f4e6d0", "--line": "rgba(128,128,128,0.35)", "--accent": "#d9763a" }),
-    ALT("3d", "3D", "Walk the dining room, inspect a table, book it.", "rb15",
-      { "--bg": "#2a1810", "--fg": "#f4e6d0", "--muted": "#f4e6d0", "--line": "rgba(128,128,128,0.35)", "--accent": "#d9763a" }),
+
     ALT("brutalist", "Brutalist", "Typography is the building. The menu is a ledger.", "rb15",
       { "--bg": "#2a1810", "--fg": "#f4e6d0", "--muted": "#f4e6d0", "--line": "rgba(128,128,128,0.35)", "--accent": "#d9763a" }),
     ALT("japanese", "Japanese", "Quiet, vertical, and mostly silence.", "rb15",
