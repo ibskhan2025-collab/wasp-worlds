@@ -281,12 +281,6 @@ export function VectorNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Terminal", "/worlds/vector"],
-        ["ledger", "Ledger", "/worlds/vector/ledger"],
-        ["filing", "Filing", "/worlds/vector/filing"],
-        ["surface", "Surface", "/worlds/vector/surface"],
-        ["chart", "Chart", "/worlds/vector/chart"],
-        ["letter", "Letter", "/worlds/vector/letter"],
-        ["report", "Report", "/worlds/vector/report"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="vector"

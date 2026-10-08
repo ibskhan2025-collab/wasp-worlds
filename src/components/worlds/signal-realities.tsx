@@ -113,14 +113,6 @@ export function SignalNav({ current }: { current: string }) {  return (
       </Link>
       {[
         ["classic", "CRT", "/worlds/signal"],
-        ["mono", "Mono", "/worlds/signal/mono"],
-        ["paper", "Paper", "/worlds/signal/paper"],
-        ["future", "Quantum", "/worlds/signal/future"],
-        ["arcade", "Arcade", "/worlds/signal/arcade"],
-        ["pocket", "Pocket", "/worlds/signal/pocket"],
-        ["ink", "Ink", "/worlds/signal/ink"],
-        ["crt", "CRT", "/worlds/signal/crt"],
-        ["arena", "Arena", "/worlds/signal/arena"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="signal"

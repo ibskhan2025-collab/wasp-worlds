@@ -211,15 +211,6 @@ export function NoirNav({ current }: { current: string }) {
       </Link>
       <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }} role="group" aria-label="Realities">
         <NoirNavLink id="classic" label="Collection" href="/worlds/noir/collection" current={current} />
-        <NoirNavLink id="brutalist" label="Brutalist" href="/worlds/noir/brutalist" current={current} />
-        <NoirNavLink id="analog" label="Analog" href="/worlds/noir/analog" current={current} />
-        <NoirNavLink id="future" label="Future" href="/worlds/noir/future" current={current} />
-        <NoirNavLink id="runway" label="Runway" href="/worlds/noir/runway" current={current} />
-        <NoirNavLink id="atelier" label="Atelier" href="/worlds/noir/atelier" current={current} />
-        <NoirNavLink id="showroom" label="Showroom" href="/worlds/noir/showroom" current={current} />
-        <NoirNavLink id="archive" label="Archive" href="/worlds/noir/archive" current={current} />
-        <NoirNavLink id="showroom" label="Showroom" href="/worlds/noir/showroom" current={current} />
-        <NoirNavLink id="archive" label="Archive" href="/worlds/noir/archive" current={current} />
       </div>
       <Link href="/worlds/noir/bag" style={{ marginLeft: "auto", border: "1px solid rgba(255,255,255,0.4)", padding: "6px 12px", fontSize: 12 }} aria-label={`Open bag, ${cart.count} items`}>
         Bag ({cart.count})

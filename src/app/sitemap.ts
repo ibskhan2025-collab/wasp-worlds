@@ -15,8 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/os", "monthly", 0.5],
     ["/matrix", "monthly", 0.6],
     ["/realities", "monthly", 0.6],
-    ["/3d", "monthly", 0.6],
-    ["/analog", "monthly", 0.6],
     ["/night", "monthly", 0.6],
     ["/resume", "monthly", 0.5],
     ["/privacy", "monthly", 0.3],

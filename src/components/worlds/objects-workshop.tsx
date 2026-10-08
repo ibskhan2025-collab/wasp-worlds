@@ -174,14 +174,6 @@ export function ObjectsNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Bone", "/worlds/objects"],
-        ["tidal", "Tidal", "/worlds/objects/tidal"],
-        ["catalogue", "Catalogue", "/worlds/objects/catalogue"],
-        ["turntable", "Turntable", "/worlds/objects/turntable"],
-        ["playful", "Play", "/worlds/objects/playful"],
-        ["storeroom", "Storeroom", "/worlds/objects/storeroom"],
-        ["gift", "Gift", "/worlds/objects/gift"],
-        ["workshop", "Workshop", "/worlds/objects/workshop"],
-        ["inspect", "Inspect", "/worlds/objects/inspect"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="objects"

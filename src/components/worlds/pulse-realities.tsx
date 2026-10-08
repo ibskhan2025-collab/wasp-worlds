@@ -459,13 +459,6 @@ export function PulseNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Signal", "/worlds/pulse"],
-        ["flyer", "Flyer", "/worlds/pulse/flyer"],
-        ["vinyl", "Vinyl", "/worlds/pulse/vinyl"],
-        ["oceanic", "Submerged", "/worlds/pulse/oceanic"],
-        ["setlist", "Setlist", "/worlds/pulse/setlist"],
-        ["booth", "Booth", "/worlds/pulse/booth"],
-        ["board", "Board", "/worlds/pulse/board"],
-        ["sound", "Sound", "/worlds/pulse/sound"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="pulse"

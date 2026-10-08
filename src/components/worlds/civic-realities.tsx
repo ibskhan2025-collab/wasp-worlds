@@ -232,13 +232,6 @@ export function CivicNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Service", "/worlds/civic"],
-        ["noticeboard", "Notice", "/worlds/civic/noticeboard"],
-        ["paperform", "Counter", "/worlds/civic/paperform"],
-        ["kiosk", "Kiosk", "/worlds/civic/kiosk"],
-        ["chamber", "Chamber", "/worlds/civic/chamber"],
-        ["desk", "Desk", "/worlds/civic/desk"],
-        ["contrast", "Contrast", "/worlds/civic/contrast"],
-        ["plain", "Plain", "/worlds/civic/plain"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="civic"

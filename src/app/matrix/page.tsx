@@ -43,8 +43,6 @@ export default function MatrixPage() {
       <p className="kicker">Cross-world</p>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
         <Link className="ghost" href="/night">Night →</Link>
-        <Link className="ghost" href="/3d">3D index →</Link>
-        <Link className="ghost" href="/analog">Analog index →</Link>
       </div>
     </div>
   );

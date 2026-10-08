@@ -18,139 +18,49 @@ function loading(label: string) {
  */
 const R: Record<string, Record<string, ComponentType>> = {
   casa: {
-    oceanic: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaOceanic), { loading: loading("OCEANIC") }),
-    counter: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaCounter), { loading: loading("COUNTER") }),
-    cellar: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaCellar), { loading: loading("CELLAR") }),
-    brutalist: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaBrutalist), { loading: loading("BRUTALIST") }),
-    japanese: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaJapanese), { loading: loading("JAPANESE") }),
     spatial: dynamic(() => import("@/components/worlds/casa-spatial").then((m) => m.CasaSpatial), { loading: loading("SPATIAL") }),
-    garden: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaGarden), { loading: loading("GARDEN") }),
   },
   noir: {
-    brutalist: dynamic(() => import("@/components/worlds/noir-brutalist").then((m) => m.NoirBrutalist), { loading: loading("BRUTALIST") }),
-    analog: dynamic(() => import("@/components/worlds/noir-realities").then((m) => m.NoirAnalog), { loading: loading("ANALOG") }),
-    future: dynamic(() => import("@/components/worlds/noir-realities").then((m) => m.NoirFuture), { loading: loading("FUTURE") }),
-    runway: dynamic(() => import("@/components/worlds/noir-realities").then((m) => m.NoirRunway), { loading: loading("RUNWAY") }),
-    atelier: dynamic(() => import("@/components/worlds/noir-realities").then((m) => m.NoirAtelier), { loading: loading("ATELIER") }),
-    showroom: dynamic(() => import("@/components/worlds/noir-showroom").then((m) => m.NoirShowroom), { loading: loading("SHOWROOM") }),
-    archive: dynamic(() => import("@/components/worlds/noir-realities").then((m) => m.NoirArchive), { loading: loading("ARCHIVE") }),
+
   },
   orbit: {
-    console: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitConsole), { loading: loading("CONSOLE") }),
-    compact: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitCompact), { loading: loading("COMPACT") }),
-    brutalist: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitRaw), { loading: loading("RAW") }),
-    standup: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitStandup), { loading: loading("STANDUP") }),
-    forecast: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitForecast), { loading: loading("FORECAST") }),
-    paper: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitPaper), { loading: loading("PAPER") }),
-    retro: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitRetro), { loading: loading("RETRO") }),
-    terminal: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitTerminal), { loading: loading("TERMINAL") }),
-    future: dynamic(() => import("@/components/worlds/orbit-realities").then((m) => m.OrbitFuture), { loading: loading("FUTURE") }),
+
   },
   still: {
-    negative: dynamic(() => import("@/components/worlds/still-realities").then((m) => m.StillNegative), { loading: loading("NEGATIVE") }),
-    contact: dynamic(() => import("@/components/worlds/still-realities").then((m) => m.StillContact), { loading: loading("CONTACT") }),
-    gallery: dynamic(() => import("@/components/worlds/still-realities").then((m) => m.StillGallery), { loading: loading("GALLERY") }),
-    darkroom: dynamic(() => import("@/components/worlds/still-realities").then((m) => m.StillDarkroom), { loading: loading("DARKROOM") }),
-    folio: dynamic(() => import("@/components/worlds/still-realities").then((m) => m.StillFolio), { loading: loading("FOLIO") }),
-    hall: dynamic(() => import("@/components/worlds/still-hall").then((m) => m.StillHall), { loading: loading("HALL") }),
+
   },
   signal: {
-    mono: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalMono), { loading: loading("MONO") }),
-    paper: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalPaper), { loading: loading("PAPER") }),
-    future: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalFuture), { loading: loading("QUANTUM") }),
-    arcade: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalArcade), { loading: loading("ARCADE") }),
-    pocket: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalPocket), { loading: loading("POCKET") }),
-    ink: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalInk), { loading: loading("INK") }),
-    crt: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalCrt), { loading: loading("CRT") }),
-    arena: dynamic(() => import("@/components/worlds/signal-realities").then((m) => m.SignalArena), { loading: loading("ARENA") }),
+
   },
   objects: {
-    tidal: dynamic(() => import("@/components/worlds/objects-realities").then((m) => m.ObjectsTidal), { loading: loading("TIDAL") }),
-    catalogue: dynamic(() => import("@/components/worlds/objects-realities").then((m) => m.ObjectsCatalogue), { loading: loading("CATALOGUE") }),
-    playful: dynamic(() => import("@/components/worlds/objects-realities").then((m) => m.ObjectsPlayful), { loading: loading("PLAY") }),
-    turntable: dynamic(() => import("@/components/worlds/objects-turntable").then((m) => m.ObjectsTurntable), { loading: loading("TURNTABLE") }),
-    storeroom: dynamic(() => import("@/components/worlds/objects-realities").then((m) => m.ObjectsStoreroom), { loading: loading("STOREROOM") }),
-    gift: dynamic(() => import("@/components/worlds/objects-realities").then((m) => m.ObjectsGift), { loading: loading("GIFT") }),
-    workshop: dynamic(() => import("@/components/worlds/objects-workshop").then((m) => m.ObjectsWorkshop), { loading: loading("WORKSHOP") }),
-    inspect: dynamic(() => import("@/components/worlds/objects-workshop").then((m) => m.ObjectsInspect), { loading: loading("INSPECT") }),
+
   },
   archive: {
-    typer: dynamic(() => import("@/components/worlds/archive-realities").then((m) => m.ArchiveTyper), { loading: loading("TYPER") }),
-    terminal: dynamic(() => import("@/components/worlds/archive-realities").then((m) => m.ArchiveTerminal), { loading: loading("TERMINAL") }),
-    poster: dynamic(() => import("@/components/worlds/archive-realities").then((m) => m.ArchivePoster), { loading: loading("POSTER") }),
-    stacks: dynamic(() => import("@/components/worlds/archive-realities").then((m) => m.ArchiveStacks), { loading: loading("STACKS") }),
-    reading: dynamic(() => import("@/components/worlds/archive-realities").then((m) => m.ArchiveReading), { loading: loading("READING") }),
-    broadsheet: dynamic(() => import("@/components/worlds/archive-realities").then((m) => m.ArchiveBroadsheet), { loading: loading("BROADSHEET") }),
-    index: dynamic(() => import("@/components/worlds/archive-realities").then((m) => m.ArchiveIndex), { loading: loading("INDEX") }),
+
   },
   motion: {
-    timing: dynamic(() => import("@/components/worlds/motion-realities").then((m) => m.MotionTiming), { loading: loading("TIMING") }),
-    cinema: dynamic(() => import("@/components/worlds/motion-realities").then((m) => m.MotionCinema), { loading: loading("CINEMA") }),
-    oceanic: dynamic(() => import("@/components/worlds/motion-realities").then((m) => m.MotionOceanic), { loading: loading("FLUID") }),
-    storyboard: dynamic(() => import("@/components/worlds/motion-realities").then((m) => m.MotionStoryboard), { loading: loading("BOARDS") }),
-    credits: dynamic(() => import("@/components/worlds/motion-realities").then((m) => m.MotionCredits), { loading: loading("CREDITS") }),
-    stage: dynamic(() => import("@/components/worlds/motion-realities").then((m) => m.MotionStage), { loading: loading("STAGE") }),
+
   },
   void: {
-    abyss: dynamic(() => import("@/components/worlds/void-realities").then((m) => m.VoidAbyss), { loading: loading("ABYSS") }),
-    ink: dynamic(() => import("@/components/worlds/void-realities").then((m) => m.VoidInk), { loading: loading("INK") }),
-    reactor: dynamic(() => import("@/components/worlds/void-realities").then((m) => m.VoidReactor), { loading: loading("REACTOR") }),
-    orbit: dynamic(() => import("@/components/worlds/void-realities").then((m) => m.VoidOrbit), { loading: loading("ORBIT") }),
-    field: dynamic(() => import("@/components/worlds/void-realities").then((m) => m.VoidField), { loading: loading("FIELD") }),
-    shader: dynamic(() => import("@/components/worlds/void-shader").then((m) => m.VoidShader), { loading: loading("SHADER") }),
-    space: dynamic(() => import("@/components/worlds/void-shader").then((m) => m.VoidSpace), { loading: loading("SPACE") }),
+
   },
   atlas: {
-    expedition: dynamic(() => import("@/components/worlds/atlas-realities").then((m) => m.AtlasExpedition), { loading: loading("EXPEDITION") }),
-    field: dynamic(() => import("@/components/worlds/atlas-realities").then((m) => m.AtlasField), { loading: loading("FIELD") }),
-    cinematic: dynamic(() => import("@/components/worlds/atlas-realities").then((m) => m.AtlasCinema), { loading: loading("CINEMA") }),
-    miniature: dynamic(() => import("@/components/worlds/atlas-miniature").then((m) => m.AtlasMiniature), { loading: loading("MINIATURE") }),
-    timetable: dynamic(() => import("@/components/worlds/atlas-realities").then((m) => m.AtlasTimetable), { loading: loading("TIMETABLE") }),
-    postcards: dynamic(() => import("@/components/worlds/atlas-realities").then((m) => m.AtlasPostcards), { loading: loading("POSTCARDS") }),
-    globe: dynamic(() => import("@/components/worlds/atlas-realities").then((m) => m.AtlasGlobe), { loading: loading("GLOBE") }),
+
   },
   forge: {
-    blueprint: dynamic(() => import("@/components/worlds/forge-realities").then((m) => m.ForgeBlueprint), { loading: loading("BLUEPRINT") }),
-    datasheet: dynamic(() => import("@/components/worlds/forge-realities").then((m) => m.ForgeDatasheet), { loading: loading("DATASHEET") }),
-    analog: dynamic(() => import("@/components/worlds/forge-realities").then((m) => m.ForgeAnalog), { loading: loading("MICROFICHE") }),
-    floor: dynamic(() => import("@/components/worlds/forge-realities").then((m) => m.ForgeFloor), { loading: loading("FLOOR") }),
-    compare: dynamic(() => import("@/components/worlds/forge-realities").then((m) => m.ForgeCompare), { loading: loading("COMPARE") }),
-    catalogue: dynamic(() => import("@/components/worlds/forge-realities").then((m) => m.ForgeCatalogue), { loading: loading("CATALOGUE") }),
-    inspect: dynamic(() => import("@/components/worlds/forge-realities").then((m) => m.ForgeInspect), { loading: loading("INSPECT") }),
-    viewer: dynamic(() => import("@/components/worlds/forge-viewer").then((m) => m.ForgeViewer), { loading: loading("VIEWER") }),
+
   },
   pulse: {
-    flyer: dynamic(() => import("@/components/worlds/pulse-realities").then((m) => m.PulseFlyer), { loading: loading("FLYER") }),
-    vinyl: dynamic(() => import("@/components/worlds/pulse-realities").then((m) => m.PulseVinyl), { loading: loading("VINYL") }),
-    oceanic: dynamic(() => import("@/components/worlds/pulse-realities").then((m) => m.PulseOceanic), { loading: loading("SUBMERGED") }),
-    setlist: dynamic(() => import("@/components/worlds/pulse-realities").then((m) => m.PulseSetlist), { loading: loading("SETLIST") }),
-    booth: dynamic(() => import("@/components/worlds/pulse-realities").then((m) => m.PulseBooth), { loading: loading("BOOTH") }),
-    board: dynamic(() => import("@/components/worlds/pulse-realities").then((m) => m.PulseBoard), { loading: loading("BOARD") }),
-    sound: dynamic(() => import("@/components/worlds/pulse-realities").then((m) => m.PulseSound), { loading: loading("SOUND") }),
+
   },
   civic: {
-    noticeboard: dynamic(() => import("@/components/worlds/civic-realities").then((m) => m.CivicNoticeboard), { loading: loading("NOTICEBOARD") }),
-    paperform: dynamic(() => import("@/components/worlds/civic-realities").then((m) => m.CivicPaperform), { loading: loading("PAPERFORM") }),
-    kiosk: dynamic(() => import("@/components/worlds/civic-realities").then((m) => m.CivicKiosk), { loading: loading("KIOSK") }),
-    chamber: dynamic(() => import("@/components/worlds/civic-realities").then((m) => m.CivicChamber), { loading: loading("CHAMBER") }),
-    desk: dynamic(() => import("@/components/worlds/civic-realities").then((m) => m.CivicDesk), { loading: loading("DESK") }),
-    contrast: dynamic(() => import("@/components/worlds/civic-realities").then((m) => m.CivicContrast), { loading: loading("CONTRAST") }),
-    plain: dynamic(() => import("@/components/worlds/civic-realities").then((m) => m.CivicPlain), { loading: loading("PLAIN") }),
+
   },
   nest: {
-    drawing: dynamic(() => import("@/components/worlds/nest-realities").then((m) => m.NestDrawing), { loading: loading("DRAWING") }),
-    simulated: dynamic(() => import("@/components/worlds/nest-realities").then((m) => m.NestSimulated), { loading: loading("SIMULATED") }),
-    mockup: dynamic(() => import("@/components/worlds/nest-realities").then((m) => m.NestMockup), { loading: loading("MOCKUP") }),
-    walk: dynamic(() => import("@/components/worlds/nest-walk").then((m) => m.NestWalk), { loading: loading("WALK") }),
-    volume: dynamic(() => import("@/components/worlds/nest-volume").then((m) => m.NestVolume), { loading: loading("VOLUME") }),
+
   },
   vector: {
-    ledger: dynamic(() => import("@/components/worlds/vector-realities").then((m) => m.VectorLedger), { loading: loading("LEDGER") }),
-    filing: dynamic(() => import("@/components/worlds/vector-realities").then((m) => m.VectorFiling), { loading: loading("FILING") }),
-    surface: dynamic(() => import("@/components/worlds/vector-realities").then((m) => m.VectorSurface), { loading: loading("SURFACE") }),
-    chart: dynamic(() => import("@/components/worlds/vector-realities").then((m) => m.VectorChart), { loading: loading("CHART") }),
-    letter: dynamic(() => import("@/components/worlds/vector-realities").then((m) => m.VectorLetter), { loading: loading("LETTER") }),
-    report: dynamic(() => import("@/components/worlds/vector-realities").then((m) => m.VectorReport), { loading: loading("REPORT") }),
+
   },
 };
 

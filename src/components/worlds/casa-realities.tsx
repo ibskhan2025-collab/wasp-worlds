@@ -8,7 +8,8 @@ import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { casa, casaGallery, dishes } from "@/data/casa";
 import { media } from "@/lib/media";
-import { CasaSubNav, type CasaViewId } from "@/components/worlds/casa-views";
+import { CasaSubNav } from "@/components/worlds/casa-views";
+import { type CasaViewId } from "@/components/worlds/casa-view-themes";
 import { money } from "@/lib/use-cart";
 
 export function CasaNav({ current }: { current: string }) {
@@ -19,13 +20,7 @@ export function CasaNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Classic", "/worlds/casa"],
-        ["oceanic", "Oceanic", "/worlds/casa/oceanic"],
-        ["counter", "Counter", "/worlds/casa/counter"],
-        ["cellar", "Cellar", "/worlds/casa/cellar"],
-        ["brutalist", "Brutalist", "/worlds/casa/brutalist"],
-        ["japanese", "Japanese", "/worlds/casa/japanese"],
         ["spatial", "Spatial", "/worlds/casa/spatial"],
-        ["garden", "Garden", "/worlds/casa/garden"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="casa"

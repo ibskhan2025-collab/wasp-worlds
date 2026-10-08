@@ -14,11 +14,6 @@ export function NestNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Plaster", "/worlds/nest"],
-        ["drawing", "Drawing", "/worlds/nest/drawing"],
-        ["simulated", "Simulated", "/worlds/nest/simulated"],
-        ["walk", "Walk", "/worlds/nest/walk"],
-        ["mockup", "Mockup", "/worlds/nest/mockup"],
-        ["volume", "Volume", "/worlds/nest/volume"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="nest"

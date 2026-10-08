@@ -342,13 +342,6 @@ export function AtlasNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Survey", "/worlds/atlas"],
-        ["expedition", "Expedition", "/worlds/atlas/expedition"],
-        ["field", "Field", "/worlds/atlas/field"],
-        ["miniature", "Miniature", "/worlds/atlas/miniature"],
-        ["cinematic", "Cinema", "/worlds/atlas/cinematic"],
-        ["timetable", "Timetable", "/worlds/atlas/timetable"],
-        ["postcards", "Postcards", "/worlds/atlas/postcards"],
-        ["globe", "Globe", "/worlds/atlas/globe"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="atlas"

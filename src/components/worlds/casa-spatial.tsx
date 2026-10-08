@@ -193,7 +193,7 @@ export function CasaSpatial() {
               {table.id} · {table.zone} · seats {table.seats}
             </strong>
             <p style={{ margin: "8px 0 0" }}>
-              <Link href="/worlds/casa/reservations" style={{ background: "#c9803f", color: "#171310", padding: "10px 20px", fontWeight: 700, fontSize: 12, letterSpacing: "0.15em" }}>
+              <Link href="/worlds/casa/spatial/reservations" style={{ background: "#c9803f", color: "#171310", padding: "10px 20px", fontWeight: 700, fontSize: 12, letterSpacing: "0.15em" }}>
                 RESERVE {table.id} →
               </Link>
             </p>
