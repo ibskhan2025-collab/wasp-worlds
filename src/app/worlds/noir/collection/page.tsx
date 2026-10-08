@@ -45,7 +45,7 @@ export default function NoirCollection() {
 
   return (
     <div style={{ padding: "20px 0 80px" }}>
-      <RealityShell world="noir" current="classic" basePath="/worlds/noir/collection" />
+      <RealityShell world="noir" current="classic" basePath="/worlds/noir" />
       <div style={{ padding: "8px 20px 20px", display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
         <h1 style={{ fontSize: "clamp(3rem, 8vw, 6rem)", margin: 0, fontWeight: 500 }}>Collection</h1>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>

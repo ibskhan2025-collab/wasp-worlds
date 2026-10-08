@@ -21,7 +21,7 @@ export function CollectionLedger() {
   return (
     <div style={{ background: "#f4f1ea", color: "#111", minHeight: "100dvh", fontFamily: "var(--font-sans)" }}>
       <WorldExit id="noir" label="Room 02 · NOIR/BRUTALIST" />
-      <RealityShell world="noir" current="brutalist" basePath="/worlds/noir/collection" />
+      <RealityShell world="noir" current="brutalist" basePath="/worlds/noir" />
       <header style={{ padding: "20px", borderBottom: "3px solid #111" }}>
         <p style={{ fontSize: 12, letterSpacing: "0.2em", margin: 0 }}>LEDGER · {rows.length} GARMENTS</p>
         <h1 style={{ fontSize: "clamp(3rem, 12vw, 8rem)", lineHeight: 0.85, margin: "8px 0 0", fontWeight: 900 }}>FULL STOCK</h1>

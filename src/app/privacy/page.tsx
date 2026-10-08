@@ -20,6 +20,18 @@ const SECTIONS: [string, string][] = [
     "Preferences (theme, motion, carts, wishlists, game scores, builder drafts) live in your browser's local storage. They never leave your device unless a form you submit includes them. Clearing site data wipes them completely.",
   ],
   [
+    "Demo worlds",
+    "The worlds on this site are fictional. Submissions made inside them (a CASA booking, an ORBIT customer, a CIVIC report) are stored for demonstration and are never sent to a real business. Please don't enter sensitive personal information in demos.",
+  ],
+  [
+    "Simulated checkouts",
+    "Card numbers in the checkout simulations are validated in your browser and are never sent to our servers or stored anywhere. We never see payment details at all.",
+  ],
+  [
+    "Audit tool",
+    "The website audit tool asks our server to fetch the public URL you enter so it can analyze it. We don't store the result.",
+  ],
+  [
     "Why we keep it",
     "Enquiries and reservations are business records: so we can reply, so we know what was agreed, and so repeated spam can be recognized. That's the whole list of reasons.",
   ],
