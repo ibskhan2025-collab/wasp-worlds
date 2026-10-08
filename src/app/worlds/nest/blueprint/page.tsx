@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { WorldExit } from "@/components/wasp/world-exit";
+import { NestNav } from "@/components/worlds/nest-realities";
 import Nest from "@/rb15w/Nest";
 
 export const metadata: Metadata = {
@@ -7,5 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default function NestBlueprintPage() {
-  return <Nest reality="blueprint" />;
+  return (
+    <>
+      <WorldExit id="nest" label="Room 14 · NEST/BLUEPRINT" />
+      <NestNav current="blueprint" />
+      <Nest reality="blueprint" />
+    </>
+  );
 }

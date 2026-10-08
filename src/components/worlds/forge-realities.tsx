@@ -15,6 +15,9 @@ export function ForgeNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Ops", "/worlds/forge"],
+        ["catalogue", "Datasheet", "/worlds/forge/catalogue"],
+        ["inspect", "3D Inspect", "/worlds/forge/inspect"],
+        ["blueprint", "Blueprint", "/worlds/forge/blueprint"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="forge"

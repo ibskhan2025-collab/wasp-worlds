@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { WorldExit } from "@/components/wasp/world-exit";
+import { NestNav } from "@/components/worlds/nest-realities";
 import Nest from "@/rb15w/Nest";
 
 export const metadata: Metadata = {
@@ -7,5 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default function Nest3DPage() {
-  return <Nest reality="3d" />;
+  return (
+    <>
+      <WorldExit id="nest" label="Room 14 · NEST/3D" />
+      <NestNav current="3d" />
+      <Nest reality="3d" />
+    </>
+  );
 }

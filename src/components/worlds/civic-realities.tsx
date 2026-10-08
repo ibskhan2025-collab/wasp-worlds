@@ -232,6 +232,9 @@ export function CivicNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Service", "/worlds/civic"],
+        ["standard", "Standard", "/worlds/civic/standard"],
+        ["contrast", "High contrast", "/worlds/civic/contrast"],
+        ["plain", "Plain text", "/worlds/civic/plain"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="civic"

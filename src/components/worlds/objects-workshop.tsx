@@ -174,6 +174,8 @@ export function ObjectsNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Bone", "/worlds/objects"],
+        ["workshop", "Workshop", "/worlds/objects/workshop"],
+        ["inspect", "3D Shelf", "/worlds/objects/inspect"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="objects"

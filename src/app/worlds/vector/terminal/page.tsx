@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { WorldExit } from "@/components/wasp/world-exit";
+import { VectorNav } from "@/components/worlds/vector-realities";
 import Vector from "@/rb15w/Vector";
 
 export const metadata: Metadata = {
@@ -7,5 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default function VectorTerminalPage() {
-  return <Vector reality="terminal" />;
+  return (
+    <>
+      <WorldExit id="vector" label="Room 15 · VECTOR/TERMINAL" />
+      <VectorNav current="terminal" />
+      <Vector reality="terminal" />
+    </>
+  );
 }

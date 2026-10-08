@@ -262,6 +262,8 @@ export function MotionNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Campaign", "/worlds/motion"],
+        ["stage", "Stage", "/worlds/motion/stage"],
+        ["dopesheet", "Dopesheet", "/worlds/motion/dopesheet"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="motion"

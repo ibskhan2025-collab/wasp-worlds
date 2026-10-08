@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { WorldExit } from "@/components/wasp/world-exit";
+import { AtlasNav } from "@/components/worlds/atlas-realities";
 import Atlas from "@/rb15w/Atlas";
 
 export const metadata: Metadata = {
@@ -7,5 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default function AtlasGlobePage() {
-  return <Atlas reality="globe" />;
+  return (
+    <>
+      <WorldExit id="atlas" label="Room 10 · ATLAS/GLOBE" />
+      <AtlasNav current="globe" />
+      <Atlas reality="globe" />
+    </>
+  );
 }

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { WorldExit } from "@/components/wasp/world-exit";
+import { ArchiveNav } from "@/components/worlds/archive-realities";
 import Archive from "@/rb15w/Archive";
 
 export const metadata: Metadata = {
@@ -7,5 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default function ArchiveBroadsheetPage() {
-  return <Archive reality="broadsheet" />;
+  return (
+    <>
+      <WorldExit id="archive" label="Room 07 · ARCHIVE/BROADSHEET" />
+      <ArchiveNav current="broadsheet" />
+      <Archive reality="broadsheet" />
+    </>
+  );
 }

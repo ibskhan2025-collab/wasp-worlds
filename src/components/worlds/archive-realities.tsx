@@ -288,6 +288,9 @@ export function ArchiveNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Parchment", "/worlds/archive"],
+        ["journal", "Journal", "/worlds/archive/journal"],
+        ["broadsheet", "Broadsheet", "/worlds/archive/broadsheet"],
+        ["index", "Index", "/worlds/archive/index"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="archive"

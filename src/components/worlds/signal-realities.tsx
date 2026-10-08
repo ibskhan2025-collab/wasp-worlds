@@ -113,6 +113,8 @@ export function SignalNav({ current }: { current: string }) {  return (
       </Link>
       {[
         ["classic", "CRT", "/worlds/signal"],
+        ["arcade", "Arcade", "/worlds/signal/arcade"],
+        ["ink", "Ink", "/worlds/signal/ink"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="signal"

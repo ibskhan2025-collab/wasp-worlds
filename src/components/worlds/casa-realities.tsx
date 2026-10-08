@@ -21,6 +21,10 @@ export function CasaNav({ current }: { current: string }) {
       {[
         ["classic", "Classic", "/worlds/casa"],
         ["spatial", "Spatial", "/worlds/casa/spatial"],
+        ["oceanic", "Oceanic", "/worlds/casa/oceanic"],
+        ["3d", "3D", "/worlds/casa/3d"],
+        ["brutalist", "Brutalist", "/worlds/casa/brutalist"],
+        ["japanese", "Japanese", "/worlds/casa/japanese"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="casa"

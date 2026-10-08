@@ -211,6 +211,9 @@ export function NoirNav({ current }: { current: string }) {
       </Link>
       <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }} role="group" aria-label="Realities">
         <NoirNavLink id="classic" label="Collection" href="/worlds/noir/collection" current={current} />
+        <NoirNavLink id="editorial" label="Editorial" href="/worlds/noir/editorial" current={current} />
+        <NoirNavLink id="archive" label="Archive" href="/worlds/noir/archive" current={current} />
+        <NoirNavLink id="showroom" label="3D Showroom" href="/worlds/noir/showroom" current={current} />
       </div>
       <Link href="/worlds/noir/bag" style={{ marginLeft: "auto", border: "1px solid rgba(255,255,255,0.4)", padding: "6px 12px", fontSize: 12 }} aria-label={`Open bag, ${cart.count} items`}>
         Bag ({cart.count})

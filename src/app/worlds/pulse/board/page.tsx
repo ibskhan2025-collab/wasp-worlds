@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { WorldExit } from "@/components/wasp/world-exit";
+import { PulseNav } from "@/components/worlds/pulse-realities";
 import Pulse from "@/rb15w/Pulse";
 
 export const metadata: Metadata = {
@@ -7,5 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default function PulseDeparturesPage() {
-  return <Pulse reality="board" />;
+  return (
+    <>
+      <WorldExit id="pulse" label="Room 12 · PULSE/BOARD" />
+      <PulseNav current="board" />
+      <Pulse reality="board" />
+    </>
+  );
 }

@@ -1,9 +1,43 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { createElement } from "react";
+import { createElement, type ComponentType } from "react";
 import { getReality } from "@/lib/realities";
 import { WORLDS } from "@/lib/worlds";
 import { getRenderer } from "@/components/worlds/registry";
+import { WorldExit } from "@/components/wasp/world-exit";
+import { CasaNav } from "@/components/worlds/casa-realities";
+import { NoirNav } from "@/components/worlds/noir-showroom";
+import { OrbitNav } from "@/components/worlds/orbit-realities";
+import { StillNav } from "@/components/worlds/still-hall";
+import { SignalNav } from "@/components/worlds/signal-realities";
+import { ObjectsNav } from "@/components/worlds/objects-workshop";
+import { ArchiveNav } from "@/components/worlds/archive-realities";
+import { MotionNav } from "@/components/worlds/motion-realities";
+import { VoidNav } from "@/components/worlds/void-shader";
+import { AtlasNav } from "@/components/worlds/atlas-realities";
+import { ForgeNav } from "@/components/worlds/forge-realities";
+import { PulseNav } from "@/components/worlds/pulse-realities";
+import { CivicNav } from "@/components/worlds/civic-realities";
+import { NestNav } from "@/components/worlds/nest-realities";
+import { VectorNav } from "@/components/worlds/vector-realities";
+
+const NAVS: Record<string, ComponentType<{ current: string }>> = {
+  casa: CasaNav,
+  noir: NoirNav,
+  orbit: OrbitNav,
+  still: StillNav,
+  signal: SignalNav,
+  objects: ObjectsNav,
+  archive: ArchiveNav,
+  motion: MotionNav,
+  void: VoidNav,
+  atlas: AtlasNav,
+  forge: ForgeNav,
+  pulse: PulseNav,
+  civic: CivicNav,
+  nest: NestNav,
+  vector: VectorNav,
+};
 
 /**
  * Generic reality router: /worlds/noir/brutalist etc.
@@ -27,5 +61,16 @@ export default async function RealityPage({ params }: { params: Promise<{ id: st
   const meta = WORLDS.find((w) => w.id === world);
   const Renderer = meta ? getRenderer(world, reality) : null;
   if (!meta || !getReality(world as never, reality) || !Renderer) return notFound();
-  return createElement(Renderer);
+  const Nav = NAVS[world];
+  return (
+    <>
+      {Nav ? (
+        <>
+          <WorldExit id={world as never} label={`Room ${meta.room} · ${meta.name}/${reality.toUpperCase()}`} />
+          <Nav current={reality} />
+        </>
+      ) : null}
+      {createElement(Renderer)}
+    </>
+  );
 }

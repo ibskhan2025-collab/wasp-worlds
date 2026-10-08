@@ -360,6 +360,8 @@ export function OrbitNav({ current }: { current: string }) {  return (
       </Link>
       {[
         ["classic", "Product", "/worlds/orbit"],
+        ["console", "Console", "/worlds/orbit/console"],
+        ["paper", "Paper", "/worlds/orbit/paper"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="orbit"

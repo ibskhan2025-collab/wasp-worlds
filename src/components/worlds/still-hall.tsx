@@ -145,6 +145,9 @@ export function StillNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Paper", "/worlds/still"],
+        ["gallery", "Gallery", "/worlds/still/gallery"],
+        ["contact", "Contact sheet", "/worlds/still/contact"],
+        ["hall", "Virtual hall", "/worlds/still/hall"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="still"

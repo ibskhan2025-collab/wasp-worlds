@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { WorldExit } from "@/components/wasp/world-exit";
+import { ForgeNav } from "@/components/worlds/forge-realities";
 import Forge from "@/rb15w/Forge";
 
 export const metadata: Metadata = {
@@ -7,5 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default function ForgeBlueprintPage() {
-  return <Forge reality="blueprint" />;
+  return (
+    <>
+      <WorldExit id="forge" label="Room 11 · FORGE/BLUEPRINT" />
+      <ForgeNav current="blueprint" />
+      <Forge reality="blueprint" />
+    </>
+  );
 }

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { WorldExit } from "@/components/wasp/world-exit";
+import { CivicNav } from "@/components/worlds/civic-realities";
 import Civic from "@/rb15w/Civic";
 
 export const metadata: Metadata = {
@@ -7,5 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default function CivicStandardPage() {
-  return <Civic reality="standard" />;
+  return (
+    <>
+      <WorldExit id="civic" label="Room 13 · CIVIC/STANDARD" />
+      <CivicNav current="standard" />
+      <Civic reality="standard" />
+    </>
+  );
 }

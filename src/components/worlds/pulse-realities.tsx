@@ -459,6 +459,9 @@ export function PulseNav({ current }: { current: string }) {
       </Link>
       {[
         ["classic", "Signal", "/worlds/pulse"],
+        ["label", "Label", "/worlds/pulse/label"],
+        ["board", "Departures", "/worlds/pulse/board"],
+        ["sound", "Sound", "/worlds/pulse/sound"],
       ].map(([id, label, href]) => (
         <WorldNavLink
           world="pulse"

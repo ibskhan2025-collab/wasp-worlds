@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { WorldExit } from "@/components/wasp/world-exit";
+import { ForgeNav } from "@/components/worlds/forge-realities";
 import Forge from "@/rb15w/Forge";
 
 export const metadata: Metadata = {
@@ -7,5 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default function ForgeDatasheetPage() {
-  return <Forge reality="catalogue" />;
+  return (
+    <>
+      <WorldExit id="forge" label="Room 11 · FORGE/CATALOGUE" />
+      <ForgeNav current="catalogue" />
+      <Forge reality="catalogue" />
+    </>
+  );
 }
