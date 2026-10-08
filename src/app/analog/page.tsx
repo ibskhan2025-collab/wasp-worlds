@@ -7,7 +7,6 @@ export const metadata: Metadata = {
 };
 
 const PRINT = [
-  { href: "/worlds/casa/analog", name: "CASA/ANALOG", note: "Letterpress menu card" },
   { href: "/worlds/noir/analog", name: "NOIR/ANALOG", note: "Photocopied lookbook" },
   { href: "/worlds/objects/catalogue", name: "OBJECTS/CATALOGUE", note: "1974 mail-order print" },
   { href: "/worlds/archive/typer", name: "ARCHIVE/TYPER", note: "Monospace manuscript" },
@@ -25,7 +24,7 @@ export default function AnalogPage() {
         <p style={{ fontSize: 11, letterSpacing: "0.3em" }}>CROSS-WORLD REALITY · INK ON PIXELS</p>
         <h1 style={{ fontSize: "clamp(3rem, 10vw, 6.5rem)", fontWeight: 400, margin: "8px 0" }}>Analog.</h1>
         <p style={{ fontStyle: "italic", fontSize: "1.15rem", maxWidth: "48ch" }}>
-          Nine rooms as physical artifacts: menus, zines, datasheets, forms.
+          Eight rooms as physical artifacts: menus, zines, datasheets, forms.
           Dashes, stamps, carbon copies — interfaces that smell faintly of paper.
         </p>
         <div style={{ marginTop: 32, border: "2px solid #2a2018", padding: "8px 20px 20px" }}>

@@ -134,6 +134,8 @@ export function Experience() {
     );
   }
 
+  if (wasp.feel === "techno") return <ZipTechnoLanding />;
+
   return (
     <div className="exhibition">
       <header className="ex-hero">
@@ -225,7 +227,6 @@ export function Experience() {
       <div className="rooms">
         {WORLDS.map((world, i) => {
           const rec = recIds.includes(world.id);
-  if (wasp.feel === "techno") return <ZipTechnoLanding />;
 
   return (
             <Link

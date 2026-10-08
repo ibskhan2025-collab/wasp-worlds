@@ -19,14 +19,11 @@ function loading(label: string) {
 const R: Record<string, Record<string, ComponentType>> = {
   casa: {
     oceanic: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaOceanic), { loading: loading("OCEANIC") }),
-    analog: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaAnalog), { loading: loading("ANALOG") }),
-    zen: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaZen), { loading: loading("ZEN") }),
     counter: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaCounter), { loading: loading("COUNTER") }),
     cellar: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaCellar), { loading: loading("CELLAR") }),
     brutalist: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaBrutalist), { loading: loading("BRUTALIST") }),
     japanese: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaJapanese), { loading: loading("JAPANESE") }),
     spatial: dynamic(() => import("@/components/worlds/casa-spatial").then((m) => m.CasaSpatial), { loading: loading("SPATIAL") }),
-    candlelight: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaCandlelight), { loading: loading("CANDLELIGHT") }),
     garden: dynamic(() => import("@/components/worlds/casa-realities").then((m) => m.CasaGarden), { loading: loading("GARDEN") }),
   },
   noir: {

@@ -6,6 +6,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import type { Group, Mesh } from "three";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { CasaNav } from "@/components/worlds/casa-realities";
+import { CasaSubNav } from "@/components/worlds/casa-views";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { Orbit } from "@/lib/three";
 
@@ -151,6 +152,7 @@ export function CasaSpatial() {
     <div style={{ background: "#171310", color: "#e8e0d2", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
       <WorldExit id="casa" label="Room 01 · CASA/SPATIAL" />
       <CasaNav current="spatial" />
+      <CasaSubNav reality="spatial" current="house" />
       <div style={{ maxWidth: 980, margin: "0 auto", padding: "28px 20px 80px" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#c9803f" }}>THE DINING ROOM, IN REAL GEOMETRY</p>
         <h1 style={{ fontSize: "clamp(2.4rem, 7vw, 4.6rem)", margin: "8px 0" }}>Pick your table.</h1>

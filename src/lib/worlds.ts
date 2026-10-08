@@ -66,7 +66,7 @@ export const WORLD_ABOUT: Record<string, WorldAbout> = {
     stack: ["Next.js App Router", "Drizzle + Postgres reservations", "validated server actions", "local bookings mirror"],
     interactions: ["Menu search, filters, sort and favorites over one derived list", "Gallery with keyboard lightbox and closing CTA", "Reservation flow validated twice — client for speed, server for truth"],
     challenges: ["Filtering a 12-dish menu without turning it into a spreadsheet", "Keeping candlelit photography legible at 320px", "A booking flow that feels like the evening, not a form"],
-    machine: "One dishes table feeding five realities, the gallery and a Postgres bookings ledger.",
+    machine: "One dishes table feeding seven realities, the gallery and a Postgres bookings ledger.",
     failed: "A candlelight reality that was only dim CSS. Cut for being a theme, not a reality.",
   },
   noir: {

@@ -2,7 +2,7 @@
 
 import Link, { type LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, type AnchorHTMLAttributes, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type AnchorHTMLAttributes, type MouseEvent } from "react";
 import type { WorldId } from "@/lib/types";
 
 /**
@@ -42,23 +42,26 @@ type WipeEvent = CustomEvent<{ world: WorldId; href: string; label: string }>;
 export function WorldWipeHost() {
   const router = useRouter();
   const [active, setActive] = useState<{ world: WorldId; label: string } | null>(null);
+  const busy = useRef(false);
   useEffect(() => {
-    let timer = 0;
     const onWipe = (e: Event) => {
+      if (busy.current) return;
+      busy.current = true;
       const { world, href, label } = (e as WipeEvent).detail;
-      if (active) return;
       setActive({ world, label });
-      timer = window.setTimeout(() => {
+      window.setTimeout(() => {
         router.push(href);
-        window.setTimeout(() => setActive(null), 120);
+        window.setTimeout(() => {
+          setActive(null);
+          busy.current = false;
+        }, 120);
       }, WORLD_WIPE_MS[world] ?? 560);
     };
     window.addEventListener("wasp:wipe", onWipe);
     return () => {
       window.removeEventListener("wasp:wipe", onWipe);
-      window.clearTimeout(timer);
     };
-  }, [router, active]);
+  }, [router]);
   if (!active) return null;
   return <WipeOverlay world={active.world} label={active.label} />;
 }

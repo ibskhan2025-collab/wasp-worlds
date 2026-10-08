@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { WorldNavLink } from "@/components/wasp/world-wipe";
 import { RealityShell } from "@/components/worlds/reality-shell";
 import { WorldProof } from "@/components/worlds/world-proof";
 import { casa, casaGallery, dishes } from "@/data/casa";
 import { media } from "@/lib/media";
+import { CasaSubNav, type CasaViewId } from "@/components/worlds/casa-views";
 import { money } from "@/lib/use-cart";
 
 export function CasaNav({ current }: { current: string }) {
@@ -19,14 +20,11 @@ export function CasaNav({ current }: { current: string }) {
       {[
         ["classic", "Classic", "/worlds/casa"],
         ["oceanic", "Oceanic", "/worlds/casa/oceanic"],
-        ["analog", "Analog", "/worlds/casa/analog"],
-        ["zen", "Zen", "/worlds/casa/zen"],
         ["counter", "Counter", "/worlds/casa/counter"],
         ["cellar", "Cellar", "/worlds/casa/cellar"],
         ["brutalist", "Brutalist", "/worlds/casa/brutalist"],
         ["japanese", "Japanese", "/worlds/casa/japanese"],
         ["spatial", "Spatial", "/worlds/casa/spatial"],
-        ["candlelight", "Candlelight", "/worlds/casa/candlelight"],
         ["garden", "Garden", "/worlds/casa/garden"],
       ].map(([id, label, href]) => (
         <WorldNavLink
@@ -54,18 +52,37 @@ export function CasaNav({ current }: { current: string }) {
 
 const KANJI = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二", "十三", "十四"];
 
-const shell = (id: "oceanic" | "analog" | "counter" | "cellar" | "brutalist" | "japanese" | "candlelight" | "garden") => (
+const shell = (id: "oceanic" | "counter" | "cellar" | "brutalist" | "japanese" | "garden") => (
   <>
     <WorldExit id="casa" label={`Room 01 · CASA/${id.toUpperCase()}`} />
     <CasaNav current={id} />
+    <CasaSubNav reality={id as CasaViewId} current="house" />
   </>
 );
 
 export function CasaOceanic() {
   const tide = dishes.filter((d) => d.category === "Sea");
   const rest = dishes.filter((d) => d.category !== "Sea");
+  const wrap = useRef<HTMLDivElement | null>(null);
+  const [depth, setDepth] = useState(0);
+  useEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const f = () => {
+      const el = wrap.current;
+      if (!el) return;
+      const max = el.scrollHeight - window.innerHeight;
+      const p = max > 0 ? Math.max(0, Math.min(1, window.scrollY / max)) : 0;
+      setDepth(reduced ? 0 : p);
+    };
+    f();
+    window.addEventListener("scroll", f, { passive: true });
+    return () => window.removeEventListener("scroll", f);
+  }, []);
+  const mix = (a: number[], b: number[], t: number) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+  const top = mix([47, 182, 201], [2, 12, 30], Math.min(1, depth * 1.6));
+  const bot = mix([10, 90, 130], [1, 6, 16], Math.min(1, depth * 1.3 + 0.2));
   return (
-    <div style={{ background: "#06222b", color: "#e8f4f0", minHeight: "100dvh", fontFamily: "var(--font-serif)" }}>
+    <div ref={wrap} style={{ background: `linear-gradient(rgb(${top}), rgb(${bot}))`, color: "#e8f4f0", minHeight: "100dvh", fontFamily: "var(--font-serif)" }}>
       {shell("oceanic")}
       <header style={{ padding: "40px 20px 8px", textAlign: "center" }}>
         <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#6fa3a5" }}>THE DINING ROOM FLOODS · ROOM 01B</p>
@@ -112,35 +129,6 @@ export function CasaOceanic() {
         relatedHref="/worlds/objects"
         relatedName="OBJECTS"
       />
-    </div>
-  );
-}
-
-export function CasaAnalog() {
-  return (
-    <div style={{ background: "#e5d5b8", color: "#2a2018", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
-      {shell("analog")}
-      <div style={{ maxWidth: 620, margin: "0 auto", padding: "48px 20px 80px" }}>
-        <div style={{ border: "3px double #2a2018", padding: "40px 32px", textAlign: "center" }}>
-          <p style={{ fontSize: 11, letterSpacing: "0.35em" }}>EST. VALLEY · No. 036</p>
-          <h1 style={{ fontSize: "clamp(3rem, 10vw, 5.5rem)", margin: "12px 0", fontWeight: 400 }}>Casa Valle</h1>
-          <p style={{ fontStyle: "italic" }}>Set menu, printed daily. What&apos;s crossed out is gone.</p>
-          <div style={{ marginTop: 28, textAlign: "left" }}>
-            {dishes.slice(0, 8).map((d, i) => (
-              <div key={d.id} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "10px 0", borderBottom: "1px dashed #2a201855", textDecoration: i === 3 ? "line-through" : "none", opacity: i === 3 ? 0.55 : 1 }}>
-                <span>{d.name} <em style={{ fontSize: "0.85rem" }}>· {d.category}</em></span>
-                <span>{money(d.price)}</span>
-              </div>
-            ))}
-          </div>
-          <p style={{ marginTop: 20, fontSize: "0.85rem" }}>Full menu lives <Link href="/worlds/casa/menu" style={{ textDecoration: "underline" }}>in the dining room</Link>.</p>
-          <div style={{ marginTop: 12, display: "inline-block", border: "2px solid #8a3b1f", color: "#8a3b1f", padding: "8px 18px", transform: "rotate(-4deg)", fontWeight: 700, letterSpacing: "0.2em", fontSize: 12 }}>STAMPED · FIRE-APPROVED</div>
-          <div style={{ marginTop: 28 }}>
-            <Link href="/worlds/casa/reservations" style={{ background: "#2a2018", color: "#e5d5b8", padding: "12px 24px", letterSpacing: "0.15em", fontSize: 12 }}>BOOK BY POSTCARD →</Link>
-          </div>
-        </div>
-        <p style={{ textAlign: "center", marginTop: 24, fontSize: "0.85rem", fontStyle: "italic" }}>Printed daily at noon. This copy is already out of date.</p>
-      </div>
     </div>
   );
 }
@@ -232,34 +220,6 @@ export function CasaCellar() {
   );
 }
 
-export function CasaZen() {
-  return (
-    <div style={{ background: "#f2efe6", color: "#2a2723", minHeight: "100dvh", fontFamily: "Georgia, serif" }}>
-      <WorldExit id="casa" label="Room 01 · CASA/ZEN" />
-      <CasaNav current="zen" />
-      <div style={{ maxWidth: 560, margin: "0 auto", padding: "64px 20px 80px" }}>
-        <p style={{ fontSize: 11, letterSpacing: "0.35em", textAlign: "center" }}>一期一会 · ONE TIME, ONE MEETING</p>
-        <h1 style={{ fontSize: "clamp(2.6rem, 8vw, 4.6rem)", fontWeight: 400, textAlign: "center", margin: "16px 0 8px" }}>Casa, quietly.</h1>
-        <p style={{ textAlign: "center", fontStyle: "italic", color: "#7a7268" }}>Five courses. No choices. No photos at the table.</p>
-        <div style={{ marginTop: 48 }}>
-          {["First — clear broth, yuzu, chive oil", "Second — leek, ember, brown butter", "Third — quail, honey, grilled citrus", "Fourth — rib, marrow butter, onion", "Sweet — olive oil cake, citrus leaf"].map((c, i) => (
-            <div key={c} style={{ padding: "28px 0", borderTop: "1px solid rgba(42,39,35,0.25)", textAlign: "center" }}>
-              <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#7a7268", margin: 0 }}>0{i + 1}</p>
-              <p style={{ fontSize: "1.4rem", margin: "8px 0 0" }}>{c}</p>
-            </div>
-          ))}
-        </div>
-        <p style={{ textAlign: "center", marginTop: 40 }}>Two seatings nightly: 17:30, 20:30. <Link href="/worlds/casa/reservations" style={{ textDecoration: "underline" }}>Reserve in silence →</Link></p>
-      </div>
-      <WorldProof
-        proves="Restraint as hospitality: five courses, no menu to decode, booking in one gesture."
-        relatedHref="/worlds/still"
-        relatedName="STILL"
-      />
-    </div>
-  );
-}
-
 export function CasaBrutalist() {
   return (
     <div style={{ background: "#f2f0e8", color: "#111", minHeight: "100dvh", fontFamily: "var(--font-code)" }}>
@@ -314,6 +274,24 @@ export function CasaBrutalist() {
         <p>Names, dates, parties. Nothing else. <Link href="/worlds/casa/reservations" style={{ background: "#111", color: "#ffe600", padding: "10px 18px", fontWeight: 800 }}>Book →</Link></p>
         <p style={{ marginTop: 24, fontWeight: 700 }}>{casa.address.toUpperCase()} · CLOSED MONDAYS.</p>
       </section>
+      <section style={{ borderTop: "4px solid #111", padding: "40px 16px 64px" }}>
+        <h2 style={{ fontFamily: "var(--font-bebas)", fontSize: "clamp(2.6rem, 9vw, 6rem)", lineHeight: 0.9, margin: "0 0 8px" }}>WRITE / FIND</h2>
+        <div style={{ display: "grid", gap: 32, gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", marginTop: 16 }}>
+          <div>
+            <p style={{ fontWeight: 800 }}>{casa.address.toUpperCase()}</p>
+            <p>{casa.phone.toUpperCase()}<br />{casa.email.toUpperCase()}</p>
+            <p style={{ marginTop: 12 }}>CLOSED MONDAYS.</p>
+          </div>
+          <div>
+            {casa.hours.map((h) => (
+              <p key={h.day} style={{ display: "flex", justifyContent: "space-between", borderBottom: "2px solid #111", padding: "8px 0", margin: 0, fontWeight: 700 }}>
+                <span>{h.day.toUpperCase()}</span><span>{h.time}</span>
+              </p>
+            ))}
+            <p style={{ marginTop: 16 }}><Link href="/worlds/casa/contact" style={{ textDecoration: "underline", fontWeight: 800 }}>FULL CONTACT →</Link></p>
+          </div>
+        </div>
+      </section>
       <WorldProof
         proves="Luxury removed, appetite intact: the same kitchen as a ledger — numbered, priced, bookable."
         relatedHref="/worlds/noir"
@@ -324,6 +302,8 @@ export function CasaBrutalist() {
 }
 
 export function CasaJapanese() {
+  const [diet, setDiet] = useState<string | null>(null);
+  const listed = diet ? dishes.filter((d) => d.dietary.includes(diet)) : dishes;
   return (
     <div style={{ background: "#f3eee3", color: "#1d1b18", minHeight: "100dvh", fontFamily: "var(--font-plex)", fontWeight: 300 }}>
       {shell("japanese")}
@@ -345,8 +325,21 @@ export function CasaJapanese() {
         <h2 style={{ textAlign: "center", fontFamily: "var(--font-cormorant)", fontWeight: 300, fontSize: "clamp(1.8rem, 4vw, 2.6rem)", letterSpacing: "0.3em", margin: 0 }}>
           MENU · 品書き
         </h2>
+        <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginTop: 20 }} role="group" aria-label="Filter by diet">
+          {[null, "vegetarian", "vegan"].map((f) => (
+            <button
+              key={f ?? "all"}
+              type="button"
+              aria-pressed={diet === f}
+              onClick={() => setDiet(f)}
+              style={{ background: diet === f ? "#1d1b18" : "transparent", color: diet === f ? "#f3eee3" : "#1d1b18", border: "1px solid #1d1b18", padding: "8px 16px", fontSize: 12, letterSpacing: "0.1em" }}
+            >
+              {f ?? "ALL"}
+            </button>
+          ))}
+        </div>
         <ol style={{ listStyle: "none", margin: "32px 0 0", padding: 0, display: "grid", gap: "0 64px", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}>
-          {dishes.map((d, i) => (
+          {listed.map((d, i) => (
             <li key={d.id} style={{ borderTop: "1px solid rgba(29,27,24,0.2)" }}>
               <Link href={`/worlds/casa/menu/${d.id}`} style={{ display: "flex", gap: 16, padding: "20px 0", textAlign: "left", width: "100%" }}>
                 <span style={{ width: 32, flexShrink: 0, paddingTop: 4, fontSize: "0.9rem", color: "#b2332a", fontFamily: "var(--font-cormorant)" }}>
@@ -383,65 +376,6 @@ export function CasaJapanese() {
         proves="Stillness as service: the same kitchen at half tempo — courses, quiet, stamp."
         relatedHref="/worlds/still"
         relatedName="STILL"
-      />
-    </div>
-  );
-}
-
-const COURSES = [
-  { wine: "Fino, chilled hard", tip: "Drink it cold enough to hurt." },
-  { wine: "Skin-contact white", tip: "Texture before fruit." },
-  { wine: "Light red, slight chill", tip: "The fire course wants acid." },
-  { wine: "Amontillado", tip: "Savoury loves savoury." },
-  { wine: "Cold amaro over ice", tip: "Bitter to close." },
-];
-
-export function CasaCandlelight() {
-  const mains = dishes.filter((d) => d.category === "Fire" || d.category === "Sea");
-  const wines = dishes.filter((d) => d.category === "Wine");
-  const [course, setCourse] = useState(0);
-  const dish = mains[course % Math.max(mains.length, 1)];
-  const pour = wines[course % Math.max(wines.length, 1)];
-  const glow = 0.35 + (course / Math.max(mains.length - 1, 1)) * 0.65;
-  return (
-    <div style={{ background: "#0d0805", color: "#f3e2c2", minHeight: "100dvh", fontFamily: "var(--font-serif)" }}>
-      {shell("candlelight")}
-      <div aria-hidden className="casa-flame" style={{ opacity: glow }} />
-      <header style={{ position: "relative", textAlign: "center", padding: "56px 20px 8px" }}>
-        <p style={{ fontSize: 11, letterSpacing: "0.35em", color: "#a08050", margin: 0 }}>ONE FLAME · SEVEN SEATS · NO MENU UNTIL YOU SIT</p>
-        <h1 style={{ fontSize: "clamp(3rem, 11vw, 8rem)", lineHeight: 0.95, margin: "12px 0", fontWeight: 500 }}>Candle&shy;light</h1>
-        <p style={{ maxWidth: "48ch", margin: "0 auto", color: "#c9a86d", fontStyle: "italic" }}>The dining room after the lights go out. Courses arrive when the flame says so — you set the pace below.</p>
-      </header>
-      <section style={{ position: "relative", maxWidth: 720, margin: "0 auto", padding: "24px 20px 80px" }}>
-        <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#e8a33d" }}>COURSE {course + 1} OF {mains.length}</p>
-        {dish ? (
-          <div key={dish.id} style={{ border: "1px solid rgba(232,163,61,0.4)", padding: 28, marginTop: 12, background: "rgba(20,12,6,0.85)" }}>
-            <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "#a08050", margin: "0 0 8px" }}>{dish.category.toUpperCase()} · {money(dish.price)}</p>
-            <h2 style={{ fontSize: "clamp(1.8rem, 5vw, 3rem)", margin: "0 0 8px", fontWeight: 500 }}>{dish.name}</h2>
-            <p style={{ color: "#c9a86d" }}>{dish.desc}</p>
-            <p style={{ fontStyle: "italic", color: "#e8a33d" }}>{dish.note}</p>
-            {pour ? <p style={{ fontSize: "0.9rem", color: "#a08050" }}>Poured alongside: <strong style={{ color: "#f3e2c2" }}>{pour.name}</strong> — {COURSES[course % COURSES.length].wine}. {COURSES[course % COURSES.length].tip}</p> : null}
-          </div>
-        ) : null}
-        <div style={{ display: "flex", gap: 10, marginTop: 20, flexWrap: "wrap" }}>
-          <button type="button" onClick={() => setCourse((c) => (c + 1) % Math.max(mains.length, 1))} style={{ background: "#e8a33d", color: "#0d0805", border: "none", padding: "12px 24px", fontWeight: 700, fontSize: 12, letterSpacing: "0.15em" }}>
-            NEXT COURSE →
-          </button>
-          <button type="button" onClick={() => setCourse(0)} style={{ background: "transparent", color: "#e8a33d", border: "1px solid rgba(232,163,61,0.5)", padding: "12px 24px", fontSize: 12, letterSpacing: "0.15em" }}>
-            START OVER
-          </button>
-        </div>
-        <div style={{ display: "flex", gap: 6, marginTop: 20 }} aria-hidden>
-          {mains.map((d, i) => (
-            <span key={d.id} style={{ flex: 1, height: 3, background: i <= course ? "#e8a33d" : "rgba(232,163,61,0.2)" }} />
-          ))}
-        </div>
-        <p style={{ marginTop: 28 }}><Link href="/worlds/casa/reservations" style={{ background: "#e8a33d", color: "#0d0805", padding: "12px 20px", fontWeight: 700, fontSize: 12, letterSpacing: "0.15em" }}>BOOK THE DARK TABLE →</Link></p>
-      </section>
-      <WorldProof
-        proves="Scarcity as service: one seating, one flame, the same kitchen — paced by the guest, booked like everything else."
-        relatedHref="/worlds/casa/cellar"
-        relatedName="CELLAR"
       />
     </div>
   );
