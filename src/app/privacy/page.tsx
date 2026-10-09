@@ -24,6 +24,10 @@ const SECTIONS: [string, string][] = [
     "The worlds on this site are fictional. Submissions made inside them (a CASA booking, an ORBIT customer, a CIVIC report) are stored for demonstration and are never sent to a real business. Please don't enter sensitive personal information in demos.",
   ],
   [
+    "Photographs",
+    "Some worlds load photographs directly from the Pexels image CDN (images.pexels.com), so your browser requests those files from Pexels when you open those pages. That's the only third party involved anywhere on this site: no advertising, no tracking pixels, no cookies from us or them for this.",
+  ],
+  [
     "Simulated checkouts",
     "Card numbers in the checkout simulations are validated in your browser and are never sent to our servers or stored anywhere. We never see payment details at all.",
   ],

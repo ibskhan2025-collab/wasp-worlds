@@ -32,7 +32,13 @@ object_orders, events. Verify: `GET /api/health` → `{"ok":true,"db":true}`.
 Push to GitHub → Import project → add the 3 env vars → Deploy.
 `npm run build` is the build command. No adapter needed.
 
-## 5. Custom domain
+## 5. Retention (privacy policy: "How long it stays")
+
+Rows older than 24 months are deleted by `GET /api/maintenance?key=ADMIN_KEY`.
+Call it monthly from any HTTPS scheduler (Vercel Cron, GitHub Actions
+schedule, or a calendar reminder + curl). It returns per-table delete counts.
+
+## 6. Custom domain
 
 Vercel → Settings → Domains → add domain → set `SITE_URL` to it →
 redeploy (bakes OG/sitemap URLs). Update `metadataBase` automatically

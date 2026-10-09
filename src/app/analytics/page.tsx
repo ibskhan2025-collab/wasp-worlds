@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default async function AnalyticsPage({ searchParams }: { searchParams: Promise<{ key?: string }> }) {
   const { key } = await searchParams;
   const admin = process.env.ADMIN_KEY;
-  if (admin && key !== admin) return notFound();
+  if (!admin || key !== admin) return notFound();
   if (!db) return <p style={{ padding: 24 }}>Database not configured.</p>;
 
   const total = await db.select({ n: sql<number>`count(*)` }).from(events);
