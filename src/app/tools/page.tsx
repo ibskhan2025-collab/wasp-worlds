@@ -25,14 +25,37 @@ const OUTPUT: Record<string, string> = {
   constellation: "Evidence links",
 };
 
+const FEATURED = ["observatory", "system", "constellation"];
+
 export default function ToolsPage() {
+  const featured = TOOLS.filter((t) => FEATURED.includes(t.slug));
+  const rest = TOOLS.filter((t) => !FEATURED.includes(t.slug));
   return (
     <div className="tool-page">
       <p className="kicker">Tools</p>
       <h1 className="display">Useful before you hire anyone. Including us.</h1>
       <p className="lede">These are working instruments. Where a live crawl isn&apos;t possible, the tool says so. Where a result can travel to the builder, it offers to.</p>
-      <div className="grid-2" style={{ marginTop: 32 }}>
-        {TOOLS.map((t, i) => (
+      <div style={{ marginTop: 32, display: "grid", gap: 2 }}>
+        {featured.map((t) => (
+          <Link key={t.slug} href={`/tools/${t.slug}`} className="panel" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, padding: "28px 24px" }}>
+            <div>
+              <div className="kicker">Featured</div>
+              <h2 style={{ fontFamily: "var(--font-display)", fontSize: "2.4rem", margin: "8px 0" }}>{t.name}</h2>
+              <p>{t.blurb}</p>
+            </div>
+            <div style={{ textAlign: "right", flexShrink: 0 }}>
+              <div className="kicker">Output</div>
+              <div className="kicker">{OUTPUT[t.slug] ?? "Result"}</div>
+              <div aria-hidden="true" style={{ fontSize: "2rem", marginTop: 8 }}>→</div>
+            </div>
+          </Link>
+        ))}
+      </div>
+      <p style={{ marginTop: 32 }}>
+        <a href="#more-tools" className="kicker">Find other tools ↓</a>
+      </p>
+      <div id="more-tools" className="grid-2" style={{ marginTop: 16 }}>
+        {rest.map((t, i) => (
           <Link key={t.slug} href={`/tools/${t.slug}`} className="panel" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 12 }}>
             <div>
               <div className="kicker">0{i + 1}</div>
