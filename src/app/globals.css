@@ -1506,6 +1506,9 @@ input, textarea, select { max-width: 100%; }
 }
 .zip-evo .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
 .zip-evo .display { font-family: var(--display); font-weight: 400; letter-spacing: -0.02em; line-height: 0.92; }
+.zip-evo .link-u { text-decoration: underline; text-underline-offset: 3px; }
+.zip-evo .link-u:hover { text-decoration-thickness: 2px; }
+.zip-evo .btn-ghost { background: transparent; }
 .zip-rb3 {
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, monospace;

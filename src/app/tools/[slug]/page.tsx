@@ -5,6 +5,7 @@ import { use, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useWasp } from "@/context/wasp-context";
 import { TOOLS, contrastRatio, conversionItems, estimateScope, fitScore } from "@/lib/tools";
+import { Constellation, Funnel, Observatory, SystemLab, Workbench } from "@/rb54t/Tools54";
 
 export default function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -26,6 +27,11 @@ export default function ToolPage({ params }: { params: Promise<{ slug: string }>
       {slug === "ideas" ? <Ideas /> : null}
       {slug === "redesign" ? <Redesign /> : null}
       {slug === "conversion" ? <Conversion /> : null}
+      {slug === "observatory" ? <div className="zip-evo" style={{ background: "#efece4", color: "#141412", padding: 24, borderRadius: 8 }}><Observatory /></div> : null}
+      {slug === "funnel" ? <div className="zip-evo" style={{ background: "#efece4", color: "#141412", padding: 24, borderRadius: 8 }}><Funnel /></div> : null}
+      {slug === "system" ? <div className="zip-evo" style={{ background: "#efece4", color: "#141412", padding: 24, borderRadius: 8 }}><SystemLab /></div> : null}
+      {slug === "workbench" ? <div className="zip-evo" style={{ background: "#efece4", color: "#141412", padding: 24, borderRadius: 8 }}><Workbench /></div> : null}
+      {slug === "constellation" ? <div className="zip-evo" style={{ background: "#efece4", color: "#141412", padding: 24, borderRadius: 8 }}><Constellation /></div> : null}
       <hr className="rule" />
       <ToolCta tool={tool.name} />
     </div>

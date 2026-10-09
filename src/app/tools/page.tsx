@@ -18,6 +18,11 @@ const OUTPUT: Record<string, string> = {
   ideas: "Directions",
   redesign: "Strategy",
   conversion: "Checklist score",
+  observatory: "Charts + log",
+  funnel: "Revenue maths",
+  system: "tokens.json",
+  workbench: "Concept",
+  constellation: "Evidence links",
 };
 
 export default function ToolsPage() {

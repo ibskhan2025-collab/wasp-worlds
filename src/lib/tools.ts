@@ -101,6 +101,11 @@ export const TOOLS = [
   { slug: "ideas", name: "Website idea generator", blurb: "Directions, not templates." },
   { slug: "redesign", name: "Redesign generator", blurb: "Strategy for a site that already exists." },
   { slug: "conversion", name: "Conversion checklist", blurb: "The unglamorous list that makes money." },
+  { slug: "observatory", name: "Data observatory", blurb: "Clean it, chart it, compare it, and admit what it can't tell you." },
+  { slug: "funnel", name: "Funnel lab", blurb: "Marketing maths you can drag. Revenue is multiplication." },
+  { slug: "system", name: "Design system lab", blurb: "Tokens in, interface out. Change a number, watch components follow." },
+  { slug: "workbench", name: "Concept workbench", blurb: "World, style, tech, interaction, motion, data. A concept generator." },
+  { slug: "constellation", name: "Technology constellation", blurb: "Click a technology. See where it's actually used." },
 ];
 
 export const conversionItems = [
