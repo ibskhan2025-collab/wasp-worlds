@@ -7,15 +7,12 @@ import "@fontsource/ibm-plex-mono/600.css";
 import "@fontsource/cormorant-garamond/300.css";
 import "@fontsource/cormorant-garamond/400.css";
 import "@fontsource/cormorant-garamond/400-italic.css";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
 import { Dialog, Field, isEmail, post } from "@/rb15l/ui";
 import { useReducedMotion } from "@/rb15l/hooks";
 import { COURSES, DIETS, DISHES, GALLERY, DishArt, type Dish } from "./casa/data";
 import Reserve, { type Skin } from "./casa/Reserve";
-
-const Casa3D = dynamic(() => import("./casa/Casa3D"), { ssr: false, loading: () => <p className="p-10 font-mono text-xs">Loading the dining room…</p> });
 
 /* ---------- shared engine ---------- */
 function useMenu() {
@@ -381,7 +378,6 @@ export default function Casa({ reality }: { reality: string }) {
       {reality === "oceanic" && <Oceanic {...p} />}
       {reality === "brutalist" && <Brutalist {...p} />}
       {reality === "japanese" && <Japanese {...p} />}
-      {reality === "3d" && <Casa3D />}
       <DishModal dish={dish} onClose={() => setDish(null)} onReserve={() => setTimeout(() => reserveRef.current(), 50)} cls={modalCls} art={reality === "classic"} />
       <Lightbox i={lb} setI={setLb} cls={modalCls} art={reality === "classic"} />
     </>

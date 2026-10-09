@@ -17,6 +17,12 @@ const OPERABLE: [string, string][] = [
   ["Compare two parts", "/worlds/forge/compare"],
   ["Board a route", "/worlds/atlas/timetable"],
   ["Read the letter", "/worlds/vector/letter"],
+  ["Plot a route", "/worlds/atlas/map"],
+  ["Read the broadsheet", "/worlds/archive/broadsheet"],
+  ["Inspect a part", "/worlds/forge/inspect"],
+  ["Walk the showroom", "/worlds/noir/showroom"],
+  ["Run the terminal", "/worlds/orbit/terminal"],
+  ["Read in plain text", "/worlds/civic/plain"],
 ];
 
 export default function ProofPage() {

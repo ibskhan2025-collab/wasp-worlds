@@ -24,7 +24,7 @@ export default function CasaMenu() {
         basePath="/worlds/casa/menu"
         options={[
           { id: "classic", label: "Menu", note: "The printed list", href: "/worlds/casa/menu" },
-          { id: "oceanic", label: "Tide", note: "Ordered by depth", href: "/worlds/casa/menu/oceanic" },
+          { id: "oceanic", label: "Tide", note: "Ordered by depth", href: "/worlds/casa/oceanic" },
         ]}
       />
       <p className="kicker" style={{ marginTop: 12 }}>The list</p>
