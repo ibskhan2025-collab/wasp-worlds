@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { UnderHood } from "@/components/worlds/under-hood";
 
 export const metadata: Metadata = {
   title: "STILL — Pictures first",
@@ -7,5 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function StillLayout({ children }: { children: ReactNode }) {
-  return <>{children}</>;
+  return <>{children}
+      <UnderHood world="still" /></>;
 }

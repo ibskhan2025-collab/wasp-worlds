@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { UnderHood } from "@/components/worlds/under-hood";
 
 export const metadata: Metadata = {
   title: "ORBIT — Complex software, made legible",
@@ -7,5 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function OrbitLayout({ children }: { children: ReactNode }) {
-  return <>{children}</>;
+  return <>{children}
+      <UnderHood world="orbit" /></>;
 }

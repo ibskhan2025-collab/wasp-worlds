@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { ObjNav } from "@/components/objects/obj-nav";
+import { UnderHood } from "@/components/worlds/under-hood";
 
 export const metadata: Metadata = {
   title: "OBJECTS — A shop that treats shopping like discovery",
@@ -14,6 +15,7 @@ export default function ObjectsLayout({ children }: { children: ReactNode }) {
       <WorldExit id="objects" label="Room 06 · OBJECTS" />
       <ObjNav />
       {children}
+      <UnderHood world="objects" />
     </div>
   );
 }

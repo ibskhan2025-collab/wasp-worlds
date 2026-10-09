@@ -5,6 +5,7 @@ import { getReality } from "@/lib/realities";
 import { WORLDS } from "@/lib/worlds";
 import { getRenderer } from "@/components/worlds/registry";
 import { WorldExit } from "@/components/wasp/world-exit";
+import { UnderHood } from "@/components/worlds/under-hood";
 import { CasaNav } from "@/components/worlds/casa-realities";
 import { NoirNav } from "@/components/worlds/noir-showroom";
 import { OrbitNav } from "@/components/worlds/orbit-realities";
@@ -71,6 +72,7 @@ export default async function RealityPage({ params }: { params: Promise<{ id: st
         </>
       ) : null}
       {createElement(Renderer)}
+      <UnderHood world={world as never} />
     </>
   );
 }

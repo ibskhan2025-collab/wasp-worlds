@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { CasaNav } from "@/components/casa/casa-nav";
+import { UnderHood } from "@/components/worlds/under-hood";
 
 export const metadata: Metadata = {
   title: "CASA — A restaurant site that makes you hungry",
@@ -14,6 +15,7 @@ export default function CasaLayout({ children }: { children: ReactNode }) {
       <WorldExit id="casa" label="Room 01 · CASA" />
       <CasaNav />
       {children}
+      <UnderHood world="casa" />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { WorldExit } from "@/components/wasp/world-exit";
 import { NoirNav } from "@/components/noir/noir-nav";
+import { UnderHood } from "@/components/worlds/under-hood";
 
 export const metadata: Metadata = {
   title: "NOIR — Fashion as desire, engineered",
@@ -14,6 +15,7 @@ export default function NoirLayout({ children }: { children: ReactNode }) {
       <WorldExit id="noir" label="Room 02 · NOIR" />
       <NoirNav />
       {children}
+      <UnderHood world="noir" />
     </div>
   );
 }
