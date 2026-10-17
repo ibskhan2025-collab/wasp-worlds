@@ -29,7 +29,7 @@ const ALT = (id: string, label: string, note: string, layout: string, tokens: Re
 
 export const REALITIES: Record<WorldId, Reality[]> = {
   casa: [
-    CLASSIC("Classic", "Bone on near-black, serif, slow"),
+    CLASSIC("classic", "Bone on near-black, serif, slow"),
     ALT("spatial", "Spatial", "The dining room in 3D", "spatial",
       { "--bg": "#171310", "--fg": "#e8e0d2", "--muted": "#8a7f6e", "--line": "rgba(232,224,210,0.25)", "--accent": "#c9803f" }),
     ALT("oceanic", "Oceanic", "The room floods. Depth replaces pages; the menu floats.", "rb15",

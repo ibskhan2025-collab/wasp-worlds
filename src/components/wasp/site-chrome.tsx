@@ -12,16 +12,16 @@ import { Nav as ZipNav } from "@/zip/evo/Nav";
 
 const LINKS = [
   { href: "/", label: "Work" },
-  { href: "/lab", label: "Lab" },
   { href: "/studio/services", label: "Services" },
   { href: "/studio", label: "Studio" },
-  { href: "/process", label: "Process" },
-  { href: "/tools", label: "Tools" },
   { href: "/start", label: "Start" },
 ];
 
 // OS lives one click deeper: studio grid, homepage meta-links, footer.
 const MORE_LINKS = [
+  { href: "/lab", label: "Lab" },
+  { href: "/tools", label: "Tools" },
+  { href: "/process", label: "Process" },
   { href: "/os", label: "OS" },
 ];
 
