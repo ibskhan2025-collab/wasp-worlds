@@ -50,22 +50,22 @@ export const services = [
 ];
 
 export const processSteps = [
-  { n: "01", name: "Enquiry", text: "You write. We read. If it's not a fit, we say so.", proof: ["Project builder", "/start"] },
-  { n: "02", name: "Qualification", text: "Budget, timeline, decision-makers. Adults in the room.", proof: ["Client fit score", "/tools/fit"] },
-  { n: "03", name: "Consultation", text: "A real conversation. Not a pitch deck with a pulse.", proof: ["Brief generator", "/tools/brief"] },
-  { n: "04", name: "Strategy", text: "What the thing is for, who it is for, what it must not become.", proof: ["CASA: one job, filling tables", "/worlds/casa"] },
-  { n: "05", name: "Proposal", text: "Scope, sequence, cost. Written so you can argue with it.", proof: ["Scope builder", "/tools/scope"] },
-  { n: "06", name: "Agreement", text: "Paperwork. Boundaries. The boring things that keep work kind.", proof: ["OS documents", "/os"] },
-  { n: "07", name: "Payment", text: "A start fee so the calendar can mean it.", proof: ["OS sales", "/os"] },
-  { n: "08", name: "Onboarding", text: "Access, people, existing assets, the ugly spreadsheet.", proof: ["OS SOPs", "/os"] },
-  { n: "09", name: "Content", text: "Words and pictures. We will not invent your voice for you.", proof: ["ARCHIVE: content as data", "/worlds/archive"] },
-  { n: "10", name: "Design", text: "Direction, then pages, then the awkward middle, then the thing.", proof: ["Five CASA realities", "/worlds/casa"] },
-  { n: "11", name: "Development", text: "It becomes real. Interactions stop being promises.", proof: ["Under the hood", "/realities"] },
-  { n: "12", name: "QA", text: "Broken links, bad focus states, the iPhone in the other hand.", proof: ["Accessibility checker", "/tools/a11y"] },
-  { n: "13", name: "Launch", text: "DNS, analytics, a quiet hour, then the public.", proof: ["Conversion checklist", "/tools/conversion"] },
-  { n: "14", name: "Handoff", text: "You can operate it. Or we stay. Your choice, priced honestly.", proof: ["OS projects", "/os"] },
-  { n: "15", name: "Case study", text: "Only if there's something true to say.", proof: ["Work: fifteen rooms", "/studio/work"] },
-  { n: "16", name: "Continued growth", text: "The site is not finished. Businesses aren't.", proof: ["Lab: where next starts", "/lab"] },
+  { n: "01", name: "Enquiry", weeks: 0.5, text: "You write. We read. If it's not a fit, we say so.", client: ["Write the enquiry"], wasp: ["Read it within a day"], output: "A straight yes or no.", proof: ["Project builder", "/start"] },
+  { n: "02", name: "Qualification", weeks: 1, text: "Budget, timeline, decision-makers. Adults in the room.", client: ["Budget, timeline, who says yes"], wasp: ["Qualify or decline"], output: "Fit or no-fit.", proof: ["Client fit score", "/tools/fit"] },
+  { n: "03", name: "Consultation", weeks: 1, text: "A real conversation. Not a pitch deck with a pulse.", client: ["Show up, answer questions"], wasp: ["Listen, don't pitch"], output: "A shared understanding of the problem.", proof: ["Brief generator", "/tools/brief"] },
+  { n: "04", name: "Strategy", weeks: 1, text: "What the thing is for, who it is for, what it must not become.", client: ["Review and poke holes"], wasp: ["Define the brief"], output: "A one-page strategy.", proof: ["CASA: one job, filling tables", "/worlds/casa"] },
+  { n: "05", name: "Proposal", weeks: 1, text: "Scope, sequence, cost. Written so you can argue with it.", client: ["Argue with it"], wasp: ["Write the proposal"], output: "A written proposal you can sign.", proof: ["Scope builder", "/tools/scope"] },
+  { n: "06", name: "Agreement", weeks: 0.5, text: "Paperwork. Boundaries. The boring things that keep work kind.", client: ["Sign"], wasp: ["Send paperwork"], output: "Signed agreement.", proof: ["OS documents", "/os"] },
+  { n: "07", name: "Payment", weeks: 0, text: "A start fee so the calendar can mean it.", client: ["Pay the start fee"], wasp: ["Reserve the calendar"], output: "Booked dates.", proof: ["OS sales", "/os"] },
+  { n: "08", name: "Onboarding", weeks: 1, text: "Access, people, existing assets, the ugly spreadsheet.", client: ["Access, people, existing assets"], wasp: ["Set up tools, name a single owner"], output: "Working access.", proof: ["OS SOPs", "/os"] },
+  { n: "09", name: "Content", weeks: 2, text: "Words and pictures. We will not invent your voice for you.", client: ["Words and pictures"], wasp: ["Never invent your voice"], output: "Copy and assets in hand.", proof: ["ARCHIVE: content as data", "/worlds/archive"] },
+  { n: "10", name: "Design", weeks: 2, text: "Direction, then pages, then the awkward middle, then the thing.", client: ["Review and poke holes"], wasp: ["Direction, then pages"], output: "Approved designs.", proof: ["Five CASA realities", "/worlds/casa"] },
+  { n: "11", name: "Development", weeks: 2, text: "It becomes real. Interactions stop being promises.", client: ["Stay out of the hot path"], wasp: ["Build it"], output: "Working code.", proof: ["Under the hood", "/realities"] },
+  { n: "12", name: "QA", weeks: 1, text: "Broken links, bad focus states, the iPhone in the other hand.", client: ["Test on your phone"], wasp: ["Broken links, bad focus states"], output: "Bug-free build.", proof: ["Accessibility checker", "/tools/a11y"] },
+  { n: "13", name: "Launch", weeks: 0.5, text: "DNS, analytics, a quiet hour, then the public.", client: ["Be available"], wasp: ["DNS, analytics"], output: "Live site.", proof: ["Conversion checklist", "/tools/conversion"] },
+  { n: "14", name: "Handoff", weeks: 1, text: "You can operate it. Or we stay. Your choice, priced honestly.", client: ["Operate it, or tell us to stay"], wasp: ["Walk through CMS, leave docs"], output: "You can run it.", proof: ["OS projects", "/os"] },
+  { n: "15", name: "Case study", weeks: 1, text: "Only if there's something true to say.", client: ["Give permission"], wasp: ["Write it honestly"], output: "A public case study.", proof: ["Work: fifteen rooms", "/studio/work"] },
+  { n: "16", name: "Continued growth", weeks: 0, text: "The site is not finished. Businesses aren't.", client: ["Run the business"], wasp: ["Care arrangement if you want it"], output: "A site that evolves.", proof: ["Lab: where next starts", "/lab"] },
 ];
 
 export const caseStudies = [
