@@ -38,7 +38,6 @@ html[data-feel="quiet"] { --bg: #101012; --fg: #e8e4dc; --muted: #7a766f; --line
 html[data-feel="luxury"] { --bg: #0d0b08; --fg: #f6efe4; --muted: #b7a48c; --line: rgba(183, 164, 140, 0.28); --accent: #c9a35c; }
 html[data-feel="raw"] { --bg: #000000; --fg: #f5f5f5; --muted: #9a9a9a; --line: rgba(255, 255, 255, 0.3); --accent: #ff4d00; }
 html[data-feel="playful"] { --bg: #141021; --fg: #f4ecff; --muted: #a79bc4; --line: rgba(244, 236, 255, 0.16); --accent: #ffd166; }
-html[data-feel="dark"] { --bg: #050505; --fg: #f4f1ea; --muted: #8a8580; --accent: #f4f1ea; }
 html[data-feel="futuristic"] { --bg: #06090d; --fg: #d8ecff; --muted: #7fa3c0; --line: rgba(180, 220, 255, 0.18); --accent: #3ddc84; --font-display: var(--font-code), ui-monospace, monospace; }
 html[data-feel="techno"] { --bg: #09090a; --fg: #f4f4f5; --muted: rgba(244, 244, 245, 0.55); --line: rgba(255, 255, 255, 0.1); --accent: #ffd23f; --font-display: var(--font-poster), Impact, sans-serif; }
 html[data-feel="paper"] { --bg: #efece4; --fg: #141412; --muted: #57544c; --line: #141412; --accent: #ffd400; --font-display: var(--font-serif), Georgia, serif; }

@@ -11,7 +11,6 @@ export type Feel =
   | "luxury"
   | "raw"
   | "playful"
-  | "dark"
   | "futuristic"
   | "techno"
   | "paper";
@@ -108,7 +107,6 @@ export const FEELS: { id: Feel; label: string }[] = [
   { id: "luxury", label: "LUXURY" },
   { id: "raw", label: "RAW" },
   { id: "playful", label: "PLAYFUL" },
-  { id: "dark", label: "DARK" },
   { id: "futuristic", label: "FUTURISTIC" },
   { id: "techno", label: "TECHNO" },
   { id: "paper", label: "PAPER" },

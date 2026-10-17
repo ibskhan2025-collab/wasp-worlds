@@ -1,6 +1,6 @@
 import { defaultState, type BuilderState, type CartItem, type WaspState } from "./types";
 
-const VALID_FEELS = new Set(["quiet", "luxury", "raw", "playful", "dark", "futuristic"]);
+const VALID_FEELS = new Set(["quiet", "luxury", "raw", "playful", "futuristic", "techno", "paper"]);
 const VALID_MOTIONS = new Set(["subtle", "cinematic", "chaotic", "still"]);
 const VALID_INTENTS = new Set(["business", "brand", "store", "app", "portfolio", "weird"]);
 

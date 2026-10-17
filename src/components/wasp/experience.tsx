@@ -38,29 +38,11 @@ export const ROOM_IMAGE: Record<string, string> = {
 export function Experience() {
   const wasp = useWasp();
   const router = useRouter();
-  const [stage, setStage] = useState(0);
   const [holy, setHoly] = useState(false);
   const [holyStep, setHolyStep] = useState(0);
   const holyTimers = useRef<number[]>([]);
 
-  useEffect(() => {
-    if (!wasp.ready) return;
-    if (wasp.entered) {
-      const id = window.setTimeout(() => setStage(5), 0);
-      return () => window.clearTimeout(id);
-    }
-    // Compressed intro: the full show is under 1.5s so the 5-second
-    // test passes — headline + ENTER are up almost immediately.
-    // STILL motion skips the theater entirely.
-    if (wasp.motion === "still") {
-      const id = window.setTimeout(() => setStage(4), 0);
-      return () => window.clearTimeout(id);
-    }
-    const timers = [120, 450, 800, 1200].map((t, i) =>
-      window.setTimeout(() => setStage(i + 1), wasp.motion === "subtle" ? t / 2 : t),
-    );
-    return () => timers.forEach((id) => window.clearTimeout(id));
-  }, [wasp.ready, wasp.entered, wasp.motion]);
+
 
   const ranked = useMemo(
     () => recommendWorlds(wasp.intent, wasp.interest),
@@ -98,40 +80,6 @@ export function Experience() {
 
   if (!wasp.ready) {
     return <div className="opening" aria-hidden />;
-  }
-
-  if (!wasp.entered) {
-    return (
-      <section className="opening" aria-label="Opening">
-        {stage >= 1 ? <h1>WELCOME TO THE INTERNET.</h1> : null}
-        {stage >= 2 ? <p style={{ marginTop: 18 }}>THIS IS A PORTFOLIO.</p> : null}
-        {stage >= 3 ? (
-          <p style={{ marginTop: 8 }}>
-            PROBABLY
-            <button
-              type="button"
-              onClick={() => wasp.discover("period")}
-              style={{ background: "none", border: 0, padding: 0, font: "inherit" }}
-              aria-label="A small discovery"
-            >
-              .
-            </button>
-          </p>
-        ) : null}
-        {stage >= 4 ? (
-          <>
-            <p className="sub">DON&apos;T LOOK. GO IN.</p>
-            <button className="enter" type="button" onClick={wasp.enter}>
-              ENTER
-            </button>
-          </>
-        ) : (
-          <button className="enter" type="button" onClick={wasp.enter} style={{ opacity: 0.4 }} aria-label="Skip intro">
-            SKIP INTRO
-          </button>
-        )}
-      </section>
-    );
   }
 
   if (wasp.feel === "techno") return <ZipTechnoLanding />;
