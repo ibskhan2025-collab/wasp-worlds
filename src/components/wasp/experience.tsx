@@ -108,6 +108,7 @@ export function Experience() {
                 key={item.id}
                 className={wasp.intent === item.id ? "chip-on" : "chip"}
                 type="button"
+                aria-pressed={wasp.intent === item.id}
                 onClick={() => wasp.setIntent(wasp.intent === item.id ? null : item.id)}
               >
                 {item.label}
@@ -130,6 +131,7 @@ export function Experience() {
                 key={f.id}
                 className={wasp.feel === f.id ? "chip-on" : "chip"}
                 type="button"
+                aria-pressed={wasp.feel === f.id}
                 onClick={() => wasp.setFeel(f.id)}
               >
                 {f.label}
@@ -145,6 +147,7 @@ export function Experience() {
                 key={m.id}
                 className={wasp.motion === m.id ? "chip-on" : "chip"}
                 type="button"
+                aria-pressed={wasp.motion === m.id}
                 onClick={() => wasp.setMotion(m.id)}
               >
                 {m.label}
