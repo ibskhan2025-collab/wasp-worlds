@@ -39,7 +39,7 @@ export default function ProcessPage() {
                 </div>
               </div>
               <p style={{ marginTop: 8 }}><strong>Output:</strong> {s.output}</p>
-              <p style={{ marginTop: 8 }}><Link href={s.proof[1]} style={{ textDecoration: "underline", fontSize: "0.95rem" }}>See it for real: {s.proof[0]} →</Link></p>
+              <p style={{ marginTop: 8 }}><Link href={s.proof[1]} style={{ textDecoration: "underline", fontSize: "0.95rem" }}>Demo: {s.proof[0]} →</Link></p>
             </div>
           </li>
         ))}
