@@ -175,9 +175,10 @@ export function Experience() {
         <p className="ex-kicker" style={{ margin: 0 }}>The exhibition · all 15 rooms</p>
         <Link className="kicker" href="/matrix" style={{ borderBottom: "1px solid currentColor" }}>Matrix view →</Link>
       </div>
-      <div className="rooms">
-        {WORLDS.map((world, i) => {
-          const rec = recIds.includes(world.id);
+      {wasp.feel !== "paper" ? (
+        <div className="rooms">
+          {WORLDS.map((world, i) => {
+            const rec = recIds.includes(world.id);
 
   return (
             <Link
@@ -196,7 +197,8 @@ export function Experience() {
             </Link>
           );
         })}
-      </div>
+        </div>
+      ) : null}
 
       <section className="world-meta-grid">
         <div><span className="kicker">THE WORLDS</span><h2>15 arguments for what the web can be.</h2><p>Industry is the surface. The real category is the feeling, behavior and problem underneath.</p></div>
