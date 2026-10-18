@@ -175,31 +175,6 @@ export function Experience() {
         <p className="ex-kicker" style={{ margin: 0 }}>The exhibition · all 15 rooms</p>
         <Link className="kicker" href="/matrix" style={{ borderBottom: "1px solid currentColor" }}>Matrix view →</Link>
       </div>
-      {wasp.feel !== "paper" ? (
-        <div className="rooms">
-          {WORLDS.map((world, i) => {
-            const rec = recIds.includes(world.id);
-
-  return (
-            <Link
-              key={world.id}
-              href={world.href}
-              className={`room ${ROOM_SPAN[i]} ${rec ? "rec" : ""} ${wasp.visited.includes(world.id) ? "visited" : ""}`}
-              style={{ ["--room-image" as string]: `url(${ROOM_IMAGE[world.id]})` }}
-            >
-              <div>
-                <div className="room-id">ROOM {world.room} · WASP STUDY · {(REALITIES[world.id] ?? []).length} REALITIES{rec ? " · FOR YOU" : ""}</div>
-                <h2>{world.name}</h2>
-                <div className="kind">{world.kind}</div>
-                <div className="room-palette">{world.palette}</div>
-              </div>
-              <p className="line">{world.line}</p>
-            </Link>
-          );
-        })}
-        </div>
-      ) : null}
-
       <section className="world-meta-grid">
         <div><span className="kicker">THE WORLDS</span><h2>15 arguments for what the web can be.</h2><p>Industry is the surface. The real category is the feeling, behavior and problem underneath.</p></div>
         <div><span className="kicker">THE OTHER ROOMS</span><div className="meta-links"><Link href="/lab">LAB — experiments</Link><Link href="/os">MACHINE — systems & AI</Link><Link href="/work">THE ARCHIVE — proof</Link><Link href="/start">START — make something</Link></div></div>
