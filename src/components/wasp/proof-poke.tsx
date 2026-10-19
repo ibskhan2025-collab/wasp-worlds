@@ -12,7 +12,7 @@ const LINKS: Record<(typeof TABS)[number], [string, string]> = {
   Software: ["/worlds/orbit", "Explore the product (ORBIT)"],
   "3D": ["/worlds/nest/3d", "Enter the WebGL room (NEST)"],
   AI: ["/matrix", "Or press ⌘K anywhere"],
-  Data: ["/worlds/vector/terminal", "Read the numbers (VECTOR)"],
+  Data: ["/worlds/vector/surface", "Read the numbers (VECTOR)"],
   Motion: ["/worlds/motion/principles", "Open the motion system"],
 };
 
