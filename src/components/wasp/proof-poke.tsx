@@ -13,7 +13,7 @@ const LINKS: Record<(typeof TABS)[number], [string, string]> = {
   "3D": ["/worlds/nest/3d", "Enter the WebGL room (NEST)"],
   AI: ["/matrix", "Or press ⌘K anywhere"],
   Data: ["/worlds/vector/terminal", "Read the numbers (VECTOR)"],
-  Motion: ["/worlds/motion/timing", "Open the motion system"],
+  Motion: ["/worlds/motion/principles", "Open the motion system"],
 };
 
 function MiniType() {
