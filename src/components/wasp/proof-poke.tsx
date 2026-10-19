@@ -10,7 +10,7 @@ const TABS = ["Design", "Software", "3D", "AI", "Data", "Motion"] as const;
 const LINKS: Record<(typeof TABS)[number], [string, string]> = {
   Design: ["/lab", "Open the type workshop"],
   Software: ["/worlds/orbit", "Explore the product (ORBIT)"],
-  "3D": ["/worlds/nest/volume", "Enter the WebGL room (NEST)"],
+  "3D": ["/worlds/nest/3d", "Enter the WebGL room (NEST)"],
   AI: ["/matrix", "Or press ⌘K anywhere"],
   Data: ["/worlds/vector/chart", "Read the numbers (VECTOR)"],
   Motion: ["/worlds/motion/timing", "Open the motion system"],
