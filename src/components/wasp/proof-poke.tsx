@@ -87,8 +87,9 @@ function MiniCube() {
         style={{ width: 224, height: 224, perspective: 700, touchAction: "none" }}
         onPointerDown={(e) => { d.current = { x: e.clientX, y: e.clientY }; (e.target as Element).setPointerCapture?.(e.pointerId); }}
         onPointerMove={(e) => {
-          if (!d.current) return;
-          setR((p) => ({ x: p.x - (e.clientY - d.current!.y) * 0.5, y: p.y + (e.clientX - d.current!.x) * 0.5 }));
+          const prev = d.current;
+          if (!prev) return;
+          setR((p) => ({ x: p.x - (e.clientY - prev.y) * 0.5, y: p.y + (e.clientX - prev.x) * 0.5 }));
           d.current = { x: e.clientX, y: e.clientY };
         }}
         onPointerUp={() => { d.current = null; }}
