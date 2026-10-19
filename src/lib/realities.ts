@@ -167,8 +167,6 @@ export const REALITIES: Record<WorldId, Reality[]> = {
       { "--bg": "#e9e5dc", "--fg": "#23211d", "--muted": "#23211d", "--line": "rgba(128,128,128,0.35)", "--accent": "#3d6b5a" }),
   ],
   vector: [
-    ALT("terminal", "Terminal", "Dark, dense, monospaced.", "rb15",
-      { "--bg": "#06120f", "--fg": "#d4ffe9", "--muted": "#d4ffe9", "--line": "rgba(128,128,128,0.35)", "--accent": "#2cff9a" }),
     ALT("report", "Report", "Light, typographic, print-quality.", "rb15",
       { "--bg": "#06120f", "--fg": "#d4ffe9", "--muted": "#d4ffe9", "--line": "rgba(128,128,128,0.35)", "--accent": "#2cff9a" }),
     ALT("surface", "3D Surface", "Quarter-by-strategy returns as a navigable terrain.", "rb15",
